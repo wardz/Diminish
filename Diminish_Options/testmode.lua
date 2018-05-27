@@ -72,6 +72,14 @@ function TestMode:IsTestingOrAnchoring()
     return isTesting or isAnchoring
 end
 
+local function PartyOnHide(self)
+    -- If you hit Escape or Cancel in InterfaceOptions instead of "Okay" button then for some reason
+    -- blizzard auto hides the PartyMember frames so hook them and prevent hiding when testing
+    if not InCombatLockdown() and isTesting or isAnchoring then
+        self:Show()
+    end
+end
+
 function TestMode:ToggleArenaAndPartyFrames(state)
     if isTesting or isAnchoring then return end
 
@@ -115,9 +123,12 @@ function TestMode:ToggleArenaAndPartyFrames(state)
             end
         end
 
-        if not useCompact and not IsInGroup() then
-            if settings.party.enabled or _G["PartyMemberFrame"..i]:IsVisible() then
-                _G["PartyMemberFrame"..i]:SetShown(showFlag)
+        if not useCompact and not IsInGroup() then -- _G["PartyMemberFrame"..i]:IsVisible()
+            if settings.party.enabled then
+                if not UnitExists(_G["PartyMemberFrame"..i]) then -- do not toggle if frame belongs to a group member
+                    _G["PartyMemberFrame"..i]:SetShown(showFlag)
+                    _G["PartyMemberFrame"..i]:HookScript("OnHide", PartyOnHide)
+                end
             end
         end
     end
