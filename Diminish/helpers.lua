@@ -53,6 +53,7 @@ do
     end
 
     NS.RemoveTable = function(tbl)
+        if not tbl then return end
         local t = wipe(tbl)
         pool[t] = true -- allow next()
     end
