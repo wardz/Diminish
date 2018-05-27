@@ -130,7 +130,6 @@ end
 
 do
     local pairs = _G.pairs
-    local BAR_CENTER_ICON_COUNT = NS.MAX_CATEGORIES / 2
 
     local function AddMasque(frame)
         Icons.MSQ = Icons.MSQ or LibStub and LibStub("Masque", true)
@@ -274,6 +273,8 @@ do
     end
 
     function Icons:GetFrame(unitID, category)
+        if not unitID or not category then return end
+
         if frames[unitID] and frames[unitID][category] then
             return frames[unitID][category]
         end
@@ -353,9 +354,11 @@ do
         local expiration = timer.expiration - now
 
         if frame.shown then
-            if (frame.cooldown:GetCooldownDuration() / 1000) > 1.1 then
-                frame.cooldown:SetCooldownDuration(expiration)
-            end
+            --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
+                if not timer.testMode then
+                    frame.cooldown:SetCooldownDuration(expiration)
+                end
+            --end
         else
             frame.shown = true
             frame.cooldown:SetCooldown(now, expiration)
