@@ -254,7 +254,7 @@ do
 
         -- label above an icon that displays category text
         local ctext = frame:CreateFontString()
-        ctext:SetFont("Fonts\\FRIZQT__.TTF", 8)
+        ctext:SetFont(STANDARD_TEXT_FONT, 8)
         ctext:SetPoint("TOP", 0, 10)
         ctext:SetShown(NS.db.showCategoryText)
         if strlen(category) >= 10 then
