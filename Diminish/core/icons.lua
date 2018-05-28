@@ -6,7 +6,6 @@ NS.Icons = Icons
 
 local _G = _G
 local GetTime = _G.GetTime
-local GetSpellTexture = _G.GetSpellTexture
 local CreateFrame = _G.CreateFrame
 local gsub = _G.string.gsub
 
@@ -143,8 +142,6 @@ do
         if not Icons.MSQGroup then return end
 
         frame:SetNormalTexture("Interface\\BUTTONS\\UI-Quickslot-Depress")
-        -- FIXME: border:SetVertexColor doesnt work with some Masque skins because Masque hooks it and prevent changes
-        -- might want to use backdrops instead
 
         Icons.MSQGroup:AddButton(frame, {
             Icon = frame.icon,
@@ -322,15 +319,21 @@ end
 do
     local textureCachePlayer = {}
     local DR_STATES_COLORS = NS.DR_STATES_COLORS
+    local GetSpellTexture = _G.GetSpellTexture
 
     local function SetIndicators(frame)
         local color = DR_STATES_COLORS[frame.timerRef.applied]
         if not color then return end
 
-        frame.border:SetVertexColor(color[1], color[2], color[3], color[4])
+        if Icons.MSQGroup then
+            frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3])
+            frame.border:SetVertexColor(frame.border.__MSQ_Color)
+        else
+            frame.border:SetVertexColor(color[1], color[2], color[3])
+        end
 
         if NS.db.timerText and NS.db.timerColors then
-            frame.countdown:SetTextColor(color[1], color[2], color[3], color[4])
+            frame.countdown:SetTextColor(color[1], color[2], color[3])
         end
     end
 
