@@ -45,6 +45,10 @@ do
             local frame = _G[name]
             if frame then
                 anchorCache[unitID] = frame
+                if unit ~= "party" and unit ~= "arena" then
+                    -- cleanup target/focus/player since these only need to be ran once
+                    NS.anchors[unit] = nil
+                end
                 return frame
             end
         end
