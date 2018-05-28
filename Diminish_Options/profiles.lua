@@ -33,6 +33,7 @@ Panel:CreateChild("Profiles", function(panel)
         DiminishDB.profileKeys[NS.PLAYER_NAME] = NS.PLAYER_NAME
 
         DIMINISH_NS.db = DiminishDB.profiles[NS.PLAYER_NAME]
+        DIMINISH_NS.activeProfile = NS.PLAYER_NAME
 
         selectProfile:SetValue(nil)
         panel.refresh()
@@ -76,6 +77,7 @@ Panel:CreateChild("Profiles", function(panel)
         end
 
         DIMINISH_NS.db = DiminishDB.profiles["Default"]
+        DIMINISH_NS.activeProfile = "Default"
         panel.refresh()
 
         if NS.TestMode:IsTestingOrAnchoring() then

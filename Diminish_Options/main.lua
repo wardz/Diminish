@@ -15,7 +15,7 @@ NS.unitFrames = {
 }
 
 NS.CreateNewProfile = function()
-    if DIMINISH_NS.db == DiminishDB.profiles["Default"] then
+    if DIMINISH_NS.activeProfile == "Default" then
         DiminishDB.profileKeys[NS.PLAYER_NAME] = NS.PLAYER_NAME
 
         DIMINISH_NS.CopyDefaults({
@@ -23,6 +23,7 @@ NS.CreateNewProfile = function()
         }, DiminishDB.profiles)
 
         DIMINISH_NS.db = DiminishDB.profiles[NS.PLAYER_NAME]
+        DIMINISH_NS.activeProfile = NS.PLAYER_NAME
     end
 end
 
