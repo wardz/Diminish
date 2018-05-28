@@ -71,7 +71,7 @@ NS.DEFAULT_SETTINGS = {
 
         party = {
             enabled = false,
-            zones = { pvp = true, arena = true, none = true },
+            zones = { pvp = false, arena = true, none = true },
             disabledCategories = defaultsDisabledCategories,
             watchFriendly = true,
             iconSize = 26,
