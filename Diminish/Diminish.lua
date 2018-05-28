@@ -11,7 +11,7 @@ end)
 
 -- used for Diminish_Options
 NS.Diminish = Diminish
-DIMINISH_NS = NS
+_G.DIMINISH_NS = NS
 
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
@@ -288,7 +288,7 @@ do
                     end
 
                     if self.onlyTrackingPartyForFriendly then
-                        if bit_band(destFlags, GROUP_MEMBER) == 0 then return end -- or ~= 0 ?
+                        if bit_band(destFlags, GROUP_MEMBER) == 0 then return end
                     end
                 end
 
