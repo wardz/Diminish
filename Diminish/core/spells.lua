@@ -158,4 +158,19 @@ NS.spellList = {
     [236077]  = C.DISARM,          -- Disarm
     [236236]  = C.DISARM,          -- Disarm (Prot)
     [209749]  = C.DISARM,          -- Faerie Swarm (Balance)
+
+    --[[
+    -- May only be tracked by spell aura applied, not broken/refresh
+    [51490]   = C.KNOCKBACK,       -- Thunderstorm
+    [204263]  = C.KNOCKBACK,       -- Shining Force
+    [61391]   = C.KNOCKBACK,       -- Typhoon
+
+    -- May only be tracked by second SPELL_AURA_APPLIED ?
+    [102793]  = C.KNOCKBACK,       -- Ursol's Vortex (or 127797 ?)
+
+    -- May only be tracked by SPELL_DAMAGE
+    [236776]  = C.KNOCKBACK,       -- Hi-Explosive Trap
+    [115770]  = C.KNOCKBACK,       -- Fellash (still exists?)
+    [6360]    = C.KNOCKBACK,       -- Whiplash (still exists?)
+    ]]
 }
