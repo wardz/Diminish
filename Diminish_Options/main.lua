@@ -44,11 +44,9 @@ NS.GetDBProxy = function(key1, key2, key3)
         end,
 
         __newindex = function(self, key, value)
-            if DIMINISH_NS.db == DiminishDB.profiles["Default"] then
-                -- If we still use Default profile and change a DB option,
-                -- create a new profile for the current player
-                NS.CreateNewProfile()
-            end
+            -- If we still use Default profile and change a DB option,
+            -- create a new profile for the current player
+            NS.CreateNewProfile()
 
             local tbl
             if key3 then
