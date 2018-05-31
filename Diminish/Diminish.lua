@@ -179,10 +179,8 @@ function Diminish:PLAYER_LOGIN()
     self:InitDB()
     self.PLAYER_GUID = UnitGUID("player")
 
-    -- Call these on login aswell and not just GROUP_ROSTER_UPDATE incase the
-    -- player joins a group while in combat where we cant anchor/create the frames
     NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
-    NS.Icons:AnchorPartyFrames()
+    --NS.Icons:AnchorPartyFrames()
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")

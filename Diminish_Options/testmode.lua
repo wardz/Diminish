@@ -156,8 +156,7 @@ function TestMode:CreateDummyAnchor(parent, unit)
     frame:SetParent(parent)
     frame.realUnit = unit
 
-    local unit = parent.unit
-    if parent.unit == "player" and isCompact then
+    if unit == "player" and isCompact then
         unit = "player-party"
     end
 

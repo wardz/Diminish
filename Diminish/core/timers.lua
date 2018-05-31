@@ -1,10 +1,10 @@
 local _, NS = ...
-local activeTimers = {}
-local activeGUIDs = {}
 local Timers = {}
 NS.Timers = Timers
 
 local StopTimers, StartTimers
+local activeTimers = {}
+local activeGUIDs = {}
 
 local DR_TIME = NS.DR_TIME
 local Icons = NS.Icons

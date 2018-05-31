@@ -38,7 +38,6 @@ Panel:CreateChild("Profiles", function(panel)
         selectProfile:SetValue(nil)
         panel.refresh()
         DIMINISH_NS.Icons:OnFrameConfigChanged()
-        DIMINISH_NS.Icons:AnchorPartyFrames() -- TODO: test
 
         if NS.TestMode:IsTestingOrAnchoring() then
             NS.TestMode:HideAnchors()
@@ -86,7 +85,6 @@ Panel:CreateChild("Profiles", function(panel)
             NS.TestMode:Test(true)
         end
         DIMINISH_NS.Icons:OnFrameConfigChanged()
-        DIMINISH_NS.Icons:AnchorPartyFrames() -- TODO: Test
     end)
     resetBtn:SetPoint("LEFT", selectProfile, 0, -100)
 
