@@ -1,7 +1,5 @@
 local _, NS = ...
 local Timers = NS.Timers
-local Debug = NS.Debug
-local Info = NS.Info
 
 local Diminish = CreateFrame("Frame")
 Diminish:RegisterEvent("PLAYER_LOGIN")
@@ -38,7 +36,7 @@ function Diminish:ToggleForZone()
 
                         if not self:IsEventRegistered(event) then
                             self:RegisterEvent(event)
-                            Debug("Registered %s for instance %s.", event, instanceType)
+                            NS.Debug("Registered %s for instance %s.", event, instanceType)
                         end
 
                         break
@@ -46,7 +44,7 @@ function Diminish:ToggleForZone()
                         settings.isEnabledForZone = false
                         if self:IsEventRegistered(event) then
                             self:UnregisterEvent(event)
-                            Debug("Unregistered %s for instance %s.", event, instanceType)
+                            NS.Debug("Unregistered %s for instance %s.", event, instanceType)
                         end
                     end
                 else
@@ -108,16 +106,16 @@ function Diminish:SetCLEUWatchVariables()
 end
 
 function Diminish:Disable()
-    Timers:ResetAll(true)
     self:UnregisterAllEvents()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")
-    Info("Disabled for zone %s.", select(2, IsInInstance()))
+    Timers:ResetAll(true)
+    NS.Info("Disabled for zone %s.", select(2, IsInInstance()))
 end
 
 function Diminish:Enable()
     self.currInstanceType = select(2, IsInInstance())
-    Info("Enabled for zone %s.", self.currInstanceType)
+    NS.Info("Enabled for zone %s.", self.currInstanceType)
     Timers:ResetAll(true)
 
     if self.currInstanceType == "arena" or self.currInstanceType == "pvp" then
@@ -141,7 +139,7 @@ function Diminish:InitDB()
     }
 
     -- Reset config completly if updating from 2.0.0b-0.1
-    -- TODO: remove this when beta is over
+    -- TODO: remove this when bfa beta is over
     if not DiminishDB.version then
         wipe(DiminishDB)
         self:InitDB()
@@ -163,9 +161,11 @@ function Diminish:InitDB()
         [profile] = NS.DEFAULT_SETTINGS
     }, DiminishDB.profiles)
 
+    -- Pointer to active db profile
+    -- Always use this directly or pointer will be invalid
+    -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
-    -- Note: Diminish_Options will be handling modification of profiles from now on
 
     NS.DEFAULT_SETTINGS = nil
     self.InitDB = nil
@@ -182,7 +182,6 @@ function Diminish:PLAYER_LOGIN()
     -- Call these on login aswell and not just GROUP_ROSTER_UPDATE incase the
     -- player joins a group while in combat where we cant anchor/create the frames
     NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
-    NS.Icons:AnchorRaidFrames()
     NS.Icons:AnchorPartyFrames()
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -192,14 +191,9 @@ function Diminish:PLAYER_LOGIN()
 end
 
 function Diminish:CVAR_UPDATE(name, value)
-    if name ~= "USE_RAID_STYLE_PARTY_FRAMES" then return end
-
-    if value == "0" then
-        NS.useCompactPartyFrames = false
+    if name == "USE_RAID_STYLE_PARTY_FRAMES" then
+        NS.useCompactPartyFrames = value ~= "0"
         NS.Icons:AnchorPartyFrames()
-    else
-        NS.useCompactPartyFrames = true
-        NS.Icons:AnchorRaidFrames()
     end
 end
 
@@ -212,7 +206,6 @@ function Diminish:PLAYER_ENTERING_WORLD()
         if NS.db.unitFrames.arena.enabled then
             if LibStub and LibStub("AceAddon-3.0", true) then
                 local _, sArena = pcall(function()
-                     -- lambda so we can use ":" or else aceaddon bugs out
                     return LibStub("AceAddon-3.0"):GetAddon("sArena")
                 end)
 
@@ -235,6 +228,7 @@ function Diminish:PLAYER_FOCUS_CHANGED()
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
+    -- FIXME: rogues restealthing/seen in stealth briefly will cause this to be ran unnecessarily
     if status == "seen" and not strfind(unitID, "pet") then
         if tonumber(strmatch(unitID, "%d+")) <= 5 then -- ignore arena6 and above for arena brawl
             Timers:Refresh(unitID)
@@ -244,8 +238,7 @@ end
 
 function Diminish:GROUP_ROSTER_UPDATE()
     local members = min(GetNumGroupMembers(), 4)
-    NS.Icons:AnchorRaidFrames(members) -- reanchor CompactRaidFrame if enabled
-    NS.Icons:AnchorPartyFrames(members) -- reanchor PartyMemberFrame if enabled
+    NS.Icons:AnchorPartyFrames(members)
 
     for i = 1, members do
         Timers:Refresh("party"..i)
@@ -261,19 +254,18 @@ function Diminish:PLAYER_REGEN_DISABLED()
 end
 
 do
+    local COMBATLOG_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY)
     local COMBATLOG_OBJECT_REACTION_FRIENDLY = _G.COMBATLOG_OBJECT_REACTION_FRIENDLY
     local COMBATLOG_OBJECT_TYPE_PLAYER = _G.COMBATLOG_OBJECT_TYPE_PLAYER
     local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
     local bit_band = _G.bit.band
     local spellList = NS.spellList
 
-    local GROUP_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY) -- , COMBATLOG_OBJECT_AFFILIATION_RAID
-
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
         local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
 
         if auraType == "DEBUFF" then
-            local category = spellList[spellID]
+            local category = spellList[spellID] -- DR category
             if not category then return end
 
             if bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then -- unit is player
@@ -284,11 +276,13 @@ do
                     if not self.isWatchingFriendly then return end
 
                     if self.onlyPlayerWatchFriendly then
+                        -- Only store friendly timers for player
                         if destGUID ~= self.PLAYER_GUID  then return end
                     end
 
                     if self.onlyTrackingPartyForFriendly then
-                        if bit_band(destFlags, GROUP_MEMBER) == 0 then return end
+                        -- Only store friendly timers for party1-4 and player
+                        if bit_band(destFlags, COMBATLOG_PARTY_MEMBER) == 0 then return end
                     end
                 end
 
@@ -308,6 +302,7 @@ do
                     -- Delete ALL timers when player died
                     return Timers:ResetAll()
                 end
+                -- Delete all timers for single unit
                 Timers:Remove(destGUID, false)
             end
         end

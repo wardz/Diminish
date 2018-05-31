@@ -80,7 +80,6 @@ do
 
                 if unit == "party" then
                     DIMINISH_NS.Icons:AnchorPartyFrames()
-                    DIMINISH_NS.Icons:AnchorRaidFrames()
                 end
             end)
             frames.enabled:SetPoint("LEFT", subVisuals, 10, -70)

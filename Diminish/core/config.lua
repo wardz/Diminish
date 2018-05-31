@@ -25,6 +25,10 @@ NS.DR_STATES_COLORS = {
     [3] = { 1, 0, 0, 1 }, -- red
 }
 
+-------------------------------------------------------
+-- Default SavedVariables
+-------------------------------------------------------
+
 local defaultsDisabledCategories = {
     [NS.CATEGORIES.DISARM] = true
 }
@@ -42,7 +46,6 @@ local defaultsTarget = {
     offsetX = 91,
 }
 
--- Default savedvariables
 NS.DEFAULT_SETTINGS = {
     timerTextSize = 14,
     timerText = true,

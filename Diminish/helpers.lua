@@ -1,5 +1,4 @@
 local _, NS = ...
-local UnitAura = _G.UnitAura
 
 NS.Debug = function(...)
     if false then print("|cFFFF0000[D]|r" .. format(...)) end
@@ -27,6 +26,7 @@ end
 
 -- UnitAura by spellname was removed in patch 8.0.0 so we have to
 -- loop through every debuff and find the spell ourself using indices
+local UnitAura = _G.UnitAura
 NS.GetAuraDuration = function(unitID, spellID)
     if not unitID or not spellID then return end
 
@@ -47,15 +47,16 @@ do
 
     NS.NewTable = function()
         local t = next(pool) or {}
-        pool[t] = nil
+        pool[t] = nil -- disallow next() with nil
 
         return t
     end
 
     NS.RemoveTable = function(tbl)
-        if not tbl then return end
-        local t = wipe(tbl)
-        pool[t] = true -- allow next()
+        if tbl then
+            -- wipe returns pointer to tbl here
+            pool[wipe(tbl)] = true -- allow next()
+        end
     end
 
     NS.ReleaseTables = function()

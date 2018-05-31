@@ -136,7 +136,7 @@ function Timers:Refresh(unitID)
             StopTimers(timer, unitID)
         end
     else
-        -- No prev guild available, hide all for this unitID instead
+        -- No prev guid available, hide all for this unitID instead
         for guid, categories in pairs(activeTimers) do
             if guid ~= unitGUID then
                 for cat, timer in pairs(categories) do
@@ -188,7 +188,6 @@ end
 
 do
     local GetAuraDuration = NS.GetAuraDuration
-    local IsInGroup = _G.IsInGroup
 
     local testModeUnits = {
         "player", "player-party", "target", "focus",
@@ -210,6 +209,7 @@ do
         if not settings.watchFriendly and timer.isFriendly then return end
         if settings.disabledCategories[timer.category] then return end
 
+        -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and NS.db.displayMode == "ON_AURA_START" then
             if not timer.testMode then
                 local duration = GetAuraDuration(origUnitID or unitID, timer.spellID)
@@ -224,24 +224,17 @@ do
     end
 
     local function Stop(timer, unitID, isBeingRemoved)
-        if TimerIsFinished(timer) then
-            Icons:StopCooldown(timer, unitID, true)
-            Debug("Stop timer %s:%s", unitID, timer.category or "nil")
+        Icons:StopCooldown(timer, unitID, TimerIsFinished(timer))
+        Debug("Stop/pause timer %s:%s", unitID, timer.category or "nil")
 
-            if not isBeingRemoved then
-                -- f.cooldown OnHide script won't trigger :Remove() if the parent (unitframe) is hidden
-                -- so attempt to remove timer here aswell if it isn't already being removed
-                Timers:Remove(timer.unitGUID, timer.category, true)
-            end
-        else
-            Icons:StopCooldown(timer, unitID)
-            Debug("Pause timer %s:%s", unitID, timer.category or "nil")
+        if not isBeingRemoved then
+            -- f.cooldown OnHide script won't trigger :Remove() if the parent (unitframe) is hidden
+            -- so attempt to remove timer here aswell if it isn't already being removed
+            Timers:Remove(timer.unitGUID, timer.category, true)
         end
     end
 
     function StartTimers(timer, isApplied, unit, isUpdate, isRefresh)
-        local unitGUID = timer.unitGUID
-
         if timer.testMode then
             -- When testing, we want to show timers for all enabled frames
             for i = 1, #testModeUnits do
@@ -251,18 +244,20 @@ do
         end
 
         if unit then
+            -- Start/update timer only for this unitID
             return Start(timer, isApplied, unit, isUpdate, isRefresh)
         end
 
         -- Start timer for every unitID that matches timer unit guid
         -- This is so we can show the *same* timer for e.g both FocusFrame and TargetFrame at the same time
         -- without having to create duplicate tables
+        local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
                 Start(timer, isApplied, unit, isUpdate, isRefresh)
 
                 if unit == "player" then
-                    if NS.db.unitFrames.party.isEnabledForZone and NS.useCompactPartyFrames then
+                    if NS.useCompactPartyFrames and NS.db.unitFrames.party.isEnabledForZone then
                         Start(timer, isApplied, "player-party", isUpdate, isRefresh)
                     end
                 end
@@ -271,8 +266,6 @@ do
     end
 
     function StopTimers(timer, unit, isBeingRemoved)
-        local unitGUID = timer.unitGUID
-
         if timer.testMode then
             for i = 1, #testModeUnits do
                 Stop(timer, testModeUnits[i], isBeingRemoved)
@@ -284,6 +277,7 @@ do
             return Stop(timer, unit, isBeingRemoved)
         end
 
+        local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
                 Stop(timer, unit, isBeingRemoved)

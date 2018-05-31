@@ -75,10 +75,10 @@ do
     local function SetupPartyAnchors(unit, anchor, iconSize)
         if not partyFrames[unit] then
             -- Create a dummy frame we can anchor all trackers to for every party member
-            -- (we can't use f:SetParent() _directly_ on CompactRaidFrame while in combat)
+            -- This seems to avoid random taint and also avoids having to call FindCompactRaidFrameByUnit
+            -- everytime we need to show a timer for party
             partyFrames[unit] = CreateFrame("Frame", nil, anchor)
             partyFrames[unit].unit = unit
-            partyFrames[unit].isPartyFrameAnchor = true
             partyFrames[unit]:SetPoint("CENTER", 0, 0)
             partyFrames[unit]:SetSize(iconSize * NS.MAX_CATEGORIES, iconSize)
             partyFrames[unit]:EnableMouse(false)
@@ -92,7 +92,9 @@ do
 
     function Icons:AnchorRaidFrames(members)
         if not NS.db or not NS.db.unitFrames.party.enabled then return end
-        if not NS.useCompactPartyFrames then return end
+        if not NS.useCompactPartyFrames then
+            return Icons:AnchorPartyFrames(members)
+        end
 
         if InCombatLockdown() or UnitAffectingCombat("player") then
             -- Try again every 3s until player has left combat
@@ -114,7 +116,9 @@ do
 
     function Icons:AnchorPartyFrames(members)
         if not NS.db or not NS.db.unitFrames.party.enabled then return end
-        if NS.useCompactPartyFrames then return end
+        if NS.useCompactPartyFrames then
+            return Icons:AnchorRaidFrames(members)
+        end
 
         if InCombatLockdown() or UnitAffectingCombat("player") then
             return C_Timer.After(3, Icons.AnchorPartyFrames)
@@ -156,7 +160,6 @@ do
         local unitFrame = anchor:GetParent()
         local unit = anchor.unit
 
-        --local cfg = NS.db.unitFrames[gsub(unit == "player-party" and "party" or unit, "%d", "")]
         local cfg = anchor.unitSettingsRef
         local ofsX = not cfg.growLeft and (cfg.iconSize + cfg.iconPadding) or (-cfg.iconSize - cfg.iconPadding)
         local first = true
@@ -220,18 +223,19 @@ do
             origUnitID = "player-party"
         end
 
-        -- Note to self: avoid inheriting from any action template here or taint will occur when frames are created in combat
-        local frame = CreateFrame("CheckButton", nil, anchor) -- CheckButton to support Masque
+        local frame = CreateFrame("CheckButton", nil, anchor)
+        frame.unit = origUnitID or unitID
+        frame.unitFormatted = gsub(unitID, "%d", "")
+        frame.unitSettingsRef = NS.db.unitFrames[frame.unitFormatted]
+
+        local size = frame.unitSettingsRef.iconSize
+        frame:SetSize(size, size)
+
         frame:SetFrameLevel(2)
         frame:SetFrameStrata("HIGH")
         frame:Disable()
         frame:EnableMouse(false)
         frame:Hide()
-        frame.unit = origUnitID or unitID
-
-        frame.unitSettingsRef = NS.db.unitFrames[gsub(unitID, "%d", "")]
-        local size = frame.unitSettingsRef.iconSize
-        frame:SetSize(size, size)
 
         frame.icon = frame:CreateTexture(nil, "BACKGROUND")
         frame.icon:SetAllPoints(frame)
@@ -293,7 +297,7 @@ do
     function Icons:OnFrameConfigChanged()
         for _, tbl in pairs(frames) do
             for _, frame in pairs(tbl) do
-                frame.unitSettingsRef = NS.db.unitFrames[gsub(frame.unit == "player-party" and "party" or frame.unit, "%d", "")] -- need to update pointer if changed profile
+                frame.unitSettingsRef = NS.db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
                 frame.cooldown:SetHideCountdownNumbers(not NS.db.timerText)
                 frame.cooldown:SetDrawSwipe(NS.db.timerSwipe)
                 frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
@@ -318,11 +322,11 @@ end
 
 do
     local textureCachePlayer = {}
-    local DR_STATES_COLORS = NS.DR_STATES_COLORS
+    local indicatorColors = NS.DR_STATES_COLORS
     local GetSpellTexture = _G.GetSpellTexture
 
-    local function SetIndicators(frame)
-        local color = DR_STATES_COLORS[frame.timerRef.applied]
+    local function SetIndicators(frame, applied)
+        local color = indicatorColors[applied]
         if not color then return end
 
         if Icons.MSQGroup then
@@ -354,11 +358,11 @@ do
             frame.icon:SetTexture(GetSpellTexture(timer.spellID))
         end
 
-        frame.timerRef = timer
-        SetIndicators(frame)
+        SetIndicators(frame, timer.applied)
 
         local now = GetTime()
         local expiration = timer.expiration - now
+        frame.timerRef = timer
 
         if frame.shown then
             --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
@@ -381,6 +385,8 @@ function Icons:StopCooldown(timer, unitID, isFinished)
     if isFinished and frame.timerRef then
         frame.timerRef.applied = 0
         frame.timerRef = nil
+        --frames[unitID][timer.category] = nil
+        --pool:Release(frame)
     end
 
     frame.shown = false
@@ -388,10 +394,13 @@ function Icons:StopCooldown(timer, unitID, isFinished)
 end
 
 function Icons:HideAll()
-    for _, tbl in pairs(frames) do
-        for _, frame in pairs(tbl) do
+    for unitID, tbl in pairs(frames) do
+        for category, frame in pairs(tbl) do
             frame.shown = false
             frame:Hide()
+            --frames[unitID][category] = nil
+            --pool:Release(frame)
         end
+        --frames[unitID] = nil
     end
 end
