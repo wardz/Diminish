@@ -223,13 +223,13 @@ do
         Debug("%s timer %s:%s", isUpdate and "Updated" or "Started", origUnitID and "player-party" or unitID, timer.category)
     end
 
-    local function Stop(timer, unitID, isBeingRemoved)
+    local function Stop(timer, unitID, preventRemove)
         Icons:StopCooldown(timer, unitID, TimerIsFinished(timer))
         Debug("Stop/pause timer %s:%s", unitID, timer.category or "nil")
 
-        if not isBeingRemoved then
+        if not preventRemove then
             -- f.cooldown OnHide script won't trigger :Remove() if the parent (unitframe) is hidden
-            -- so attempt to remove timer here aswell if it isn't already being removed
+            -- so attempt to remove timer here aswell if it isn't already being removed or we're just refreshing
             Timers:Remove(timer.unitGUID, timer.category, true)
         end
     end
@@ -265,22 +265,22 @@ do
         end
     end
 
-    function StopTimers(timer, unit, isBeingRemoved)
+    function StopTimers(timer, unit, preventRemove)
         if timer.testMode then
             for i = 1, #testModeUnits do
-                Stop(timer, testModeUnits[i], isBeingRemoved)
+                Stop(timer, testModeUnits[i], preventRemove)
             end
             return
         end
 
         if unit then
-            return Stop(timer, unit, isBeingRemoved)
+            return Stop(timer, unit, preventRemove)
         end
 
         local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
-                Stop(timer, unit, isBeingRemoved)
+                Stop(timer, unit, preventRemove)
 
                 if unit == "player" then
                     Stop(timer, "player-party", true)
