@@ -76,7 +76,9 @@ local function PartyOnHide(self)
     -- If you hit Escape or Cancel in InterfaceOptions instead of "Okay" button then for some reason
     -- blizzard auto hides the PartyMember frames so hook them and prevent hiding when testing
     if not InCombatLockdown() and isTesting or isAnchoring then
-        self:Show()
+        if not GetCVarBool("useCompactPartyFrames") then -- toggling cvar while testing would prevent hiding permanently
+            self:Show()
+        end
     end
 end
 
@@ -143,7 +145,7 @@ function TestMode:HideAnchors()
     TestMode:ToggleArenaAndPartyFrames(false)
 end
 
-function TestMode:CreateDummyAnchor(parent, unit)
+function TestMode:CreateDummyAnchor(parent, unit, unitID)
     if not parent then return end
 
     local db = DIMINISH_NS.db.unitFrames[unit]
@@ -182,7 +184,7 @@ function TestMode:CreateDummyAnchor(parent, unit)
         frame:SetScript("OnLeave", OnLeave)
     end
 
-    frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unit), db.growLeft and L.LEFT or L.RIGHT)
+    frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unitID or unit), db.growLeft and L.LEFT or L.RIGHT)
     frame:SetSize(db.iconSize, db.iconSize)
     frame:SetPoint("CENTER", parent, db.offsetX, db.offsetY)
     frame:Show()
@@ -197,14 +199,13 @@ function TestMode:ShowAnchors()
         if unitID == "arena" then
             for i = 1, 3 do
                 local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i)
-                TestMode:CreateDummyAnchor(anchor, unitID)
+                TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
             end
         elseif unitID == "party" then
-            for i = 1, 3 do
-                local compact = _G["CompactRaidFrame"..i]
-                --local compact = DIMINISH_NS.Icons:FindCompactUnitFrameByID(unitID..i)
-                local anchor = compact and compact:IsVisible() and compact or DIMINISH_NS.Icons:GetAnchor(unitID..i)
-                TestMode:CreateDummyAnchor(anchor, unitID)
+            for i = 0, 3 do
+                local unit = i == 0 and "player-party" or "party"..i
+                local anchor = DIMINISH_NS.Icons:GetAnchor(unit)
+                TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
             end
         else
             local anchor = DIMINISH_NS.Icons:GetAnchor(unitID)
