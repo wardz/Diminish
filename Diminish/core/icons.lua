@@ -1,55 +1,45 @@
 local _, NS = ...
 local Icons = {}
-local partyFrames = {}
-local frames = {}
 NS.Icons = Icons
+
+local anchorCache = {}
+local frames = {}
 
 local _G = _G
 local GetTime = _G.GetTime
 local CreateFrame = _G.CreateFrame
 local gsub = _G.string.gsub
+local strmatch = _G.string.match
 
-do
-    local strmatch = _G.string.match
-    local anchorCache = {}
+function Icons:GetAnchor(unitID, defaultAnchor)
+    if anchorCache[unitID] and not defaultAnchor then
+        return anchorCache[unitID]
+    end
 
-    function Icons:GetAnchor(unitID, partyDefaultAnchor)
-        local unit, count = gsub(unitID, "%d", "") -- party1 -> party
+    local unit, count = gsub(unitID, "%d", "") -- party1 -> party
+    local anchors = NS.anchors[unit]
+    if not anchors then return end
 
-        if unit == "party" and not partyDefaultAnchor then
-            -- special case, we have custom main anchors for party frames too avoid taint
-            return partyFrames[unitID]
+    for i = 1, #anchors do
+        local name = anchors[i]
+
+        if count > 0 then
+            name = name .. strmatch(unitID, "%d+") -- add unit index to frame name
         end
 
-        if unit == "player-party" then -- CompactRaidFrame for player
-            return partyFrames.player
-        end
+        local frame = _G[name]
 
-        if anchorCache[unitID] then
-            return anchorCache[unitID]
-        end
-
-        -- Loop through all possible unitframe anchors, return & cache permanently first one that exists for this unitID
-        -- basically just a lazy way to add third party addon frame support.
-        -- note to self: blizzard frames must always be ran last here
-        local anchors = NS.anchors[unit]
-        for i = 1, #anchors do
-            local name = anchors[i]
-
-            if count > 0 then
-                name = name .. strmatch(unitID, "%d+") -- add unit index to frame name
-                -- name = format(name, strmatch(unitID, "%d+"))
+        if frame then
+            if unit ~= "party" and unit ~= "arena" then
+                -- cleanup target/focus/player table since these only need to be ran once
+                NS.anchors[unit] = nil
             end
 
-            local frame = _G[name]
-            if frame then
+            if unit ~= "party" then -- AnchorPartyFrames() will handle party frames cache instead
                 anchorCache[unitID] = frame
-                if unit ~= "party" and unit ~= "arena" then
-                    -- cleanup target/focus/player since these only need to be ran once
-                    NS.anchors[unit] = nil
-                end
-                return frame
             end
+
+            return frame
         end
     end
 end
@@ -57,8 +47,8 @@ end
 do
     local UnitGUID = _G.UnitGUID
 
-    local function FindCompactRaidFrameByUnit(unit)
-        local guid = UnitGUID(unit)
+    local function FindCompactRaidFrameByUnit(unitID)
+        local guid = UnitGUID(unitID)
         if not guid then return end
 
         for i = 1, (#CompactRaidFrameContainer.flowFrames or 5) do
@@ -66,70 +56,31 @@ do
             local frame = _G["CompactRaidFrame"..i]
             if not frame then return end
 
-            if frame and frame.unit and UnitGUID(frame.unit) == guid then
+            if frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
             end
         end
     end
 
-    local function SetupPartyAnchors(unit, anchor, iconSize)
-        if not partyFrames[unit] then
-            -- Create a dummy frame we can anchor all trackers to for every party member
-            -- This seems to avoid random taint and also avoids having to call FindCompactRaidFrameByUnit
-            -- everytime we need to show a timer for party
-            partyFrames[unit] = CreateFrame("Frame", nil, anchor)
-            partyFrames[unit].unit = unit
-            partyFrames[unit]:SetPoint("CENTER", 0, 0)
-            partyFrames[unit]:SetSize(iconSize * NS.MAX_CATEGORIES, iconSize)
-            partyFrames[unit]:EnableMouse(false)
-        else
-            -- CompactRaidFrameXX can be any unitID unlike PartyMemberFrames where frame1 is always party1
-            -- so reanchor everytime here to whatever raid/party frame unitX is at
-            -- partyFrames[unit].unit = unit
-            partyFrames[unit]:SetParent(anchor)
-        end
-    end
-
-    function Icons:AnchorRaidFrames(members)
-        if not NS.db or not NS.db.unitFrames.party.enabled then return end
-        if not NS.useCompactPartyFrames then
-            return Icons:AnchorPartyFrames(members)
-        end
-
-        if InCombatLockdown() or UnitAffectingCombat("player") then
-            -- Try again every 3s until player has left combat
-            return C_Timer.After(3, Icons.AnchorRaidFrames)
-        end
-
-        local cfg = NS.db.unitFrames
-        local iconSize = cfg.party.iconSize
-
-        for i = 0, (members or 4) do
-            local unit = i == 0 and "player" or "party"..i
-            local anchor = FindCompactRaidFrameByUnit(unit)
-
-            if anchor then
-                SetupPartyAnchors(unit, anchor, iconSize)
-            end
-        end
-    end
-
     function Icons:AnchorPartyFrames(members)
-        if not NS.db or not NS.db.unitFrames.party.enabled then return end
-        if NS.useCompactPartyFrames then
-            return Icons:AnchorRaidFrames(members)
-        end
+        if not NS.db.unitFrames.party.enabled then return end
 
-        if InCombatLockdown() or UnitAffectingCombat("player") then
-            return C_Timer.After(3, Icons.AnchorPartyFrames)
-        end
+        for i = (NS.useCompactPartyFrames and 0 or 1), (members or 4) do
+            local unit = i == 0 and "player" or "party"..i
+            local parent
 
-        local iconSize = NS.db.unitFrames.party.iconSize
+            if NS.useCompactPartyFrames then
+                parent = FindCompactRaidFrameByUnit(unit)
+            else
+                parent = Icons:GetAnchor(unit, true)
+            end
 
-        for i = 1, members or 4 do
-            local anchor = Icons:GetAnchor("party"..i, true)
-            if anchor then
-                SetupPartyAnchors("party"..i, anchor, iconSize)
+            if parent then
+                if unit == "player" then
+                    unit = "player-party"
+                end
+
+                anchorCache[unit] = parent
             end
         end
     end
@@ -138,7 +89,7 @@ end
 do
     local pairs = _G.pairs
 
-    local function AddMasque(frame)
+    local function MasqueAddFrame(frame)
         Icons.MSQ = Icons.MSQ or LibStub and LibStub("Masque", true)
         if not Icons.MSQ then return end
 
@@ -180,18 +131,19 @@ do
     end
 
     local function CooldownOnShow(self)
-        local timer = self.parent.timerRef
+        local frame = self.parent
+        local timer = frame.timerRef
+
         if timer and GetTime() >= (timer.expiration or 0) then
-        -- if timer and self:GetCooldownDuration() <= 0 then
             NS.Timers:Remove(timer.unitGUID, timer.category)
+            frame.timerRef = nil
         end
 
-        if not self.parent:IsVisible() then
-            -- Seems like there's a race condition that sometimes causes
-            -- icons to not be shown when multiple unitframes have same timers.
+        if not frame:IsVisible() then
+            -- Seems like there's a race condition that sometimes causes icons to not be shown
             -- Dunno exactly why so this fix will have to do for now.
-            self.parent:Show()
-            self.parent.shown = true
+            frame.shown = true
+            frame:Show()
         end
 
         UpdatePositions(self)
@@ -199,14 +151,17 @@ do
 
     local function CooldownOnHide(self)
         if self:GetCooldownDuration() <= 0 then
-            local timer = self.parent.timerRef
+            local frame = self.parent
+            local timer = frame.timerRef
+
             if timer then
                 NS.Timers:Remove(timer.unitGUID, timer.category)
+                frame.timerRef = nil
             end
 
-            if self.parent:IsVisible() then
-                self.parent:Hide()
-                self.parent.shown = false
+            if frame:IsVisible() then
+                frame.shown = false
+                frame:Hide()
             end
 
             UpdatePositions(self)
@@ -223,7 +178,8 @@ do
             origUnitID = "player-party"
         end
 
-        local frame = CreateFrame("CheckButton", nil, anchor)
+        -- Note to self: Do not inherit from any actionbutton template here or taint will occur
+        local frame = CreateFrame("CheckButton", nil, anchor) -- CheckButton to support Masque
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = NS.db.unitFrames[frame.unitFormatted]
@@ -251,6 +207,9 @@ do
         cooldown.parent = frame -- avoids calling :GetParent() later on
         frame.cooldown = cooldown
 
+        frame.countdown = cooldown:GetRegions()
+        frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
+
         local border = frame:CreateTexture(nil, "OVERLAY")
         border:SetPoint("TOPLEFT", -1, 1)
         border:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -269,10 +228,7 @@ do
         end
         frame.categoryText = ctext
 
-        frame.countdown = cooldown:GetRegions()
-        frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
-
-        AddMasque(frame)
+        MasqueAddFrame(frame)
 
         return frame
     end
@@ -320,6 +276,15 @@ do
     end
 end
 
+function Icons:HideAll()
+    for unitID, tbl in pairs(frames) do
+        for category, frame in pairs(tbl) do
+            frame.shown = false
+            frame:Hide()
+        end
+    end
+end
+
 do
     local textureCachePlayer = {}
     local indicatorColors = NS.DR_STATES_COLORS
@@ -341,28 +306,31 @@ do
         end
     end
 
-    function Icons:StartCooldown(timer, unitID)
-        local frame = self:GetFrame(unitID, timer.category)
-        if not frame then return end
-
+    local function SetSpellTexture(frame, timer)
         if NS.db.spellBookTextures then
             if not textureCachePlayer[timer.category] and timer.srcGUID == UnitGUID("player") then
                 textureCachePlayer[timer.category] = GetSpellTexture(timer.spellID)
             end
         end
 
+        -- always set texture that player has cast before for this category, but only if timer is for enemy target
         if NS.db.spellBookTextures and textureCachePlayer[timer.category] and not timer.isFriendly then
-            -- always set texture that player has cast before for this category, but only if timer is for enemy target
             frame.icon:SetTexture(textureCachePlayer[timer.category])
         else
             frame.icon:SetTexture(GetSpellTexture(timer.spellID))
         end
+    end
 
-        SetIndicators(frame, timer.applied)
+    function Icons:StartCooldown(timer, unitID)
+        local frame = self:GetFrame(unitID, timer.category)
+        if not frame then return end
 
         local now = GetTime()
         local expiration = timer.expiration - now
         frame.timerRef = timer
+
+        SetSpellTexture(frame, timer)
+        SetIndicators(frame, timer.applied)
 
         if frame.shown then
             --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
@@ -376,31 +344,17 @@ do
             frame:Show()
         end
     end
-end
 
-function Icons:StopCooldown(timer, unitID, isFinished)
-    local frame = Icons:GetFrame(unitID, timer.category)
-    if not frame then return end
+    function Icons:StopCooldown(timer, unitID, isFinished)
+        local frame = Icons:GetFrame(unitID, timer.category)
+        if not frame then return end
 
-    if isFinished and frame.timerRef then
-        frame.timerRef.applied = 0
-        frame.timerRef = nil
-        --frames[unitID][timer.category] = nil
-        --pool:Release(frame)
-    end
-
-    frame.shown = false
-    frame:Hide()
-end
-
-function Icons:HideAll()
-    for unitID, tbl in pairs(frames) do
-        for category, frame in pairs(tbl) do
-            frame.shown = false
-            frame:Hide()
-            --frames[unitID][category] = nil
-            --pool:Release(frame)
+        if isFinished and frame.timerRef then
+            frame.timerRef.applied = 0
+            frame.timerRef = nil
         end
-        --frames[unitID] = nil
+
+        frame.shown = false
+        frame:Hide()
     end
 end
