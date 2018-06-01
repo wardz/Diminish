@@ -5,7 +5,7 @@
 
 locales\localization.lua
 
-widgets\libs\LibStub\LibStub.lua
+widgets\libs\LibStub.lua
 widgets\libs\PhanxConfig-Dropdown.lua
 widgets\widgets.lua
 widgets\button.lua
