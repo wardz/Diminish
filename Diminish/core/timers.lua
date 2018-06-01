@@ -99,7 +99,7 @@ function Timers:Remove(unitGUID, category, noStop)
             RemoveTable(timers[category])
             timers[category] = nil -- remove ref to table in pool but not table itself
         end
-    else
+    elseif category == false then
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
         for cat, t in pairs(timers) do
@@ -133,14 +133,14 @@ function Timers:Refresh(unitID)
     -- Hide all timers belonging to previous guid
     if prevGUID and prevGUID ~= unitGUID and activeTimers[prevGUID] then
         for category, timer in pairs(activeTimers[prevGUID]) do
-            StopTimers(timer, unitID)
+            StopTimers(timer, unitID, true)
         end
     else
         -- No prev guid available, hide all for this unitID instead
         for guid, categories in pairs(activeTimers) do
             if guid ~= unitGUID then
                 for cat, timer in pairs(categories) do
-                    StopTimers(timer, unitID)
+                    StopTimers(timer, unitID, true)
                 end
             end
         end
