@@ -178,9 +178,10 @@ end
 function Diminish:PLAYER_LOGIN()
     self:InitDB()
     self.PLAYER_GUID = UnitGUID("player")
-
     NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
-    --NS.Icons:AnchorPartyFrames()
+
+    local Masque = LibStub and LibStub("Masque", true)
+    NS.MasqueGroup = Masque and Masque:Group("Diminish")
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")

@@ -90,15 +90,11 @@ do
     local pairs = _G.pairs
 
     local function MasqueAddFrame(frame)
-        Icons.MSQ = Icons.MSQ or LibStub and LibStub("Masque", true)
-        if not Icons.MSQ then return end
-
-        Icons.MSQGroup = Icons.MSQGroup or Icons.MSQ:Group("Diminish")
-        if not Icons.MSQGroup then return end
+        if not NS.MasqueGroup then return end
 
         frame:SetNormalTexture("Interface\\BUTTONS\\UI-Quickslot-Depress")
 
-        Icons.MSQGroup:AddButton(frame, {
+        NS.MasqueGroup:AddButton(frame, {
             Icon = frame.icon,
             Cooldown = frame.cooldown,
             Normal = frame:GetNormalTexture(),
@@ -174,7 +170,7 @@ do
 
         local origUnitID
         if unitID == "player-party" then
-            unitID = "party" -- use for party settings
+            unitID = "party" -- use for party db settings
             origUnitID = "player-party"
         end
 
