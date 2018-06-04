@@ -127,6 +127,12 @@ function Panel:Setup()
     end)
     frames.spellBookTextures:SetPoint("LEFT", frames.displayMode, 0, -40)
 
+    frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, L.COLORBLIND_TOOLTIP, function()
+        db.colorBlind = not db.colorBlind
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
+    end)
+    frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
+
     -------------------------------------------------------------------
 
     local tip = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
@@ -151,7 +157,7 @@ function Panel:Setup()
             tip:Hide()
         end
     end)
-    unlock:SetPoint("BOTTOMLEFT", frames.spellBookTextures, 0, -40)
+    unlock:SetPoint("BOTTOMLEFT", frames.colorBlind, 0, -40)
     tip:SetPoint("BOTTOM", unlock, 0, -20)
 
 

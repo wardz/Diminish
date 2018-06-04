@@ -13,6 +13,8 @@ L["ANCHORDRAG"] = [=[%s
 Grows: %s]=]
 L["ARENA"] = "Arena"
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking."
+L["COLORBLIND"] = "Enable Colorblind Mode"
+L["COLORBLIND_TOOLTIP"] = "Show DR indicators using text instead of colors."
 L["COMBATLOCKDOWN_ERROR"] = "Must leave combat before doing that."
 L["COMPACTFRAMES_ERROR"] = "Unable to test raid frames while not in a group."
 L["COPY"] = "Copy"

@@ -197,7 +197,7 @@ do
         cooldown:SetHideCountdownNumbers(not NS.db.timerText)
         cooldown:SetDrawSwipe(NS.db.timerSwipe)
         cooldown:SetDrawEdge(false)
-        cooldown:SetSwipeColor(0, 0, 0, 0.65)
+        cooldown:SetSwipeColor(0, 0, 0, 0.6)
         cooldown:SetScript("OnShow", CooldownOnShow)
         cooldown:SetScript("OnHide", CooldownOnHide)
         cooldown.parent = frame -- avoids calling :GetParent() later on
@@ -213,7 +213,7 @@ do
         frame.border = border
 
         -- label above an icon that displays category text
-        local ctext = frame:CreateFontString()
+        local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
         ctext:SetFont(STANDARD_TEXT_FONT, 8)
         ctext:SetPoint("TOP", 0, 10)
         ctext:SetShown(NS.db.showCategoryText)
@@ -263,6 +263,17 @@ do
                 if NS.db.timerText and not NS.db.timerColors then
                     frame.countdown:SetTextColor(1, 1, 1, 1)
                 end
+
+                if NS.db.colorBlind then
+                    frame.countdown:SetPoint("CENTER", 0, 3)
+                    frame.border:SetVertexColor(0, 0, 0, 0)
+                else
+                    frame.countdown:SetPoint("CENTER", 0, 0)
+                end
+
+                if frame.indicator then
+                    frame.indicator:SetShown(NS.db.colorBlind)
+                end
             end
         end
 
@@ -286,19 +297,33 @@ do
     local indicatorColors = NS.DR_STATES_COLORS
     local GetSpellTexture = _G.GetSpellTexture
 
+    local indicatorTexts = { "50%", "75%", "100%" }
+
     local function SetIndicators(frame, applied)
+        if NS.db.colorBlind then
+            if not frame.indicator then
+                frame.indicator = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
+                frame.indicator:SetPoint("BOTTOMRIGHT", 0, 0)
+                frame.countdown:SetPoint("CENTER", 0, 3)
+            end
+
+            frame.indicator:SetText(indicatorTexts[applied])
+            return
+        end
+
         local color = indicatorColors[applied]
         if not color then return end
 
         if Icons.MSQGroup then
-            frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3])
+            frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
             frame.border:SetVertexColor(frame.border.__MSQ_Color)
         else
-            frame.border:SetVertexColor(color[1], color[2], color[3])
+            frame.border:SetVertexColor(color[1], color[2], color[3], 1)
         end
 
         if NS.db.timerText and NS.db.timerColors then
-            frame.countdown:SetTextColor(color[1], color[2], color[3])
+            frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
         end
     end
 
