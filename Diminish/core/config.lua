@@ -38,7 +38,7 @@ local defaultsTarget = {
     zones = { pvp = true, arena = false, none = true  },
     disabledCategories = defaultsDisabledCategories,
     watchFriendly = false,
-    iconSize = 26,
+    iconSize = 24,
     iconPadding = 3,
     growLeft = false,
     point = "CENTER",
@@ -47,13 +47,14 @@ local defaultsTarget = {
 }
 
 NS.DEFAULT_SETTINGS = {
-    timerTextSize = 14,
+    timerTextSize = 11,
     timerText = true,
     timerSwipe = true,
     timerColors = false,
     displayMode = "ON_AURA_START",
     spellBookTextures = false,
     showCategoryText = false,
+    colorBlind = false,
 
     unitFrames = {
         target = defaultsTarget,
@@ -64,7 +65,7 @@ NS.DEFAULT_SETTINGS = {
             zones = { pvp = true, arena = true, none = true },
             disabledCategories = defaultsDisabledCategories,
             watchFriendly = true,
-            iconSize = 26,
+            iconSize = 24,
             iconPadding = 3,
             growLeft = false,
             point = "CENTER",
@@ -77,7 +78,7 @@ NS.DEFAULT_SETTINGS = {
             zones = { pvp = false, arena = true, none = true },
             disabledCategories = defaultsDisabledCategories,
             watchFriendly = true,
-            iconSize = 26,
+            iconSize = 24,
             iconPadding = 3,
             growLeft = false,
             point = "CENTER",
@@ -89,7 +90,7 @@ NS.DEFAULT_SETTINGS = {
             enabled = true,
             zones = { pvp = false, arena = true, none = false },
             disabledCategories = defaultsDisabledCategories,
-            iconSize = 26,
+            iconSize = 24,
             iconPadding = 3,
             growLeft = true,
             point = "CENTER",
