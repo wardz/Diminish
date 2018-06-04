@@ -12,6 +12,32 @@ local function RefreshOnShow(self)
 end
 
 local function OnShow(self)
+    if not Panel.initialized then
+        -- Create all frames when our optionsframe gets shown
+        if Panel.Setup then
+            Panel:Setup()
+        end
+
+        if Panel.callbacks then
+            for i = 1, #Panel.callbacks do
+                Panel.callbacks[i]()
+                Panel.callbacks[i] = nil
+            end
+            Panel.callbacks = nil
+        end
+
+        -- allow garbage collection of widgets
+        -- since we dont need them any more after PLAYER_LOGIN (except ToggleState())
+        for k, v in pairs(NS.Widgets) do
+            if k ~= "ToggleState" then
+                NS.Widgets[k] = nil
+            end
+        end
+
+        Panel.CreateChild = nil
+        Panel.initialized = true
+    end
+
     RefreshOnShow(self)
 
     if InCombatLockdown() then return end
@@ -52,7 +78,7 @@ function Panel:CreateChild(name, callback)
         self.callbacks = {}
     end
 
-    -- Schedule creation for PLAYER_LOGIN
+    -- Schedule creation for OnShow
     self.callbacks[#self.callbacks + 1] = function()
         local panel = CreateFrame("Frame", nil, self)
         panel.name = name
@@ -65,31 +91,4 @@ function Panel:CreateChild(name, callback)
     end
 end
 
-Panel:RegisterEvent("PLAYER_LOGIN")
-Panel:SetScript("OnEvent", function()
-    Panel:Register()
-
-    if Panel.Setup then
-        Panel:Setup()
-    end
-
-    if Panel.callbacks then
-        for i = 1, #Panel.callbacks do
-            Panel.callbacks[i]()
-            Panel.callbacks[i] = nil
-        end
-        Panel.callbacks = nil
-    end
-
-    -- allow garbage collection of widgets
-    -- since we dont need them any more after PLAYER_LOGIN (except ToggleState())
-    for k, v in pairs(NS.Widgets) do
-        if k ~= "ToggleState" then
-            NS.Widgets[k] = nil
-        end
-    end
-    Panel.CreateChild = nil
-
-    Panel:UnregisterEvent("PLAYER_LOGIN")
-    Panel:SetScript("OnEvent", nil)
-end)
+Panel:Register()
