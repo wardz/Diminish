@@ -9,6 +9,7 @@ local _G = _G
 local GetTime = _G.GetTime
 local CreateFrame = _G.CreateFrame
 local gsub = _G.string.gsub
+local format = _G.string.format
 local strmatch = _G.string.match
 
 function Icons:GetAnchor(unitID, defaultAnchor)
@@ -24,7 +25,7 @@ function Icons:GetAnchor(unitID, defaultAnchor)
         local name = anchors[i]
 
         if count > 0 then
-            name = name .. strmatch(unitID, "%d+") -- add unit index to frame name
+            name = format(name, strmatch(unitID, "%d+")) -- add unit index to frame name
         end
 
         local frame = _G[name]

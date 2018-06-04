@@ -41,16 +41,16 @@ NS.anchors = {
     },
 
     party = {
-        "SUFHeaderpartyUnitButton",
-        "XPerl_party",
-        "ElvUF_PartyGroup1UnitButton",
-        "TukuiPartyUnitButton",
+        "SUFHeaderpartyUnitButton%d",
+        "XPerl_party%d",
+        "ElvUF_PartyGroup1UnitButton%d",
+        "TukuiPartyUnitButton%d",
         --"Vd1H%dBgBarlcBarFIBar",
-        "DUF_PartyFrame",
+        "DUF_PartyFrame%d",
         -- TODO: gw2 raid/partyframe
-        -- TODO: oUF party frame + raid
-        "PitBull4_Groups_PartyUnitButton",
-        "PartyMemberFrame",
+        "PitBull4_Groups_PartyUnitButton%d",
+        "oUF_Raid%d",
+        "PartyMemberFrame%d",
     },
 
     --[[raid = {
@@ -58,9 +58,10 @@ NS.anchors = {
     },]]
 
     arena =  {
-        "ElvUF_Arena",
-        "TukuiArena",
-        --"barena%dUnitFrame",
-        "ArenaEnemyFrame",
+        "ElvUF_Arena%d",
+        "TukuiArena%d",
+        "barena%dUnitFrame",
+        "oUF_Arena%d",
+        "ArenaEnemyFrame%d",
     },
 }
