@@ -120,16 +120,18 @@ function TestMode:ToggleArenaAndPartyFrames(state)
 
     for i = 1, 3 do
         if not isInArena then
-            if _G["ArenaEnemyFrame"..i] and _G["ArenaEnemyFrame"..i]:IsVisible() or settings.arena.enabled then
-                _G["ArenaEnemyFrame"..i]:SetShown(showFlag)
+            local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i)
+            if frame and frame:IsVisible() or settings.arena.enabled then
+                frame:SetShown(showFlag)
             end
         end
 
-        if not useCompact and not IsInGroup() then -- _G["PartyMemberFrame"..i]:IsVisible()
-            if settings.party.enabled then
-                if not UnitExists(_G["PartyMemberFrame"..i]) then -- do not toggle if frame belongs to a group member
-                    _G["PartyMemberFrame"..i]:SetShown(showFlag)
-                    _G["PartyMemberFrame"..i]:HookScript("OnHide", PartyOnHide)
+        if not useCompact and settings.party.enabled then
+            if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
+                local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true)
+                if frame then
+                    frame:SetShown(showFlag)
+                    frame:HookScript("OnHide", PartyOnHide)
                 end
             end
         end
