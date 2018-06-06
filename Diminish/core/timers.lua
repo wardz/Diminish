@@ -130,17 +130,18 @@ function Timers:Refresh(unitID)
     activeGUIDs[unitID] = unitGUID
     if not unitGUID then return end
 
-    -- Hide all timers belonging to previous guid
+    -- Hide active timers belonging to previous guid
     if prevGUID and prevGUID ~= unitGUID and activeTimers[prevGUID] then
         for category, timer in pairs(activeTimers[prevGUID]) do
             StopTimers(timer, unitID, true)
         end
     else
-        -- No prev guid available, hide all for this unitID instead
-        for guid, categories in pairs(activeTimers) do
-            if guid ~= unitGUID then
-                for cat, timer in pairs(categories) do
-                    StopTimers(timer, unitID, true)
+        -- No prev guid available, hide ALL frames for this unitID instead
+        if NS.iconFrames[unitID] then
+            for category, frame in pairs(NS.iconFrames[unitID]) do
+                if frame.shown then
+                    frame.shown = false
+                    frame:Hide()
                 end
             end
         end
@@ -148,10 +149,11 @@ function Timers:Refresh(unitID)
 
     local _, englishClass = UnitClass(unitID)
 
-    -- Show all timers belonging to current guid
+    -- Start (or delete) timers belonging to current guid
     if activeTimers[unitGUID] then
         for category, timer in pairs(activeTimers[unitGUID]) do
             if not timer.unitClass then
+                -- Used to detect hunters, we need to ignore Feign Death for UNIT_DIED later on
                 timer.unitClass = englishClass
             end
 

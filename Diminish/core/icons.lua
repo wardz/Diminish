@@ -4,6 +4,7 @@ NS.Icons = Icons
 
 local anchorCache = {}
 local frames = {}
+NS.iconFrames = frames
 
 local _G = _G
 local GetTime = _G.GetTime
@@ -302,6 +303,7 @@ do
 
     local function SetIndicators(frame, applied)
         if NS.db.colorBlind then
+            -- For color blind users we show diminishing status using text instead of border colors
             if not frame.indicator then
                 frame.indicator = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
@@ -368,7 +370,7 @@ do
     end
 
     function Icons:StopCooldown(timer, unitID, isFinished)
-        local frame = Icons:GetFrame(unitID, timer.category)
+        local frame = frames[unitID] and frames[unitID][timer.category]
         if not frame then return end
 
         if isFinished and frame.timerRef then
