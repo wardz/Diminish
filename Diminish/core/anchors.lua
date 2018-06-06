@@ -50,6 +50,7 @@ NS.anchors = {
         -- TODO: gw2 raid/partyframe
         "PitBull4_Groups_PartyUnitButton%d",
         "oUF_Raid%d",
+        --"GridLayoutHeader1UnitButton%d",
         "PartyMemberFrame%d",
     },
 

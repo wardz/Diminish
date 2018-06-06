@@ -16,7 +16,7 @@ local function Refresh(self)
 
     -- Refresh value of all widgets except zones/categories
     for setting, value in pairs(unitFrameSettings) do
-        if setting ~= "zones" and setting ~= "categories" then -- TODO: test categories
+        if setting ~= "zones" and setting ~= "categories" then
             if frames[setting] then
                 if frames[setting]:IsObjectType("Slider") then
                     frames[setting]:SetValue(value)
