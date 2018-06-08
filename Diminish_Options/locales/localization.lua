@@ -64,8 +64,7 @@ L["TARGETTIP"] = "Target/focus yourself to see all frames."
 L["TEST"] = "Test Frames"
 L["TEST_TOOLTIP"] = "Test all *enabled* DR frames."
 L["TIMERCOLORS"] = "Show Countdown Indicator"
-L["TIMERCOLORS_TOOLTIP"] = [=[Toggles DR effect coloring of the countdown text.
-(Red=100%, Yellow=75%, Green=50%)]=]
+L["TIMERCOLORS_TOOLTIP"] = "Toggles DR indicator coloring of the countdown text."
 L["TIMERSWIPE"] = "Show Swipe for Cooldowns"
 L["TIMERSWIPE_TOOLTIP"] = "Toggles the cooldown swipe animation for all frames."
 L["TIMERTEXT"] = "Show Countdown for Cooldowns"
