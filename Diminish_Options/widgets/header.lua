@@ -39,7 +39,7 @@ function Widgets:CreateSubHeader(parent, text)
     local anchor = CreateFrame("Frame", nil, parent)
     anchor:SetSize(200, 32)
 
-    local title = anchor:CreateFontString(nil, "ARTWORK", "OptionsFontHighlight")
+    local title = anchor:CreateFontString(nil, "ARTWORK", "GameFontNormalMed1")
     title:SetJustifyH("LEFT")
     title:SetJustifyV("TOP")
     title:SetText(text)
