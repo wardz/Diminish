@@ -118,17 +118,7 @@ function Diminish:Enable()
     NS.Info("Enabled for zone %s.", self.currInstanceType)
     Timers:ResetAll(true)
 
-    if self.currInstanceType == "arena" or self.currInstanceType == "pvp" then
-        -- Always keep CLEU registered when in arena/bg's for more accurate tracking
-        self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-    else
-        -- Outdoors, only register CLEU while in combat.
-        self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        self:RegisterEvent("PLAYER_REGEN_ENABLED")
-        self:RegisterEvent("PLAYER_REGEN_DISABLED")
-    end
+    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
 function Diminish:InitDB()
@@ -242,14 +232,6 @@ function Diminish:GROUP_ROSTER_UPDATE()
     for i = 1, members do
         Timers:Refresh("party"..i)
     end
-end
-
-function Diminish:PLAYER_REGEN_ENABLED()
-    self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-end
-
-function Diminish:PLAYER_REGEN_DISABLED()
-    self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
 do
