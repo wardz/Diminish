@@ -71,7 +71,7 @@ function Panel:Setup()
     Widgets:CreateHeader(self, self.name, GetAddOnMetadata("Diminish", "Version"), GetAddOnMetadata(self.name, "Notes"))
 
     local subCooldown = Widgets:CreateSubHeader(self, L.HEADER_COOLDOWN)
-    subCooldown:SetPoint("TOPLEFT", 16, -40)
+    subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
@@ -108,7 +108,7 @@ function Panel:Setup()
     -------------------------------------------------------------------
 
     local subMisc = Widgets:CreateSubHeader(self, L.HEADER_MISC)
-    subMisc:SetPoint("TOPRIGHT", -64, -40)
+    subMisc:SetPoint("TOPRIGHT", -64, -50)
 
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
         db.showCategoryText = not db.showCategoryText
@@ -132,6 +132,22 @@ function Panel:Setup()
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end)
     frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
+
+    local textures = {
+        { value = "Interface\\BUTTONS\\UI-Quickslot-Depress", text = L.DEFAULT },
+        -- { value = "Interface\\COMMON\\WhiteIconFrame", text = "Clean" },
+        { value = "Interface\\BUTTONS\\WHITE8X8", text = L.TEXTURE_BRIGHT },
+        { value = "", text = L.TEXTURE_NONE },
+    }
+
+    frames.borderTexture = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
+    frames.borderTexture:SetPoint("LEFT", frames.colorBlind, 7, -50)
+    frames.borderTexture:SetWidth(180)
+    frames.borderTexture.OnValueChanged = function(self, value)
+        if not value or value == EMPTY then return end
+        db.borderTexture = value
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
+    end
 
     -------------------------------------------------------------------
 
@@ -157,7 +173,7 @@ function Panel:Setup()
             tip:Hide()
         end
     end)
-    unlock:SetPoint("BOTTOMLEFT", frames.colorBlind, 0, -40)
+    unlock:SetPoint("BOTTOMLEFT", frames.borderTexture, 0, -40)
     tip:SetPoint("BOTTOM", unlock, 0, -20)
 
 
@@ -189,6 +205,8 @@ function Panel:refresh()
                     value = true
                 end
                 frames[setting]:SetChecked(value)
+            elseif frames[setting].items then -- phanx dropdown
+                frames[setting]:SetValue(value)
             end
         end
     end

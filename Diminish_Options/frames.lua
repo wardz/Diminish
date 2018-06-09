@@ -65,7 +65,7 @@ do
             local db = NS.GetDBProxy("unitFrames", unit)
 
             local subVisuals = Widgets:CreateSubHeader(panel, L.HEADER_ICONS)
-            subVisuals:SetPoint("TOPLEFT", 16, -40)
+            subVisuals:SetPoint("TOPLEFT", 16, -50)
 
 
             frames.enabled = Widgets:CreateCheckbox(panel, L.ENABLED, L.ENABLED_TOOLTIP, function()
@@ -128,7 +128,7 @@ do
 
             do
                 local subCategories = Widgets:CreateSubHeader(panel, L.HEADER_CATEGORIES)
-                subCategories:SetPoint("TOPRIGHT", -64, -40)
+                subCategories:SetPoint("TOPRIGHT", -64, -50)
 
                 frames.categories = {}
                 local x = -60
@@ -149,7 +149,7 @@ do
 
             if unit ~= "arena" then
                 local subZones = Widgets:CreateSubHeader(panel, L.HEADER_ZONE)
-                subZones:SetPoint("LEFT", 16, -80)
+                subZones:SetPoint("LEFT", 16, -100)
 
                 frames.zones = {}
                 local x = -60

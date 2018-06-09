@@ -94,7 +94,8 @@ do
     local function MasqueAddFrame(frame)
         if not NS.MasqueGroup then return end
 
-        frame:SetNormalTexture("Interface\\BUTTONS\\UI-Quickslot-Depress")
+        -- TODO: test
+        frame:SetNormalTexture(NS.db.borderTexture)
 
         NS.MasqueGroup:AddButton(frame, {
             Icon = frame.icon,
@@ -191,8 +192,9 @@ do
         frame:EnableMouse(false)
         frame:Hide()
 
-        frame.icon = frame:CreateTexture(nil, "BACKGROUND")
+        frame.icon = frame:CreateTexture(nil, "ARTWORK")
         frame.icon:SetAllPoints(frame)
+        frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
         local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
         cooldown:SetAllPoints(frame)
@@ -208,10 +210,10 @@ do
         frame.countdown = cooldown:GetRegions()
         frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
 
-        local border = frame:CreateTexture(nil, "OVERLAY")
-        border:SetPoint("TOPLEFT", -1, 1)
-        border:SetPoint("BOTTOMRIGHT", 1, -1)
-        border:SetTexture("Interface\\BUTTONS\\UI-Quickslot-Depress")
+        local border = frame:CreateTexture(nil, "BORDER")
+        border:SetPoint("TOPLEFT", -2.5, 2.5)
+        border:SetPoint("BOTTOMRIGHT", 2.5, -2.5)
+        border:SetTexture(NS.db.borderTexture)
         frame.border = border
 
         -- label above an icon that displays category text
@@ -259,7 +261,7 @@ do
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
 
-                UpdatePositions(frame.cooldown)
+                frame.border:SetTexture(NS.db.borderTexture)
 
                 frame.cooldown.noCooldownCount = NS.db.timerColors or not NS.db.timerText -- toggle OmniCC
                 if NS.db.timerText and not NS.db.timerColors then
@@ -268,7 +270,6 @@ do
 
                 if NS.db.colorBlind then
                     frame.countdown:SetPoint("CENTER", 0, 3)
-                    frame.border:SetVertexColor(0, 0, 0, 0)
                 else
                     frame.countdown:SetPoint("CENTER", 0, 0)
                 end
@@ -276,6 +277,8 @@ do
                 if frame.indicator then
                     frame.indicator:SetShown(NS.db.colorBlind)
                 end
+
+                UpdatePositions(frame.cooldown)
             end
         end
 
@@ -303,7 +306,6 @@ do
 
     local function SetIndicators(frame, applied)
         if NS.db.colorBlind then
-            -- For color blind users we show diminishing status using text instead of border colors
             if not frame.indicator then
                 frame.indicator = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
