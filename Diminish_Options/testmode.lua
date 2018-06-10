@@ -118,6 +118,17 @@ function TestMode:ToggleArenaAndPartyFrames(state)
         end
     end
 
+    if ElvUI then
+        -- Show/Hide doesn't seem to work for ElvUI so use ElvUI built in functions to toggle arena/party frames
+        local E = unpack(ElvUI)
+        local UF = E and E:GetModule("UnitFrames")
+        if UF then
+            UF:ToggleForceShowGroupFrames('arena', 3)
+            UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
+            return
+        end
+    end
+
     for i = 1, 3 do
         if not isInArena then
             local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i)
@@ -131,7 +142,10 @@ function TestMode:ToggleArenaAndPartyFrames(state)
                 local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true)
                 if frame then
                     frame:SetShown(showFlag)
-                    frame:HookScript("OnHide", PartyOnHide)
+                    if not frame.Diminish_isHooked then
+                        frame:HookScript("OnHide", PartyOnHide) -- fixes blizzard bug
+                        frame.Diminish_isHooked = true
+                    end
                 end
             end
         end
