@@ -67,8 +67,8 @@ function Panel:Setup()
     local frames = self.frames
     local db = NS.GetDBProxy()
 
-    -- TODO: GetAddOnMetadata notes should work with localization
-    Widgets:CreateHeader(self, self.name, GetAddOnMetadata("Diminish", "Version"), GetAddOnMetadata(self.name, "Notes"))
+    local notes = GetAddOnMetadata(self.name, "Notes-" .. GetLocale()) or GetAddOnMetadata(self.name, "Notes")
+    Widgets:CreateHeader(self, self.name, GetAddOnMetadata("Diminish", "Version"), notes)
 
     local subCooldown = Widgets:CreateSubHeader(self, L.HEADER_COOLDOWN)
     subCooldown:SetPoint("TOPLEFT", 16, -50)
@@ -132,6 +132,7 @@ function Panel:Setup()
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end)
     frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
+
 
     local textures = {
         { value = "Interface\\BUTTONS\\UI-Quickslot-Depress", text = L.DEFAULT },
