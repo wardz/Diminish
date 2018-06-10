@@ -82,7 +82,7 @@ local function PartyOnHide(self)
     end
 end
 
-function TestMode:ToggleArenaAndPartyFrames(state)
+function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     if isTesting or isAnchoring then return end
 
     local settings = DIMINISH_NS.db.unitFrames
@@ -100,7 +100,7 @@ function TestMode:ToggleArenaAndPartyFrames(state)
 
     local isInArena = select(2, IsInInstance()) == "arena"
 
-    if settings.arena.enabled and not isInArena then
+    if forceHide or settings.arena.enabled and not isInArena then
         ArenaEnemyFrames:SetShown(showFlag)
         if LibStub and LibStub("AceAddon-3.0", true) then
             local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
@@ -137,7 +137,7 @@ function TestMode:ToggleArenaAndPartyFrames(state)
             end
         end
 
-        if not useCompact and settings.party.enabled then
+        if not useCompact and forceHide or settings.party.enabled then
             if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
                 local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true)
                 if frame then
@@ -236,7 +236,7 @@ function TestMode:Test(hide)
 
     if isTesting or hide then
         isTesting = false
-        TestMode:ToggleArenaAndPartyFrames(false)
+        TestMode:ToggleArenaAndPartyFrames(false, hide)
         DIMINISH_NS.Timers:ResetAll(true)
         return
     end
