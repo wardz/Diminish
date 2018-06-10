@@ -60,7 +60,7 @@ L["SLIDER_LOW"] = "Small"
 L["SPELLBOOKTEXTURES"] = "Show Own Textures Only"
 L["SPELLBOOKTEXTURES_TOOLTIP"] = [=[DR icons will only use spell textures found in your own spellbook that matches the triggered category if available.
 
-(Enemy timers only. Textures will be sat after you've casted a CC ability once.)]=]
+(Enemy timers only. Textures will be sat after you've casted a CC ability once for each category)]=]
 L["STOP"] = "Stop"
 L["TARGET"] = "Target"
 L["TARGETTIP"] = "Target/focus yourself to see all frames."

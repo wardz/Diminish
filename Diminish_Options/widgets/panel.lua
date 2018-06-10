@@ -16,6 +16,7 @@ local function OnShow(self)
         -- Create all frames when our optionsframe gets shown
         if Panel.Setup then
             Panel:Setup()
+            Panel.Setup = nil
         end
 
         if Panel.callbacks then
@@ -27,7 +28,7 @@ local function OnShow(self)
         end
 
         -- allow garbage collection of widgets
-        -- since we dont need them any more after PLAYER_LOGIN (except ToggleState())
+        -- since we dont need them any more after initialization (except ToggleState())
         for k, v in pairs(NS.Widgets) do
             if k ~= "ToggleState" then
                 NS.Widgets[k] = nil
@@ -78,7 +79,7 @@ function Panel:CreateChild(name, callback)
         self.callbacks = {}
     end
 
-    -- Schedule creation for OnShow
+    -- Schedule creation for main Panel OnShow
     self.callbacks[#self.callbacks + 1] = function()
         local panel = CreateFrame("Frame", nil, self)
         panel.name = name

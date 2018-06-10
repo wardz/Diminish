@@ -35,7 +35,6 @@ function Widgets:CreateHeader(parent, titleText, versionText, notesText)
 end
 
 function Widgets:CreateSubHeader(parent, text)
-    -- TODO: avoid creating frame here
     local anchor = CreateFrame("Frame", nil, parent)
     anchor:SetSize(200, 32)
 
