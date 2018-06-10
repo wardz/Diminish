@@ -212,7 +212,7 @@ do
         frame.countdown = cooldown:GetRegions()
         frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
 
-        local borderWidth = strfind(db.borderTexture, "Depress") and 2.5 or 1
+        local borderWidth = strfind(db.borderTexture, "Depress") and 3 or 1.5
         local border = frame:CreateTexture(nil, "BORDER")
         border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
         border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
@@ -266,7 +266,7 @@ do
 
                 if not NS.MasqueGroup then
                     frame.border:SetTexture(NS.db.borderTexture)
-                    local borderWidth = strfind(NS.db.borderTexture, "Depress") and 2.5 or 1
+                    local borderWidth = strfind(NS.db.borderTexture, "Depress") and 3 or 1.5
                     frame.border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
                     frame.border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
                 end
