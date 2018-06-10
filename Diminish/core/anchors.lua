@@ -48,7 +48,7 @@ NS.anchors = {
         "DUF_PartyFrame%d",
         "PitBull4_Groups_PartyUnitButton%d",
         "oUF_Raid%d",
-        -- TODO: gw2 partyframe
+        "GwPartyFrame%d",
         "PartyMemberFrame%d",
     },
 
