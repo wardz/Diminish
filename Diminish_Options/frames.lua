@@ -5,7 +5,7 @@ local L = NS.L
 
 local function Refresh(self)
     local frames = self.frames
-    local unit = strlower(self.name)
+    local unit = self.unitID
     local unitFrameSettings = DIMINISH_NS.db.unitFrames[unit]
 
     if not unitFrameSettings.enabled then
@@ -59,6 +59,7 @@ do
     for unitFrame, unit in pairs(NS.unitFrames) do
         Panel:CreateChild(unitFrame, function(panel)
             Widgets:CreateHeader(panel, unitFrame, false, format(L.HEADER_UNITFRAME, unitFrame))
+            panel.unitID = unit
             panel.refresh = Refresh
 
             local frames = panel.frames
