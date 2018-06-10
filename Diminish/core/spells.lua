@@ -30,6 +30,7 @@ NS.spellList = {
     [236748]  = C.DISORIENT,       -- Intimidating Roar
     [226943]  = C.DISORIENT,       -- Mind Bomb
     [2637]    = C.DISORIENT,       -- Hibernate
+    --[xxxx]  = C.DISORIENT,       -- Holographic Horror Projector
 
     [99]      = C.INCAPACITATE,    -- Incapacitating Roar
     [203126]  = C.INCAPACITATE,    -- Maim (Blood trauma)
@@ -75,6 +76,7 @@ NS.spellList = {
     [217832]  = C.INCAPACITATE,    -- Imprison
     [221527]  = C.INCAPACITATE,    -- Imprison (Honor Talent)
     [197214]  = C.INCAPACITATE,    -- Sundering
+    --[274930]  = C.INCAPACITATE,  -- Organic Discombobulation Grenade
 
     [47476]   = C.SILENCE,         -- Strangulate
     [204490]  = C.SILENCE,         -- Sigil of Silence
@@ -135,7 +137,7 @@ NS.spellList = {
     [170855]  = C.ROOT,            -- Entangling Roots (Nature's Grasp)
     [201589]  = C.ROOT,            -- Entangling Roots (Tree of Life)
     [235963]  = C.ROOT,            -- Entangling Roots (Feral honor talent)
-    [45334]   = C.ROOT,            -- Immobilized (Wild Charge)
+    [45334]   = C.ROOT,            -- Immobilized (Wild Charge) TODO: does not cause DR?
     [102359]  = C.ROOT,            -- Mass Entanglement
     [53148]   = C.ROOT,            -- Charge (Hunter pet)
     [162480]  = C.ROOT,            -- Steel Trap

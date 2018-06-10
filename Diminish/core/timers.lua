@@ -213,9 +213,9 @@ do
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and NS.db.displayMode == "ON_AURA_START" then
-            if not timer.testMode then
+            if not timer.testMode and not isRefresh then -- TODO: test
                 local duration = GetAuraDuration(origUnitID or unitID, timer.spellID)
-                if duration and duration > 0 or not isRefresh then
+                if duration and duration > 0 then
                     timer.expiration = GetTime() + DR_TIME + (duration or 0)
                 end
             end

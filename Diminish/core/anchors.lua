@@ -45,17 +45,17 @@ NS.anchors = {
         "XPerl_party%d",
         "ElvUF_PartyGroup1UnitButton%d",
         "TukuiPartyUnitButton%d",
-        --"Vd1H%dBgBarlcBarFIBar",
         "DUF_PartyFrame%d",
-        -- TODO: gw2 raid/partyframe
         "PitBull4_Groups_PartyUnitButton%d",
         "oUF_Raid%d",
-        --"GridLayoutHeader1UnitButton%d",
+        -- TODO: gw2 partyframe
         "PartyMemberFrame%d",
     },
 
     --[[raid = {
-        "CompactRaidFrame",
+        "Vd1H%dBgBarlcBarFIBar",
+        "GridLayoutHeader1UnitButton%d",
+        "CompactRaidFrame%d",
     },]]
 
     arena =  {

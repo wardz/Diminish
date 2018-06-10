@@ -60,6 +60,6 @@ do
     end
 
     NS.ReleaseTables = function()
-        wipe(pool)
+        pool = {}
     end
 end

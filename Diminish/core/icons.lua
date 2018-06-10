@@ -8,7 +8,6 @@ NS.iconFrames = frames
 
 local _G = _G
 local GetTime = _G.GetTime
-local CreateFrame = _G.CreateFrame
 local gsub = _G.string.gsub
 local format = _G.string.format
 local strmatch = _G.string.match
@@ -89,12 +88,15 @@ do
 end
 
 do
+    local CreateFrame = _G.CreateFrame
+    local strfind = _G.string.find
+    local strlen = _G.string.len
     local pairs = _G.pairs
+    local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 
     local function MasqueAddFrame(frame)
         if not NS.MasqueGroup then return end
 
-        -- TODO: test
         frame:SetNormalTexture(NS.db.borderTexture)
 
         NS.MasqueGroup:AddButton(frame, {
@@ -177,18 +179,18 @@ do
             origUnitID = "player-party"
         end
 
+        local db = NS.db
+
         -- Note to self: Do not inherit from any actionbutton template here or taint will occur
         local frame = CreateFrame("CheckButton", nil, anchor) -- CheckButton to support Masque
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
-        frame.unitSettingsRef = NS.db.unitFrames[frame.unitFormatted]
+        frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
 
         local size = frame.unitSettingsRef.iconSize
         frame:SetSize(size, size)
 
-        frame:SetFrameLevel(2)
         frame:SetFrameStrata("HIGH")
-        frame:Disable()
         frame:EnableMouse(false)
         frame:Hide()
 
@@ -198,8 +200,8 @@ do
 
         local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
         cooldown:SetAllPoints(frame)
-        cooldown:SetHideCountdownNumbers(not NS.db.timerText)
-        cooldown:SetDrawSwipe(NS.db.timerSwipe)
+        cooldown:SetHideCountdownNumbers(not db.timerText)
+        cooldown:SetDrawSwipe(db.timerSwipe)
         cooldown:SetDrawEdge(false)
         cooldown:SetSwipeColor(0, 0, 0, 0.6)
         cooldown:SetScript("OnShow", CooldownOnShow)
@@ -208,19 +210,20 @@ do
         frame.cooldown = cooldown
 
         frame.countdown = cooldown:GetRegions()
-        frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
+        frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
 
+        local borderWidth = strfind(db.borderTexture, "Depress") and 2.5 or 1
         local border = frame:CreateTexture(nil, "BORDER")
-        border:SetPoint("TOPLEFT", -2.5, 2.5)
-        border:SetPoint("BOTTOMRIGHT", 2.5, -2.5)
-        border:SetTexture(NS.db.borderTexture)
+        border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
+        border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
+        border:SetTexture(db.borderTexture)
         frame.border = border
 
         -- label above an icon that displays category text
         local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
         ctext:SetFont(STANDARD_TEXT_FONT, 8)
         ctext:SetPoint("TOP", 0, 10)
-        ctext:SetShown(NS.db.showCategoryText)
+        ctext:SetShown(db.showCategoryText)
         if strlen(category) >= 10 then
             ctext:SetText(strsub(category, 1, 5)) -- truncate
         else
@@ -261,7 +264,12 @@ do
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
 
-                frame.border:SetTexture(NS.db.borderTexture)
+                if not NS.MasqueGroup then
+                    frame.border:SetTexture(NS.db.borderTexture)
+                    local borderWidth = strfind(NS.db.borderTexture, "Depress") and 2.5 or 1
+                    frame.border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
+                    frame.border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
+                end
 
                 frame.cooldown.noCooldownCount = NS.db.timerColors or not NS.db.timerText -- toggle OmniCC
                 if NS.db.timerText and not NS.db.timerColors then
@@ -270,6 +278,7 @@ do
 
                 if NS.db.colorBlind then
                     frame.countdown:SetPoint("CENTER", 0, 3)
+                    frame.border:SetVertexColor(1, 1, 1, 1)
                 else
                     frame.countdown:SetPoint("CENTER", 0, 0)
                 end
@@ -282,8 +291,8 @@ do
             end
         end
 
-        if self.MSQGroup then
-            self.MSQGroup:ReSkin()
+        if NS.MasqueGroup then
+            NS.MasqueGroup:ReSkin()
         end
     end
 end
@@ -307,7 +316,7 @@ do
     local function SetIndicators(frame, applied)
         if NS.db.colorBlind then
             if not frame.indicator then
-                frame.indicator = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
+                frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
                 frame.indicator:SetPoint("BOTTOMRIGHT", 0, 0)
                 frame.countdown:SetPoint("CENTER", 0, 3)
