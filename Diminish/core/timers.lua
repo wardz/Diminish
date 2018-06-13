@@ -167,6 +167,26 @@ function Timers:Refresh(unitID)
     end
 end
 
+function Timers:RemoveInactiveTimers()
+    -- Remove inactive timers on player left combat incase they
+    -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
+    -- Timers are also reset every loading screen.
+    self.inactiveCheckRan = (self.inactiveCheckRan + 1) or 0
+
+    if self.inactiveCheckRan > 3  then -- we don't need to check every time player left combat
+        NS.Info("RemoveInactiveTimers")
+        for guid, categories in pairs(activeTimers) do
+            for cat, timer in pairs(categories) do
+                if TimerIsFinished(timer) then
+                    StopTimers(timer)
+                    NS.Info("Removed a timer")
+                end
+            end
+        end
+        self.inactiveCheckRan = 0
+    end
+end
+
 function Timers:ResetAll(clearGUIDs)
     for guid, categories in pairs(activeTimers) do
         for cat, t in pairs(categories) do
