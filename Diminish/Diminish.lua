@@ -127,6 +127,7 @@ function Diminish:Enable()
         self:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
     end
 
+    self:RegisterEvent("PLAYER_REGEN_ENABLED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
@@ -239,6 +240,10 @@ function Diminish:GROUP_ROSTER_UPDATE()
     for i = 1, members do
         Timers:Refresh("party"..i)
     end
+end
+
+function Diminish:PLAYER_REGEN_ENABLED()
+    Timers:RemoveInactiveTimers()
 end
 
 function Diminish:UnitIsHunter(name)
