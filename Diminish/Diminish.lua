@@ -1,5 +1,6 @@
 local _, NS = ...
 local Timers = NS.Timers
+local hunterList = {}
 
 local Diminish = CreateFrame("Frame")
 Diminish:RegisterEvent("PLAYER_LOGIN")
@@ -110,6 +111,7 @@ function Diminish:Disable()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")
     Timers:ResetAll(true)
+    wipe(hunterList)
     NS.Info("Disabled for zone %s.", select(2, IsInInstance()))
 end
 
@@ -117,6 +119,13 @@ function Diminish:Enable()
     self.currInstanceType = select(2, IsInInstance())
     NS.Info("Enabled for zone %s.", self.currInstanceType)
     Timers:ResetAll(true)
+
+    wipe(hunterList)
+    if self.currInstanceType == "pvp" then
+        self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
+    else
+        self:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
+    end
 
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
@@ -218,10 +227,8 @@ end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     -- FIXME: rogues restealthing/seen in stealth briefly will cause this to be ran unnecessarily
-    if status == "seen" and not strfind(unitID, "pet") then
-        if tonumber(strmatch(unitID, "%d+")) <= 5 then -- ignore arena6 and above for arena brawl
-            Timers:Refresh(unitID)
-        end
+    if status == "seen" and not C_PvP.IsInBrawl() and not strfind(unitID, "pet") then
+        Timers:Refresh(unitID)
     end
 end
 
@@ -234,6 +241,27 @@ function Diminish:GROUP_ROSTER_UPDATE()
     end
 end
 
+function Diminish:UnitIsHunter(name)
+    return hunterList[name]
+end
+
+function Diminish:UPDATE_BATTLEFIELD_SCORE()
+    -- Build a list with every hunter in BG found and save their name
+    -- This is so we can check if the player is a hunter when UNIT_DIED is fired,
+    -- without having an unitID available (only CLEU destName). When hunters use Feign Death it triggers UNIT_DIED so
+    -- we use this list to ignore hunters when removing timers from units that died.
+    -- For outdoors we cache UnitClass(unitID) when available instead, accuracy isn't really a big deal there
+    NS.Info("UPDATE_BATTLEFIELD_SCORE")
+    local GetBattlefieldScore = _G.GetBattlefieldScore
+    for i = 1, GetNumBattlefieldScores() do
+        local name, _, _, _, _, _, _, _, classToken = GetBattlefieldScore(i)
+        if name and classToken == "HUNTER" then
+            hunterList[name] = true
+            NS.Info(name)
+        end
+    end
+end
+
 do
     local COMBATLOG_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY)
     local COMBATLOG_OBJECT_REACTION_FRIENDLY = _G.COMBATLOG_OBJECT_REACTION_FRIENDLY
@@ -243,7 +271,7 @@ do
     local spellList = NS.spellList
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
-        local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
+        local _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
 
         if auraType == "DEBUFF" then
             local category = spellList[spellID] -- DR category
@@ -268,11 +296,11 @@ do
                 end
 
                 if eventType == "SPELL_AURA_REMOVED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false)
+                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, destName)
                 elseif eventType == "SPELL_AURA_APPLIED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true)
+                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, destName)
                 elseif eventType == "SPELL_AURA_REFRESH" then
-                    Timers:Update(destGUID, category, spellID, isFriendly, true)
+                    Timers:Update(destGUID, category, spellID, isFriendly, true, destName)
                 end
             end
         end

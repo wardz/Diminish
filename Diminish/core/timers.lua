@@ -23,7 +23,7 @@ local function TimerIsFinished(timer)
     return GetTime() >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.displayMode == "ON_AURA_END" and not testMode then
             -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
@@ -53,21 +53,22 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.spellID = spellID
     timer.unitGUID = unitGUID
     timer.srcGUID = srcGUID
+    timer.destName = destName
     timer.testMode = testMode
 
     activeTimers[unitGUID][category] = timer
     StartTimers(timer, isApplied)
 end
 
-function Timers:Update(unitGUID, category, spellID, isFriendly, updateApplied, isApplied)
+function Timers:Update(unitGUID, category, spellID, isFriendly, updateApplied, isApplied, destName)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
         if isApplied then
             -- TODO: verify if this works
             -- SPELL_AURA_REFRESH or APPLIED didn't detect DR (if out of range etc)
             -- but SPELL_AURA_REMOVED was detected later, so create new timer here
-            -- print("ran")
-            Timers:Insert(unitGUID, category, spellID, isFriendly)
+            NS.Info("Update not timer ran")
+            Timers:Insert(unitGUID, category, spellID, isFriendly, destName)
         end
         return
     end
@@ -103,10 +104,12 @@ function Timers:Remove(unitGUID, category, noStop)
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
         for cat, t in pairs(timers) do
-            if t.unitClass and t.unitClass == "HUNTER" then
+            if t.unitClass == "HUNTER" or NS.Diminish:UnitIsHunter(t.destName) then
                 -- UNIT_DIED is fired for Feign Death so ignore hunters here
+                NS.Info("hunter UNIT_DIED remove")
                 return
             end
+
             if not noStop then
                 StopTimers(t, nil, true)
             end
@@ -123,8 +126,6 @@ function Timers:Remove(unitGUID, category, noStop)
 end
 
 function Timers:Refresh(unitID)
-    if not NS.db.unitFrames[gsub(unitID, "%d", "")].enabled then return end
-
     local unitGUID = UnitGUID(unitID)
     local prevGUID = activeGUIDs[unitID]
     activeGUIDs[unitID] = unitGUID
