@@ -11,6 +11,7 @@ local GetTime = _G.GetTime
 local gsub = _G.string.gsub
 local format = _G.string.format
 local strmatch = _G.string.match
+local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 
 function Icons:GetAnchor(unitID, defaultAnchor)
     if anchorCache[unitID] and not defaultAnchor then
@@ -55,7 +56,7 @@ do
         for i = 1, (#CompactRaidFrameContainer.flowFrames or 5) do
             --local frame = Icons:GetAnchor("raid"..i, true)
             local frame = _G["CompactRaidFrame"..i]
-            if not frame then return end
+            if not frame then return end -- no more frames
 
             if frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
@@ -92,7 +93,6 @@ do
     local strfind = _G.string.find
     local strlen = _G.string.len
     local pairs = _G.pairs
-    local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 
     local function MasqueAddFrame(frame)
         if not NS.MasqueGroup then return end
@@ -120,7 +120,6 @@ do
             if frame.shown then
                 if first then
                     frame:SetPoint("CENTER", unitFrame, cfg.offsetX, cfg.offsetY)
-
                     first = false
                 else
                     frame:SetPoint("CENTER", anchor, ofsX, 0)
@@ -137,7 +136,7 @@ do
 
         if timer and GetTime() >= (timer.expiration or 0) then
             NS.Timers:Remove(timer.unitGUID, timer.category)
-            frame.timerRef = nil
+            return -- TODO: test
         end
 
         if not frame:IsVisible() then
@@ -157,7 +156,6 @@ do
 
             if timer then
                 NS.Timers:Remove(timer.unitGUID, timer.category)
-                frame.timerRef = nil
             end
 
             if frame:IsVisible() then
@@ -385,7 +383,7 @@ do
         if not frame then return end
 
         if isFinished and frame.timerRef then
-            frame.timerRef.applied = 0
+            --frame.timerRef.applied = 0
             frame.timerRef = nil
         end
 

@@ -14,7 +14,7 @@ NS.CATEGORIES = {
     DISARM = NS.L.DISARM,
 }
 
--- Border indicator colors
+-- Border/text indicator colors
 NS.DR_STATES_COLORS = {
     [1] = { 0, 1, 0, 1 }, -- applied 1, green
     [2] = { 1, 1, 0, 1 }, -- yellow
@@ -38,7 +38,6 @@ do
         iconSize = 24,
         iconPadding = 6,
         growLeft = false,
-        point = "CENTER", -- always has to be "CENTER" to be fully accurate, see OnDragStop @ testmode.lua
         offsetY = 26,
         offsetX = 91,
     }
@@ -66,7 +65,6 @@ do
                 iconSize = 18,
                 iconPadding = 6,
                 growLeft = false,
-                point = "CENTER",
                 offsetY = 21,
                 offsetX = 3,
             },
@@ -79,7 +77,6 @@ do
                 iconSize = 24,
                 iconPadding = 6,
                 growLeft = false,
-                point = "CENTER",
                 offsetY = 7,
                 offsetX = 76,
             },
@@ -91,7 +88,6 @@ do
                 iconSize = 22,
                 iconPadding = 6,
                 growLeft = true,
-                point = "CENTER",
                 offsetY = 20,
                 offsetX = -66,
             },
