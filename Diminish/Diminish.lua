@@ -131,6 +131,10 @@ function Diminish:Enable()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
+function Diminish:UnitIsHunter(name) -- for BGs only
+    return hunterList[name]
+end
+
 function Diminish:InitDB()
     DiminishDB = DiminishDB and next(DiminishDB) ~= nil and DiminishDB or {
         version = GetAddOnMetadata("Diminish", "Version"),
@@ -246,10 +250,6 @@ function Diminish:PLAYER_REGEN_ENABLED()
     Timers:RemoveInactiveTimers()
 end
 
-function Diminish:UnitIsHunter(name)
-    return hunterList[name]
-end
-
 function Diminish:UPDATE_BATTLEFIELD_SCORE()
     -- Build a list with every hunter in BG found and save their name
     -- This is so we can check if the player is a hunter when UNIT_DIED is fired,
@@ -261,8 +261,10 @@ function Diminish:UPDATE_BATTLEFIELD_SCORE()
     for i = 1, GetNumBattlefieldScores() do
         local name, _, _, _, _, _, _, _, classToken = GetBattlefieldScore(i)
         if name and classToken == "HUNTER" then
-            hunterList[name] = true
-            NS.Info(name)
+            if not hunterList[name] then
+                hunterList[name] = true
+                NS.Info(name)
+            end
         end
     end
 end
@@ -301,11 +303,11 @@ do
                 end
 
                 if eventType == "SPELL_AURA_REMOVED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, destName)
+                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName)
                 elseif eventType == "SPELL_AURA_APPLIED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, destName)
+                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
                 elseif eventType == "SPELL_AURA_REFRESH" then
-                    Timers:Update(destGUID, category, spellID, isFriendly, true, destName)
+                    Timers:Update(destGUID, category, spellID, isFriendly, true, nil, destName)
                 end
             end
         end
