@@ -248,13 +248,6 @@ end
 
 function Diminish:PLAYER_REGEN_ENABLED()
     Timers:RemoveInactiveTimers()
-<<<<<<< HEAD
-=======
-end
-
-function Diminish:UnitIsHunter(name)
-    return hunterList[name]
->>>>>>> 047e4b9b54fc213025cc9a50d4c72a27ea9c398d
 end
 
 function Diminish:UPDATE_BATTLEFIELD_SCORE()

@@ -174,26 +174,16 @@ function Timers:RemoveInactiveTimers()
     self.inactiveCheckRan = (self.inactiveCheckRan + 1) or 0
 
     if self.inactiveCheckRan > 3  then -- we don't need to check every time player left combat
-<<<<<<< HEAD
         NS.Info("RemoveInactiveTimers")
-=======
->>>>>>> 047e4b9b54fc213025cc9a50d4c72a27ea9c398d
         for guid, categories in pairs(activeTimers) do
             for cat, timer in pairs(categories) do
                 if TimerIsFinished(timer) then
                     StopTimers(timer)
-<<<<<<< HEAD
                     NS.Info("Removed a timer")
                 end
             end
         end
         self.inactiveCheckRan = 0
-=======
-                end
-            end
-        end
-        self.previousInactiveCheck = 0
->>>>>>> 047e4b9b54fc213025cc9a50d4c72a27ea9c398d
     end
 end
 
