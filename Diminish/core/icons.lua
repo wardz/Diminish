@@ -136,12 +136,9 @@ do
 
         if timer and GetTime() >= (timer.expiration or 0) then
             NS.Timers:Remove(timer.unitGUID, timer.category)
-            return -- TODO: test
         end
 
         if not frame:IsVisible() then
-            -- Seems like there's a race condition that sometimes causes icons to not be shown
-            -- Dunno exactly why so this fix will have to do for now.
             frame.shown = true
             frame:Show()
         end
