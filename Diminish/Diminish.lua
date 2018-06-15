@@ -277,8 +277,12 @@ do
     local bit_band = _G.bit.band
     local spellList = NS.spellList
 
-    function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
-        local _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
+    local build = select(4, GetBuildInfo())
+
+    function Diminish:COMBAT_LOG_EVENT_UNFILTERED(_, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType)
+        if build >= 80000 then
+            _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
+        end
 
         if auraType == "DEBUFF" then
             local category = spellList[spellID] -- DR category
