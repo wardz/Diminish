@@ -23,22 +23,33 @@ local function TimerIsFinished(timer)
     return GetTime() >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.displayMode == "ON_AURA_END" and not testMode then
             -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
+            -- but update timer if there's less than 4 sec left or else it's possible that a CC aura is applied
+            -- while timer is being removed and when the aura ends it will show incorrect timer
+            if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
+                local timer = activeTimers[unitGUID][category]
+                if timer.expiration - GetTime() <= 4 then
+                    self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
+                end
+            end
+
             return
         end
     else -- SPELL_AURA_REMOVED
         if NS.db.displayMode == "ON_AURA_START" then
-            return self:Update(unitGUID, category, spellID, isFriendly, nil, isApplied)
+            if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
+                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
+            end
         end
     end
 
     local timers = activeTimers[unitGUID]
     if timers and timers[category] then
         -- Timer already active
-        return self:Update(unitGUID, category, spellID, isFriendly, true)
+        return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, true)
     end
 
     if not timers then
@@ -56,19 +67,20 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.destName = destName
     timer.testMode = testMode
 
+    if ranFromUpdate and NS.db.displayMode == "ON_AURA_START" then
+        timer.applied = 2
+    end
+
     activeTimers[unitGUID][category] = timer
     StartTimers(timer, isApplied)
 end
 
-function Timers:Update(unitGUID, category, spellID, isFriendly, updateApplied, isApplied, destName)
+function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
-        if isApplied then
-            -- TODO: verify if this works
-            -- SPELL_AURA_REFRESH or APPLIED didn't detect DR (if out of range etc)
-            -- but SPELL_AURA_REMOVED was detected later, so create new timer here
-            NS.Info("Update not timer ran")
-            Timers:Insert(unitGUID, category, spellID, isFriendly, destName)
+        if isApplied or updateApplied then
+            -- SPELL_AURA_APPLIED/BROKEN didn't detect DR, but REFRESH did
+            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true)
         end
         return
     end
@@ -106,7 +118,6 @@ function Timers:Remove(unitGUID, category, noStop)
         for cat, t in pairs(timers) do
             if t.unitClass == "HUNTER" or NS.Diminish:UnitIsHunter(t.destName) then
                 -- UNIT_DIED is fired for Feign Death so ignore hunters here
-                NS.Info("hunter UNIT_DIED remove")
                 return
             end
 
@@ -171,15 +182,13 @@ function Timers:RemoveInactiveTimers()
     -- Remove inactive timers on player left combat incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
     -- Timers are also reset every loading screen.
-    self.inactiveCheckRan = (self.inactiveCheckRan + 1) or 0
+    self.inactiveCheckRan = self.inactiveCheckRan and (self.inactiveCheckRan + 1) or 0
 
     if self.inactiveCheckRan > 3  then -- we don't need to check every time player left combat
-        NS.Info("RemoveInactiveTimers")
         for guid, categories in pairs(activeTimers) do
             for cat, timer in pairs(categories) do
                 if TimerIsFinished(timer) then
                     StopTimers(timer)
-                    NS.Info("Removed a timer")
                 end
             end
         end
@@ -235,10 +244,10 @@ do
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and NS.db.displayMode == "ON_AURA_START" then
             if not timer.testMode --[[and not isRefresh]] then
-                local duration = GetAuraDuration(origUnitID or unitID, timer.spellID)
-                if duration and duration > 0 then
-                    timer.expiration = GetTime() + DR_TIME + (duration or 0)
-                end
+                local expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                --if expirationTime and expirationTime > 0 then
+                    timer.expiration = (expirationTime or GetTime()) + DR_TIME
+                --end
             end
         end
 
