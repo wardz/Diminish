@@ -137,7 +137,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
             end
         end
 
-        if not useCompact and forceHide or settings.party.enabled then
+        if forceHide or not useCompact and settings.party.enabled then
             if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
                 local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true)
                 if frame then
@@ -237,7 +237,7 @@ function TestMode:Test(hide)
     if isTesting or hide then
         isTesting = false
         TestMode:ToggleArenaAndPartyFrames(false, hide)
-        DIMINISH_NS.Timers:ResetAll(true)
+        DIMINISH_NS.Timers:ResetAll()
         return
     end
 
