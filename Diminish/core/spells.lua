@@ -125,6 +125,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [30283]   = C.STUN,            -- Shadowfury
         [46968]   = C.STUN,            -- Shockwave
         [107570]  = C.STUN,            -- Storm Bolt
+        [132169]  = C.STUN,            -- Storm Bolt 2
         [64044]   = C.STUN,            -- Psychic Horror
         [200200]  = C.STUN,            -- Holy Word: Chastise Censure
         [226943]  = C.STUN,            -- Mind Bomb
@@ -157,6 +158,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [122]     = C.ROOT,            -- Frost Nova
         [33395]   = C.ROOT,            -- Freeze
         [198121]  = C.ROOT,            -- Frostbite
+        [220107]  = C.ROOT,            -- Frostbite (Water Elemental? needs testing)
         [116706]  = C.ROOT,            -- Disable
         [64695]   = C.ROOT,            -- Earthgrab (Totem effect)
         [233582]  = C.ROOT,            -- Entrenched in Flame
@@ -310,6 +312,7 @@ else -- bfa beta
         [122]     = C.ROOT,            -- Frost Nova
         [33395]   = C.ROOT,            -- Freeze
         [198121]  = C.ROOT,            -- Frostbite
+        [220107]  = C.ROOT,            -- Frostbite (Water Elemental? needs testing)
         [116706]  = C.ROOT,            -- Disable
         [64695]   = C.ROOT,            -- Earthgrab (Totem effect)
         [233582]  = C.ROOT,            -- Entrenched in Flame
