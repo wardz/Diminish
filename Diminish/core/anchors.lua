@@ -11,6 +11,8 @@ NS.anchors = {
         "GwPlayerHealthGlobe",
         "PitBull4_Frames_Player",
         "oUF_Player",
+        "SUI_playerFrame",
+        "gUI4_UnitPlayer",
         "PlayerFrame", -- Blizzard frame should always be last
     },
 
@@ -24,6 +26,8 @@ NS.anchors = {
         "GwTargetUnitFrame",
         "PitBull4_Frames_Target",
         "oUF_Target",
+        "SUI_targetFrame",
+        "gUI4_UnitTarget",
         "TargetFrame",
     },
 
@@ -37,6 +41,8 @@ NS.anchors = {
         "GwFocusUnitFrame",
         "PitBull4_Frames_Focus",
         "oUF_Focus",
+        "SUI_focusFrame",
+        "gUI4_UnitFocus",
         "FocusFrame",
     },
 
@@ -49,6 +55,7 @@ NS.anchors = {
         "PitBull4_Groups_PartyUnitButton%d",
         "oUF_Raid%d",
         "GwPartyFrame%d",
+        "gUI4_GroupFramesGroup5UnitButton%d",
         "PartyMemberFrame%d",
     },
 
@@ -63,6 +70,7 @@ NS.anchors = {
         "TukuiArena%d",
         "barena%dUnitFrame",
         "oUF_Arena%d",
+        --"GladiusClassIconFramearena%d",
         "ArenaEnemyFrame%d",
     },
 }
