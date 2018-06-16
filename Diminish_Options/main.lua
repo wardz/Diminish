@@ -189,6 +189,13 @@ function Panel:Setup()
     --testBtn:SetAttribute("type", "macro")
     --testBtn:SetAttribute("macrotext", "/target [@player]\n/focus [@player]\n/diminishtest")
     testBtn:SetPoint("BOTTOMLEFT", unlock, 115, 0)
+
+
+    -- TODO: remove when bfa beta is over
+    local beta = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
+    beta:SetJustifyH("LEFT")
+    beta:SetPoint("BOTTOMLEFT", 15, 10)
+    beta:SetText("Beta version. Please report any bugs or issues to Curse or WoWInterface page.")
 end
 
 function Panel:refresh()
