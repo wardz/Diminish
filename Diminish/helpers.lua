@@ -27,15 +27,23 @@ end
 -- UnitAura by spellname was removed in patch 8.0.0 so we have to
 -- loop through every debuff and find the spell ourself using indices
 local UnitAura = _G.UnitAura
+local GetSpellInfo = _G.GetSpellInfo
+local build = select(4, GetBuildInfo())
 NS.GetAuraDuration = function(unitID, spellID)
     if not unitID or not spellID then return end
 
+    -- TODO: remove when bfa beta is over
+    if build < 80000 then
+        local name, _, _, _, _, _, expirationTime = UnitAura(unitID, GetSpellInfo(spellID), nil, "HARMFUL")
+        return expirationTime
+    end
+
     for i = 1, 40 do
-        local _, _, _, _, duration, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
+        local _, _, _, _, _, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
         if not id then return end -- no more debuffs
 
         if spellID == id then
-            return duration
+            return expirationTime
         end
     end
 end

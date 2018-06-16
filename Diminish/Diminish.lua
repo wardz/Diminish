@@ -123,10 +123,13 @@ function Diminish:Enable()
     wipe(hunterList)
     if self.currInstanceType == "pvp" then
         self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
+        self:RegisterEvent("PLAYER_REGEN_DISABLED")
     else
         self:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
+        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
     end
 
+    self:GROUP_ROSTER_UPDATE()
     self:RegisterEvent("PLAYER_REGEN_ENABLED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
@@ -149,7 +152,16 @@ function Diminish:InitDB()
         self:InitDB()
         return
     end
-    DiminishDB.version = GetAddOnMetadata("Diminish", "Version")
+    DiminishDB.version = DiminishDB.version or GetAddOnMetadata("Diminish", "Version")
+
+    -- Reset config when updating from 2.0.0b-0.2/0.3 to 0.4
+    -- (due to new icon size logic)
+    -- TODO: remove this when bfa beta is over
+    if DiminishDB.version == "2.0.0b" then
+        wipe(DiminishDB)
+        self:InitDB()
+        return
+    end
 
     local playerName = UnitName("player") .. "-" .. GetRealmName()
     local profile = DiminishDB.profileKeys[playerName]
@@ -182,6 +194,7 @@ end
 function Diminish:PLAYER_LOGIN()
     self:InitDB()
     self.PLAYER_GUID = UnitGUID("player")
+
     NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
 
     local Masque = LibStub and LibStub("Masque", true)
@@ -243,6 +256,17 @@ function Diminish:GROUP_ROSTER_UPDATE()
 
     for i = 1, members do
         Timers:Refresh("party"..i)
+    end
+end
+
+function Diminish:PLAYER_REGEN_DISABLED()
+    if not self.prevCheckRan or (GetTime() - self.prevCheckRan) > 20 then
+        -- UPDATE_BATTLEFIELD_SCORE is not always ran on player joined/left BG so
+        -- trigger on player joined combat to check for any new players
+        RequestBattlefieldScoreData()
+        --self:UPDATE_BATTLEFIELD_SCORE()
+
+        self.prevCheckRan = GetTime()
     end
 end
 
@@ -311,7 +335,7 @@ do
                 elseif eventType == "SPELL_AURA_APPLIED" then
                     Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
                 elseif eventType == "SPELL_AURA_REFRESH" then
-                    Timers:Update(destGUID, category, spellID, isFriendly, true, nil, destName)
+                    Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
                 end
             end
         end
