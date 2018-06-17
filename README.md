@@ -1,10 +1,7 @@
-# Diminish (Battle for Azeroth 8.0.0+)
+# Diminish (Battle for Azeroth Beta & Legion 7.3.5)
 Lightweight diminishing returns tracker for both friendly and enemy players.
 Diminish attaches icons to unit frames, displaying time left until a diminishing returns category expires,
 as well as how far the category is diminished.
-
-Icons for each unit frame is separately configurable. Type **/diminish** to open the options panel.
-Default config is set to only use enemy target/focus frame tracking outside arena, and only arena frame tracking while inside arena.
 
 
 [Curse Download](https://www.curseforge.com/wow/addons/diminish)
