@@ -25,9 +25,9 @@ function Diminish:ToggleForZone()
 
     -- (Un)register unit events for current zone depending on user settings
     for unit, settings in pairs(NS.db.unitFrames) do -- DR tracking for focus/target etc each have their own seperate settings
-        if settings.enabled then
-            local event = unitEvents[unit]
+        local event = unitEvents[unit]
 
+        if settings.enabled then
             -- Loop through every zone/instance enabled and see if we're currently in that instance
             for zone, state in pairs(settings.zones) do
                 if unit ~= "player" then
@@ -55,13 +55,16 @@ function Diminish:ToggleForZone()
                     settings.isEnabledForZone = registeredOnce
                 end
             end
-        else
+        else -- unitframe is not enabled for tracking at all
             settings.isEnabledForZone = false
+            if self:IsEventRegistered(event) then
+                self:UnregisterEvent(event)
+                NS.Debug("Unregistered %s for instance %s.", event, instanceType)
+            end
         end
     end
 
     if registeredOnce then
-        self:SetCLEUWatchVariables()
         self:Enable()
     else
         self:Disable()
@@ -112,12 +115,12 @@ function Diminish:Disable()
     self:RegisterEvent("CVAR_UPDATE")
     Timers:ResetAll(true)
     wipe(hunterList)
+
     NS.Info("Disabled for zone %s.", select(2, IsInInstance()))
 end
 
 function Diminish:Enable()
     self.currInstanceType = select(2, IsInInstance())
-    NS.Info("Enabled for zone %s.", self.currInstanceType)
     Timers:ResetAll(true)
 
     wipe(hunterList)
@@ -129,9 +132,11 @@ function Diminish:Enable()
         self:UnregisterEvent("PLAYER_REGEN_DISABLED")
     end
 
+    self:SetCLEUWatchVariables()
     self:GROUP_ROSTER_UPDATE()
     self:RegisterEvent("PLAYER_REGEN_ENABLED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    NS.Info("Enabled for zone %s.", self.currInstanceType)
 end
 
 function Diminish:UnitIsHunter(name) -- for BGs only
@@ -177,7 +182,7 @@ function Diminish:InitDB()
         [profile] = NS.DEFAULT_SETTINGS
     }, DiminishDB.profiles)
 
-    -- Pointer to active db profile
+    -- Reference to active db profile
     -- Always use this directly or pointer will be invalid
     -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
@@ -259,19 +264,19 @@ function Diminish:GROUP_ROSTER_UPDATE()
     end
 end
 
+function Diminish:PLAYER_REGEN_ENABLED()
+    Timers:RemoveInactiveTimers()
+end
+
 function Diminish:PLAYER_REGEN_DISABLED()
-    if not self.prevCheckRan or (GetTime() - self.prevCheckRan) > 20 then
+    if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 20 then
         -- UPDATE_BATTLEFIELD_SCORE is not always ran on player joined/left BG so
         -- trigger on player joined combat to check for any new players
         RequestBattlefieldScoreData()
         --self:UPDATE_BATTLEFIELD_SCORE()
 
-        self.prevCheckRan = GetTime()
+        self.prevRegenCheckRan = GetTime()
     end
-end
-
-function Diminish:PLAYER_REGEN_ENABLED()
-    Timers:RemoveInactiveTimers()
 end
 
 function Diminish:UPDATE_BATTLEFIELD_SCORE()
@@ -279,15 +284,14 @@ function Diminish:UPDATE_BATTLEFIELD_SCORE()
     -- This is so we can check if the player is a hunter when UNIT_DIED is fired,
     -- without having an unitID available (only CLEU destName). When hunters use Feign Death it triggers UNIT_DIED so
     -- we use this list to ignore hunters when removing timers from units that died.
-    -- For outdoors we cache UnitClass(unitID) when available instead, accuracy isn't really a big deal there
-    NS.Info("UPDATE_BATTLEFIELD_SCORE")
+    -- For outdoors we just cache UnitClass(unitID) when available instead, accuracy isn't really a big deal there
     local GetBattlefieldScore = _G.GetBattlefieldScore
     for i = 1, GetNumBattlefieldScores() do
         local name, _, _, _, _, _, _, _, classToken = GetBattlefieldScore(i)
         if name and classToken == "HUNTER" then
             if not hunterList[name] then
                 hunterList[name] = true
-                NS.Info(name)
+                NS.Info("Add %s to hunter list.", name)
             end
         end
     end
@@ -304,6 +308,7 @@ do
     local build = select(4, GetBuildInfo())
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED(_, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType)
+        -- TODO: remove args & build when bfa is live
         if build >= 80000 then
             _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
         end
@@ -344,6 +349,7 @@ do
             if self.currInstanceType ~= "arena" then
                 if destGUID == self.PLAYER_GUID then
                     -- Delete ALL timers when player died
+                    -- TODO: might want to remove this for better accurracy, needs more testing
                     return Timers:ResetAll()
                 end
                 -- Delete all timers for single unit

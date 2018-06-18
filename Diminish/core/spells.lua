@@ -9,7 +9,6 @@ local C = NS.CATEGORIES
 ]]
 
 if select(4, GetBuildInfo()) < 80000 then
-    --print("Using Legion spellIDs")
     NS.spellList = {
         [207167]  = C.DISORIENT,       -- Blinding Sleet
         [186387]  = C.DISORIENT,       -- Bursting Shot
@@ -170,7 +169,6 @@ if select(4, GetBuildInfo()) < 80000 then
         [209749]  = C.DISARM,          -- Faerie Swarm (Balance)
     }
 else -- bfa beta
-    --print("Using BFA spellIDs")
     NS.spellList = {
         [207167]  = C.DISORIENT,       -- Blinding Sleet
         [198909]  = C.DISORIENT,       -- Song of Chi-ji
@@ -250,8 +248,8 @@ else -- bfa beta
         [199683]  = C.SILENCE,         -- Last Word
         [15487]   = C.SILENCE,         -- Silence
         [1330]    = C.SILENCE,         -- Garrote
-        [43523]   = C.SILENCE,         -- UCtable Affliction Silence Effect
-        [196364]  = C.SILENCE,         -- UCtable Affliction Silence Effect 2
+        [43523]   = C.SILENCE,         -- Unstable Affliction Silence Effect
+        [196364]  = C.SILENCE,         -- Unstable Affliction Silence Effect 2
 
         [210141]  = C.STUN,            -- Zombie Explosion
         [108194]  = C.STUN,            -- Asphyxiate (unholy)
