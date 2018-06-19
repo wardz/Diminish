@@ -143,7 +143,6 @@ do
 
         if timer and GetTime() >= (timer.expiration or 0) then
             NS.Timers:Remove(timer.unitGUID, timer.category)
-            --self:SetCooldown(0, 0)
             return
         end
 
@@ -384,7 +383,8 @@ do
         if frame.shown then
             --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
                 if not timer.testMode then
-                    frame.cooldown:SetCooldownDuration(expiration)
+                    -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc
+                    frame.cooldown:SetCooldown(now, expiration)
                 end
             --end
         else
