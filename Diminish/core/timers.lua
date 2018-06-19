@@ -41,8 +41,8 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     else -- SPELL_AURA_REMOVED
         if NS.db.displayMode == "ON_AURA_START" then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
-                print("ran update")
-                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
+                -- only return if timer exists (was detected in SPELL_AURA_APPLIED)
+                return
             end
         end
     end
@@ -256,9 +256,9 @@ do
         if isApplied and NS.db.displayMode == "ON_AURA_START" then
             if not timer.testMode --[[and not isRefresh]] then
                 local expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
-                --if expirationTime and expirationTime > 0 then
+                if expirationTime and expirationTime > 0 then
                     timer.expiration = (expirationTime or GetTime()) + DR_TIME
-                --end
+                end
             end
         end
 
