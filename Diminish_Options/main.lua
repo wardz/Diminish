@@ -206,6 +206,8 @@ function Panel:Setup()
             btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
             tip:SetShown(btn:GetText() ~= L.TEST)
             TestMode:Test()
+        else
+            print("Diminish: " .. L.COMBATLOCKDOWN_ERROR)
         end
     end)
     testBtn:SetSize(200, 25)
