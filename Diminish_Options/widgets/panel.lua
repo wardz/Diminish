@@ -41,7 +41,7 @@ local function OnShow(self)
 
     RefreshOnShow(self)
 
-    if InCombatLockdown() then return end
+    --if InCombatLockdown() then return end
 
     -- Display child panels when clicking main panel
     local i, target = 1, Panel.name
