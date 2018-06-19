@@ -34,16 +34,16 @@ NS.GetAuraDuration = function(unitID, spellID)
 
     -- TODO: remove when bfa beta is over
     if build < 80000 then
-        local name, _, _, _, _, _, expirationTime = UnitAura(unitID, GetSpellInfo(spellID), nil, "HARMFUL")
-        return expirationTime
+        local name, _, _, _, _, duration, expirationTime = UnitAura(unitID, GetSpellInfo(spellID), nil, "HARMFUL")
+        return duration, expirationTime
     end
 
     for i = 1, 40 do
-        local _, _, _, _, _, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
+        local _, _, _, _, duration, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
         if not id then return end -- no more debuffs
 
         if spellID == id then
-            return expirationTime
+            return duration, expirationTime
         end
     end
 end

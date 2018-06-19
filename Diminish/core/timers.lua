@@ -93,7 +93,7 @@ function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateA
 
     timer.spellID = spellID
     timer.isFriendly = isFriendly
-    timer.expiration = GetTime() + (not timer.testMode and DR_TIME or random(6, DR_TIME))
+    timer.expiration = GetTime() + (not timer.testMode and DR_TIME - 0.1 or random(6, DR_TIME))
 
     StartTimers(timer, true, nil, true)
 end
@@ -254,9 +254,15 @@ do
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and NS.db.displayMode == "ON_AURA_START" then
             if not timer.testMode --[[and not isRefresh]] then
-                local expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
                 if expirationTime and expirationTime > 0 then
                     timer.expiration = (expirationTime or GetTime()) + DR_TIME
+
+                    if timer.applied >= 2 and duration >= 6 then
+                        -- is no DR but timer shows immune
+                        -- may happen if server reset DR before our timer did & new CC got applied
+                        timer.applied = 1
+                    end
                 end
             end
         end
