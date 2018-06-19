@@ -41,8 +41,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     else -- SPELL_AURA_REMOVED
         if NS.db.displayMode == "ON_AURA_START" then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
-                -- only return if timer exists (was detected in SPELL_AURA_APPLIED)
-                return
+                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
             end
         end
     end
