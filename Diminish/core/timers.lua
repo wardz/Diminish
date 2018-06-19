@@ -27,8 +27,8 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.displayMode == "ON_AURA_END" and not testMode then
             -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
-            -- but update timer if there's less than 4 sec left or else it's possible that a CC aura is applied
-            -- while timer is being removed and when the aura ends it will show incorrect timer
+            -- but update timer if it already exists & there's less than 4 sec left or else it's possible that a CC aura is applied
+            -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 local timer = activeTimers[unitGUID][category]
                 if timer.expiration - GetTime() <= 4 then
@@ -41,6 +41,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     else -- SPELL_AURA_REMOVED
         if NS.db.displayMode == "ON_AURA_START" then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
+                print("ran update")
                 return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
             end
         end
@@ -68,6 +69,8 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.testMode = testMode
 
     if ranFromUpdate and NS.db.displayMode == "ON_AURA_START" then
+        -- SPELL_AURA/APPLIED/BROKEN didn't detect DR, but REFRESH did
+        -- and also since the aura was refreshed it means we're atleast 2 on applied
         timer.applied = 2
     end
 
@@ -211,9 +214,17 @@ function Timers:ResetAll(clearGUIDs)
     Icons:HideAll()
 
     if clearGUIDs then
-        wipe(activeGUIDs)
+        for unitID, guid in pairs(activeGUIDs) do
+            if not UnitExists(unitID) then
+                activeGUIDs[unitID] = nil
+            end
+        end
     end
-    activeGUIDs.player = UnitGUID("player")
+
+    if not activeGUIDs.player then
+        -- cache on first Diminish:Enable()
+        activeGUIDs.player = UnitGUID("player")
+    end
 
     Debug("Stopped all timers.")
 end
