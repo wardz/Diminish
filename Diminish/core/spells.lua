@@ -128,7 +128,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [64044]   = C.STUN,            -- Psychic Horror
         [200200]  = C.STUN,            -- Holy Word: Chastise Censure
         [226943]  = C.STUN,            -- Mind Bomb
-        [204399]  = C.STUN,            -- Earthfury
+--      [204399]  = C.STUN,            -- Earthfury (doesn't seem to DR)
         [179057]  = C.STUN,            -- Chaos Nova
         [205630]  = C.STUN,            -- Illidan's Grasp, primary effect
         [208618]  = C.STUN,            -- Illidan's Grasp, secondary effect
@@ -167,6 +167,21 @@ if select(4, GetBuildInfo()) < 80000 then
         [236077]  = C.DISARM,          -- Disarm
         [236236]  = C.DISARM,          -- Disarm (Prot)
         [209749]  = C.DISARM,          -- Faerie Swarm (Balance)
+
+        [56222]   = C.TAUNT,           -- Dark Command
+        [57603]   = C.TAUNT,           -- Death Grip
+        [51399]   = C.TAUNT,           -- Death Grip 2
+        [185245]  = C.TAUNT,           -- Torment
+        [6795]    = C.TAUNT,           -- Growl (Druid)
+        [2649]    = C.TAUNT,           -- Growl (Hunter Pet)
+        [20736]   = C.TAUNT,           -- Distracting Shot
+        [116189]  = C.TAUNT,           -- Provoke
+        [118635]  = C.TAUNT,           -- Provoke 2
+        [196727]  = C.TAUNT,           -- Provoke (Niuzao)
+        [62124]   = C.TAUNT,           -- Hand of Reckoning
+        [17735]   = C.TAUNT,           -- Suffering (Voidwalker)
+        [355]     = C.TAUNT,           -- Taunt
+        [36213]   = C.TAUNT,           -- Angered Earth (Earth Elemental) FIXME: no spell aura
     }
 else -- bfa beta
     NS.spellList = {
@@ -281,7 +296,7 @@ else -- bfa beta
         [132169]  = C.STUN,            -- Storm Bolt
         [64044]   = C.STUN,            -- Psychic Horror
         [200200]  = C.STUN,            -- Holy Word: Chastise CeCure
-        [204399]  = C.STUN,            -- Earthfury
+--      [204399]  = C.STUN,            -- Earthfury (doesn't seem to DR)
         [179057]  = C.STUN,            -- Chaos Nova
         [205630]  = C.STUN,            -- Illidan's Grasp, primary effect
         [208618]  = C.STUN,            -- Illidan's Grasp, secondary effect
@@ -322,6 +337,21 @@ else -- bfa beta
         [236077]  = C.DISARM,          -- Disarm
         [236236]  = C.DISARM,          -- Disarm (Prot)
         [209749]  = C.DISARM,          -- Faerie Swarm (Balance)
+
+        [56222]   = C.TAUNT,           -- Dark Command
+        [57603]   = C.TAUNT,           -- Death Grip
+        [51399]   = C.TAUNT,           -- Death Grip 2
+        [185245]  = C.TAUNT,           -- Torment
+        [6795]    = C.TAUNT,           -- Growl (Druid)
+        [2649]    = C.TAUNT,           -- Growl (Hunter Pet)
+        [20736]   = C.TAUNT,           -- Distracting Shot
+        [116189]  = C.TAUNT,           -- Provoke
+        [118635]  = C.TAUNT,           -- Provoke 2
+        [196727]  = C.TAUNT,           -- Provoke (Niuzao)
+        [62124]   = C.TAUNT,           -- Hand of Reckoning
+        [17735]   = C.TAUNT,           -- Suffering (Voidwalker)
+        [355]     = C.TAUNT,           -- Taunt
+        [36213]   = C.TAUNT,           -- Angered Earth (Earth Elemental) FIXME: no spell aura
 
         --[[
         -- May only be tracked by spell aura applied, not broken/refresh

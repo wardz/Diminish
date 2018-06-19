@@ -143,6 +143,8 @@ do
 
         if timer and GetTime() >= (timer.expiration or 0) then
             NS.Timers:Remove(timer.unitGUID, timer.category)
+            --self:SetCooldown(0, 0)
+            return
         end
 
         if not frame:IsVisible() then
@@ -154,7 +156,7 @@ do
     end
 
     local function CooldownOnHide(self)
-        if self:GetCooldownDuration() <= 0 then
+        if self:GetCooldownDuration() <= 0.3 then
             local frame = self.parent
             local timer = frame.timerRef
 
@@ -312,10 +314,11 @@ do
     local textureCachePlayer = {}
     local indicatorColors = NS.DR_STATES_COLORS
     local GetSpellTexture = _G.GetSpellTexture
+    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
 
     local indicatorTexts = { "50%", "75%", "100%" }
 
-    local function SetIndicators(frame, applied)
+    local function SetIndicators(frame, applied, category)
         if NS.db.colorBlind then
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
@@ -324,12 +327,21 @@ do
                 frame.countdown:SetPoint("CENTER", 0, 3)
             end
 
-            frame.indicator:SetText(indicatorTexts[applied])
+            if category ~= CATEGORY_TAUNT then
+                frame.indicator:SetText(indicatorTexts[applied])
+            else
+                frame.indicator:SetText(applied <= 4 and applied or indicatorTexts[3])
+            end
             return
         end
 
-        local color = indicatorColors[applied]
-        if not color then return end
+        local color
+        if category ~= CATEGORY_TAUNT then
+            color = indicatorColors[applied]
+            if not color then return end
+        else
+            color = applied <= 4 and indicatorColors[1] or indicatorColors[3]
+        end
 
         if Icons.MSQGroup then
             frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
@@ -367,7 +379,7 @@ do
         frame.timerRef = timer
 
         SetSpellTexture(frame, timer)
-        SetIndicators(frame, timer.applied)
+        SetIndicators(frame, timer.applied, timer.category)
 
         if frame.shown then
             --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
@@ -387,7 +399,6 @@ do
         if not frame then return end
 
         if isFinished and frame.timerRef then
-            --frame.timerRef.applied = 0
             frame.timerRef = nil
         end
 

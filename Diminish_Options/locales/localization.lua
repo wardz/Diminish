@@ -23,7 +23,7 @@ L["CURRENT_PROFILE"] = "Current Profile: |cffFFEB00%s|r"
 L["DEFAULT"] = "Default"
 L["DELETE"] = "Delete"
 L["DELETE_TOOLTIP"] = "Delete an existing profile."
-L["DISPLAYMODE"] = "Start Timers on CC Start"
+L["DISPLAYMODE"] = "Show Cooldown on CC Applied"
 L["DISPLAYMODE_TOOLTIP"] = [=[If checked, will start showing timers when a CC aura has been applied instead of removed.
 
 Disable for better performance.]=]
@@ -78,6 +78,8 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 (Esc -> Interface -> ActionBars -> Show Numbers for Cooldowns)]=]
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text. Default 14."
+L["TRACKNPCS"] = "Enable Tracking for PvE"
+L["TRACKNPCS_TOOLTIP"] = "Show stun & taunt DR timers on mobs. Also shows all timers on player pets."
 L["UNLOCK"] = "Unlock Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle frames for moving. Drag the red boxes to move icon spawn points."
 L["WATCHFRIENDLY"] = "Show Friendly DRs"
@@ -86,5 +88,6 @@ L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle DR tracking for friendly players. (Cast b
 Enabling this will drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
 L["ZONE_BATTLEGROUNDS"] = "Battlegrounds"
+L["ZONE_DUNGEONS"] = "Dungeons & Raids"
 L["ZONE_OUTDOORS"] = "Outdoors"
 L["ZONES_TOOLTIP"] = "Enable tracking for this zone."

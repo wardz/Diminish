@@ -74,11 +74,17 @@ function Panel:Setup()
     subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
+    frames.displayMode = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
+        db.displayMode = cb:GetChecked() and "ON_AURA_START" or "ON_AURA_END"
+    end)
+    frames.displayMode:SetPoint("LEFT", subCooldown, 10, -70)
+
+
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
         db.timerSwipe = not db.timerSwipe
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end)
-    frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
+    frames.timerSwipe:SetPoint("LEFT", frames.displayMode, 0, -40)
 
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
@@ -110,22 +116,37 @@ function Panel:Setup()
     local subMisc = Widgets:CreateSubHeader(self, L.HEADER_MISC)
     subMisc:SetPoint("TOPRIGHT", -64, -50)
 
+
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
         db.showCategoryText = not db.showCategoryText
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end)
     frames.showCategoryText:SetPoint("RIGHT", -225, 160)
 
-    frames.displayMode = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
-        db.displayMode = cb:GetChecked() and "ON_AURA_START" or "ON_AURA_END"
-    end)
-    frames.displayMode:SetPoint("LEFT", frames.showCategoryText, 0, -40)
 
+    frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
+        db.trackNPCs = not db.trackNPCs
+
+        for _, unit in pairs({ "target", "focus" }) do
+            local cfg = db.unitFrames[unit]
+            if db.trackNPCs then
+                cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = false
+            elseif not db.trackNPCs then
+                cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = true
+            end
+
+            cfg.zones.party = db.trackNPCs
+            cfg.zones.scenario = db.trackNPCs
+            cfg.zones.raid = db.trackNPCs
+        end
+        DIMINISH_NS.Diminish:ToggleForZone()
+    end)
+    frames.trackNPCs:SetPoint("LEFT", frames.showCategoryText, 0, -40)
 
     frames.spellBookTextures = Widgets:CreateCheckbox(self, L.SPELLBOOKTEXTURES, L.SPELLBOOKTEXTURES_TOOLTIP, function()
         db.spellBookTextures = not db.spellBookTextures
     end)
-    frames.spellBookTextures:SetPoint("LEFT", frames.displayMode, 0, -40)
+    frames.spellBookTextures:SetPoint("LEFT", frames.trackNPCs, 0, -40)
 
     frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, L.COLORBLIND_TOOLTIP, function()
         db.colorBlind = not db.colorBlind
@@ -142,7 +163,7 @@ function Panel:Setup()
     }
 
     frames.borderTexture = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
-    frames.borderTexture:SetPoint("LEFT", frames.colorBlind, 7, -50)
+    frames.borderTexture:SetPoint("LEFT", frames.colorBlind, 7, -55)
     frames.borderTexture:SetWidth(180)
     frames.borderTexture.OnValueChanged = function(self, value)
         if not value or value == EMPTY then return end
@@ -155,6 +176,7 @@ function Panel:Setup()
     local tip = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
     tip:SetJustifyH("LEFT")
     tip:SetText(L.TARGETTIP)
+    tip:SetPoint("CENTER", self, 0, -220)
     tip:Hide()
 
 
@@ -174,8 +196,8 @@ function Panel:Setup()
             tip:Hide()
         end
     end)
-    unlock:SetPoint("BOTTOMLEFT", frames.borderTexture, 0, -40)
-    tip:SetPoint("BOTTOM", unlock, 0, -20)
+    unlock:SetPoint("BOTTOMLEFT", self, 15, 10)
+    unlock:SetSize(200, 25)
 
 
     -- Test mode for timers
@@ -186,16 +208,10 @@ function Panel:Setup()
             TestMode:Test()
         end
     end)
+    testBtn:SetSize(200, 25)
     --testBtn:SetAttribute("type", "macro")
     --testBtn:SetAttribute("macrotext", "/target [@player]\n/focus [@player]\n/diminishtest")
-    testBtn:SetPoint("BOTTOMLEFT", unlock, 115, 0)
-
-
-    -- TODO: remove when bfa beta is over
-    local beta = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
-    beta:SetJustifyH("LEFT")
-    beta:SetPoint("BOTTOMLEFT", 15, 10)
-    beta:SetText("Beta version. Please report any bugs or issues to Curse or WoWInterface page.")
+    testBtn:SetPoint("BOTTOMRIGHT", self, -15, 10)
 end
 
 function Panel:refresh()

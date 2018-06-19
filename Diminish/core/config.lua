@@ -12,6 +12,7 @@ NS.CATEGORIES = {
     STUN = NS.L.STUN,
     ROOT = NS.L.ROOT,
     DISARM = NS.L.DISARM,
+    TAUNT = NS.L.TAUNT,
 }
 
 -- Border/text indicator colors
@@ -27,12 +28,13 @@ NS.DR_STATES_COLORS = {
 
 do
     local defaultsDisabledCategories = {
-        [NS.CATEGORIES.DISARM] = true
+        [NS.CATEGORIES.DISARM] = true,
+        [NS.CATEGORIES.TAUNT] = true,
     }
 
     local defaultsTarget = {
         enabled = true,
-        zones = { pvp = true, arena = false, none = true  },
+        zones = { pvp = true, arena = false, none = true, party = false, raid = false, scenario = false },
         disabledCategories = defaultsDisabledCategories,
         watchFriendly = false,
         iconSize = 24,
@@ -51,6 +53,7 @@ do
         spellBookTextures = false,
         showCategoryText = false,
         colorBlind = false,
+        trackNPCs = false,
         borderTexture = "Interface\\BUTTONS\\UI-Quickslot-Depress",
 
         unitFrames = {
@@ -59,7 +62,7 @@ do
 
             player = {
                 enabled = true,
-                zones = { pvp = true, arena = true, none = true },
+                zones = { pvp = true, arena = true, none = true, party = false, raid = false, scenario = false  },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = true,
                 iconSize = 18,
@@ -71,7 +74,7 @@ do
 
             party = {
                 enabled = false,
-                zones = { pvp = false, arena = true, none = true },
+                zones = { pvp = false, arena = true, none = true, party = false, raid = false, scenario = false  },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = true,
                 iconSize = 24,
@@ -83,7 +86,7 @@ do
 
             arena = {
                 enabled = true,
-                zones = { pvp = false, arena = true, none = false },
+                zones = { pvp = false, arena = true, none = false, party = false, raid = false, scenario = false  },
                 disabledCategories = defaultsDisabledCategories,
                 iconSize = 22,
                 iconPadding = 6,

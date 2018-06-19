@@ -81,6 +81,13 @@ function Diminish:SetCLEUWatchVariables()
         targetOrFocusWatchFriendly = true
     end
 
+    -- PvE mode
+    self.isWatchingNPCs = NS.db.trackNPCs
+    if not cfg.target.isEnabledForZone and not cfg.focus.isEnabledForZone then
+        -- PvE mode only works for target/focus so disable mode if those frames are not active
+        self.isWatchingNPCs = false
+    end
+
     -- Check if we're tracking any friendly units and not just enemy only
     self.isWatchingFriendly = false
     if cfg.player.isEnabledForZone or cfg.party.isEnabledForZone or targetOrFocusWatchFriendly then
@@ -301,8 +308,12 @@ do
     local COMBATLOG_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY)
     local COMBATLOG_OBJECT_REACTION_FRIENDLY = _G.COMBATLOG_OBJECT_REACTION_FRIENDLY
     local COMBATLOG_OBJECT_TYPE_PLAYER = _G.COMBATLOG_OBJECT_TYPE_PLAYER
+    local COMBATLOG_OBJECT_CONTROL_PLAYER = _G.COMBATLOG_OBJECT_CONTROL_PLAYER
     local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
     local bit_band = _G.bit.band
+
+    local CATEGORY_STUN = NS.CATEGORIES.STUN
+    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local spellList = NS.spellList
 
     local build = select(4, GetBuildInfo())
@@ -317,31 +328,48 @@ do
             local category = spellList[spellID] -- DR category
             if not category then return end
 
-            if bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then -- unit is player
-                local isFriendly = bit_band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0
-                if not isFriendly and self.onlyFriendlyTracking then return end
-
-                if isFriendly then
-                    if not self.isWatchingFriendly then return end
-
-                    if self.onlyPlayerWatchFriendly then
-                        -- Only store friendly timers for player
-                        if destGUID ~= self.PLAYER_GUID  then return end
-                    end
-
-                    if self.onlyTrackingPartyForFriendly then
-                        -- Only store friendly timers for party1-4 and player
-                        if bit_band(destFlags, COMBATLOG_PARTY_MEMBER) == 0 then return end
+            local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+            if not isPlayer then
+                -- Track stuns/taunt for PvE if enabled
+                if not self.isWatchingNPCs then
+                    return
+                else
+                    if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet
+                        if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT then
+                            -- only show taunt and stun for normal mobs
+                            -- player pets will show all
+                            return
+                        end
                     end
                 end
+            else
+                -- Ignore taunts for players
+                if category == CATEGORY_TAUNT then return end
+            end
 
-                if eventType == "SPELL_AURA_REMOVED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName)
-                elseif eventType == "SPELL_AURA_APPLIED" then
-                    Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
-                elseif eventType == "SPELL_AURA_REFRESH" then
-                    Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
+            local isFriendly = bit_band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0
+            if not isFriendly and self.onlyFriendlyTracking then return end
+
+            if isFriendly then
+                if not self.isWatchingFriendly then return end
+
+                if self.onlyPlayerWatchFriendly then
+                    -- Only store friendly timers for player
+                    if destGUID ~= self.PLAYER_GUID  then return end
                 end
+
+                if self.onlyTrackingPartyForFriendly then
+                    -- Only store friendly timers for party1-4 and player
+                    if bit_band(destFlags, COMBATLOG_PARTY_MEMBER) == 0 then return end
+                end
+            end
+
+            if eventType == "SPELL_AURA_REMOVED" then
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName)
+            elseif eventType == "SPELL_AURA_APPLIED" then
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
+            elseif eventType == "SPELL_AURA_REFRESH" then
+                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
             end
         end
 
