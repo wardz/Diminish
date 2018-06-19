@@ -1,8 +1,7 @@
 local _, NS = ...
 
 -- How long a diminshing return lasts.
--- Add 0.3 extra to account for any animation/server delay
-NS.DR_TIME = 18.3
+NS.DR_TIME = 18
 
 -- "enum" for categories
 NS.CATEGORIES = {
