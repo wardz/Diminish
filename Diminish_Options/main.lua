@@ -156,18 +156,44 @@ function Panel:Setup()
 
 
     local textures = {
-        { value = "Interface\\BUTTONS\\UI-Quickslot-Depress", text = L.DEFAULT },
-        -- { value = "Interface\\COMMON\\WhiteIconFrame", text = "Clean" },
-        { value = "Interface\\BUTTONS\\WHITE8X8", text = L.TEXTURE_BRIGHT },
-        { value = "", text = L.TEXTURE_NONE },
+        { text = L.DEFAULT, value = {
+            edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+            layer = "BORDER",
+            edgeSize = 2.5,
+            name = L.DEFAULT,
+        }},
+
+        -- TODO: localization
+        { text = "Default, with glow", value = {
+            edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+            layer = "OVERLAY",
+            edgeSize = 1,
+            name = "Default, with glow",
+        }},
+
+        { text = L.TEXTURE_BRIGHT, value = {
+            edgeFile = "Interface\\BUTTONS\\WHITE8X8",
+            --isBackdrop = true,
+            edgeSize = 1.5,
+            layer = "BORDER",
+            name = L.TEXTURE_BRIGHT,
+        }},
+
+        { text = L.TEXTURE_NONE, value = {
+            layer = "BORDER",
+            edgeFile = "",
+            edgeSize = 0,
+            name = L.TEXTURE_NONE,
+        }},
     }
 
-    frames.borderTexture = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
-    frames.borderTexture:SetPoint("LEFT", frames.colorBlind, 7, -55)
-    frames.borderTexture:SetWidth(180)
-    frames.borderTexture.OnValueChanged = function(self, value)
+    frames.border = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
+    frames.border:SetPoint("LEFT", frames.colorBlind, 7, -55)
+    frames.border:SetWidth(180)
+    frames.border.OnValueChanged = function(self, value)
         if not value or value == EMPTY then return end
-        db.borderTexture = value
+        db.border = value
+        print(value.name)
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end
 
@@ -196,7 +222,7 @@ function Panel:Setup()
             tip:Hide()
         end
     end)
-    unlock:SetPoint("BOTTOMLEFT", self, 15, 10)
+    unlock:SetPoint("BOTTOMLEFT", self, 15, 15)
     unlock:SetSize(200, 25)
 
 
@@ -213,7 +239,7 @@ function Panel:Setup()
     testBtn:SetSize(200, 25)
     --testBtn:SetAttribute("type", "macro")
     --testBtn:SetAttribute("macrotext", "/target [@player]\n/focus [@player]\n/diminishtest")
-    testBtn:SetPoint("BOTTOMRIGHT", self, -15, 10)
+    testBtn:SetPoint("BOTTOMRIGHT", self, -15, 15)
 end
 
 function Panel:refresh()
@@ -232,7 +258,7 @@ function Panel:refresh()
                 end
                 frames[setting]:SetChecked(value)
             elseif frames[setting].items then -- phanx dropdown
-                frames[setting]:SetValue(value)
+                frames[setting]:SetValue(value.name)
             end
         end
     end

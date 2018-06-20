@@ -215,11 +215,11 @@ do
         frame.countdown = cooldown:GetRegions()
         frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
 
-        local borderWidth = strfind(db.borderTexture, "Depress") and 2.5 or 1.5
-        local border = frame:CreateTexture(nil, "BORDER")
+        local borderWidth = db.border.edgeSize
+        local border = frame:CreateTexture(nil, db.border.layer or "BORDER")
         border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
         border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
-        border:SetTexture(db.borderTexture)
+        border:SetTexture(db.border.edgeFile)
         frame.border = border
 
         -- label above an icon that displays category text
@@ -268,10 +268,10 @@ do
                 frame:SetSize(size, size)
 
                 if not NS.MasqueGroup then
-                    frame.border:SetTexture(NS.db.borderTexture)
-                    local borderWidth = strfind(NS.db.borderTexture, "Depress") and 2.5 or 1.5
-                    frame.border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
-                    frame.border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
+                    frame.border:SetDrawLayer(NS.db.border.layer or "BORDER")
+                    frame.border:SetTexture(NS.db.border.edgeFile)
+                    frame.border:SetPoint("TOPLEFT", -NS.db.border.edgeSize, NS.db.border.edgeSize)
+                    frame.border:SetPoint("BOTTOMRIGHT", NS.db.border.edgeSize, -NS.db.border.edgeSize)
                 end
 
                 frame.cooldown.noCooldownCount = NS.db.timerColors or not NS.db.timerText -- toggle OmniCC

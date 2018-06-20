@@ -53,7 +53,12 @@ do
         showCategoryText = false,
         colorBlind = false,
         trackNPCs = false,
-        borderTexture = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+        border = {
+            edgeSize = 2.5,
+            edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+            layer = "BORDER",
+            name = "Default",
+        },
 
         unitFrames = {
             target = defaultsTarget,
