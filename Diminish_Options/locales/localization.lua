@@ -23,10 +23,8 @@ L["CURRENT_PROFILE"] = "Current Profile: |cffFFEB00%s|r"
 L["DEFAULT"] = "Default"
 L["DELETE"] = "Delete"
 L["DELETE_TOOLTIP"] = "Delete an existing profile."
-L["DISPLAYMODE"] = "Show Cooldown on CC Applied"
-L["DISPLAYMODE_TOOLTIP"] = [=[If checked, will start showing timers when a CC aura has been applied instead of removed.
-
-Disable for better performance.]=]
+L["DISPLAYMODE"] = "Show Cooldown on Aura Applied"
+L["DISPLAYMODE_TOOLTIP"] = "If checked, will start showing timers when a CC aura has been applied instead of removed."
 L["ENABLED"] = "Enabled"
 L["ENABLED_TOOLTIP"] = "Enable or disable DR tracking for this specific unit frame."
 L["FOCUS"] = "Focus"
@@ -80,7 +78,7 @@ L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text. Default 14."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
 L["TRACKNPCS_TOOLTIP"] = "Show stun & taunt DR timers on mobs. Also shows all timers on player pets."
-L["UNLOCK"] = "Unlock Frames"
+L["UNLOCK"] = "Unlock/Move Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle frames for moving. Drag the red boxes to move icon spawn points."
 L["WATCHFRIENDLY"] = "Show Friendly DRs"
 L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle DR tracking for friendly players. (Cast by enemy onto friendly)
