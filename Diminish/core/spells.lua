@@ -83,8 +83,8 @@ if select(4, GetBuildInfo()) < 80000 then
         [199683]  = C.SILENCE,         -- Last Word
         [15487]   = C.SILENCE,         -- Silence
         [1330]    = C.SILENCE,         -- Garrote
-        [43523]   = C.SILENCE,         -- Untable Affliction Silence Effect
-        [196364]  = C.SILENCE,         -- UNtable Affliction Silence Effect 2
+        [43523]   = C.SILENCE,         -- Unstable Affliction Silence Effect
+        [196364]  = C.SILENCE,         -- Unstable Affliction Silence Effect 2
         [25046]   = C.SILENCE,         -- Arcane Torrent (Energy version)
         [28730]   = C.SILENCE,         -- Arcane Torrent (Priest/Mage/Lock version)
         [50613]   = C.SILENCE,         -- Arcane Torrent (Runic power version)
@@ -123,6 +123,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [22703]   = C.STUN,            -- Infernal Awakening
         [30283]   = C.STUN,            -- Shadowfury
         [46968]   = C.STUN,            -- Shockwave
+        [132168]  = C.STUN,            -- Shockwave (Protection)
         [107570]  = C.STUN,            -- Storm Bolt
         [132169]  = C.STUN,            -- Storm Bolt 2
         [64044]   = C.STUN,            -- Psychic Horror
