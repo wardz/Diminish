@@ -118,10 +118,10 @@ function Timers:Remove(unitGUID, category, noStop)
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
         for cat, t in pairs(timers) do
-            if t.unitClass == "HUNTER" or NS.Diminish:UnitIsHunter(t.destName) then
-                -- UNIT_DIED is fired for Feign Death so ignore hunters here
-                return
-            end
+            -- UNIT_DIED is fired for Feign Death so ignore hunters here
+            if t.unitClass == "HUNTER" then return end
+            if NS.Diminish:UnitIsHunter(t.destName) then return end
+            if NS.currInstanceType ~= "pvp" and not t.unitClass then return end
 
             if not noStop then
                 StopTimers(t, nil, true)
