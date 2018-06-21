@@ -214,7 +214,9 @@ function Panel:Setup()
 
         if btn:GetText() == L.UNLOCK then
             btn:SetText(L.STOP)
-            tip:Show()
+            if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled then
+                tip:Show()
+            end
             TestMode:ShowAnchors()
         else
             TestMode:HideAnchors()
@@ -230,7 +232,9 @@ function Panel:Setup()
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
         if not InCombatLockdown() then
             btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
-            tip:SetShown(btn:GetText() ~= L.TEST)
+            if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled or tip:IsShown() then
+                tip:SetShown(btn:GetText() ~= L.TEST)
+            end
             TestMode:Test()
         else
             print("Diminish: " .. L.COMBATLOCKDOWN_ERROR)
