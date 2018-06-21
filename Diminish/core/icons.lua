@@ -155,21 +155,21 @@ do
     end
 
     local function CooldownOnHide(self)
-        if self:GetCooldownDuration() <= 0.3 then
-            local frame = self.parent
-            local timer = frame.timerRef
+        local frame = self.parent
+        local timer = frame.timerRef
 
-            if timer then
+        if timer then
+            if self:GetCooldownDuration() <= 0.3 then
                 NS.Timers:Remove(timer.unitGUID, timer.category)
             end
-
-            if frame:IsVisible() then
-                frame.shown = false
-                frame:Hide()
-            end
-
-            UpdatePositions(self)
         end
+
+        if frame:IsVisible() then
+            frame.shown = false
+            frame:Hide()
+        end
+
+        UpdatePositions(self)
     end
 
     local function CreateIcon(unitID, category)
