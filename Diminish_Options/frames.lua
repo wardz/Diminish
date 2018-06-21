@@ -17,8 +17,10 @@ local function Refresh(self)
 
     if not unitFrameSettings.enabled then
         frames.enabled.labelText:SetTextColor(1, 0, 0, 1)
+        frames.testBtn:Disable()
     else
         frames.enabled.labelText:SetTextColor(1, 1, 1, 1)
+        frames.testBtn:Enable()
     end
 
     -- Refresh value of all widgets except zones/categories
@@ -60,6 +62,16 @@ local function Refresh(self)
                 end
             end
         end
+
+        if frames.zones[L.ZONE_DUNGEONS] then
+            if DIMINISH_NS.db.trackNPCs then
+                frames.zones[L.ZONE_DUNGEONS]:Enable()
+                frames.categories.TAUNT:Enable()
+            else
+                frames.zones[L.ZONE_DUNGEONS]:Disable()
+                frames.categories.TAUNT:Disable()
+            end
+        end
     end
 end
 
@@ -82,8 +94,10 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             db.enabled = not db.enabled
             if not db.enabled then
                 frames.enabled.labelText:SetTextColor(1, 0, 0, 1)
+                frames.testBtn:Disable()
             else
                 frames.enabled.labelText:SetTextColor(1 ,1, 1, 1)
+                frames.testBtn:Enable()
             end
 
             DIMINISH_NS.Diminish:ToggleForZone()
@@ -199,12 +213,12 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             end
         end
 
-        local testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
+        frames.testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
             if not InCombatLockdown() then
                 btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
                 NS.TestMode:Test()
             end
         end)
-        testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
+        frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
     end)
 end
