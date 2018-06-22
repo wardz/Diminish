@@ -383,7 +383,7 @@ do
 
         if frame.shown then
             if not timer.testMode then
-                if not onAuraEnd then
+                if not onAuraEnd or NS.db.displayMode == "ON_AURA_END"then
                     -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
                     frame.cooldown:SetCooldown(now, expiration)
                 else
