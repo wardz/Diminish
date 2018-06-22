@@ -357,7 +357,7 @@ do
 
     local function SetSpellTexture(frame, timer)
         if NS.db.spellBookTextures then
-            if not textureCachePlayer[timer.category] and timer.srcGUID == UnitGUID("player") then
+            if not textureCachePlayer[timer.category] and timer.srcGUID == NS.Diminish.PLAYER_GUID then
                 textureCachePlayer[timer.category] = GetSpellTexture(timer.spellID)
             end
         end
