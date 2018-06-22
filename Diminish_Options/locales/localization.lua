@@ -56,9 +56,9 @@ L["SHOWCATEGORYTEXT_TOOLTIP"] = "Show text above a timer that displays what DR c
 L["SLIDER_HIGH"] = "Large"
 L["SLIDER_LOW"] = "Small"
 L["SPELLBOOKTEXTURES"] = "Show Own Textures Only"
-L["SPELLBOOKTEXTURES_TOOLTIP"] = [=[DR icons will only use spell textures found in your own spellbook that matches the triggered category if available.
+L["SPELLBOOKTEXTURES_TOOLTIP"] = [=[DR icons for enemies will only use spell textures found in your own spellbook that matches the triggered category if available.
 
-(Enemy timers only. Textures will be sat after you've casted a CC ability once for each category)]=]
+(Spellbook textures will be set & saved only after you have yourself casted a CC ability once for that category)]=]
 L["STOP"] = "Stop"
 L["TARGET"] = "Target"
 L["TARGETTIP"] = "Target/focus yourself to see all frames."
@@ -77,7 +77,7 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text. Default 14."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
-L["TRACKNPCS_TOOLTIP"] = "Show stun & taunt DR timers on mobs. Also shows all timers on player pets."
+L["TRACKNPCS_TOOLTIP"] = "Show stun & taunt DR timers on mobs. Also shows all timers on player pets. (Target/focus)"
 L["UNLOCK"] = "Unlock/Move Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle frames for moving. Drag the red boxes to move icon spawn points."
 L["WATCHFRIENDLY"] = "Show Friendly DRs"
