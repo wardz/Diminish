@@ -141,7 +141,6 @@ function Diminish:Enable()
 
     self:SetCLEUWatchVariables()
     self:GROUP_ROSTER_UPDATE()
-    self:RegisterEvent("PLAYER_REGEN_ENABLED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     NS.Info("Enabled for zone %s.", self.currInstanceType)
 end
@@ -205,12 +204,12 @@ end
 
 function Diminish:PLAYER_LOGIN()
     self:InitDB()
-    self.PLAYER_GUID = UnitGUID("player")
-
-    NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
 
     local Masque = LibStub and LibStub("Masque", true)
     NS.MasqueGroup = Masque and Masque:Group("Diminish")
+    NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
+    self.PLAYER_GUID = UnitGUID("player")
+    self.PLAYER_CLASS = select(2, UnitClass("player"))
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")
@@ -256,7 +255,6 @@ function Diminish:PLAYER_FOCUS_CHANGED()
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
-    -- FIXME: rogues restealthing/seen in stealth briefly will cause this to be ran unnecessarily
     if status == "seen" and not C_PvP.IsInBrawl() and not strfind(unitID, "pet") then
         Timers:Refresh(unitID)
     end
@@ -271,32 +269,24 @@ function Diminish:GROUP_ROSTER_UPDATE()
     end
 end
 
-function Diminish:PLAYER_REGEN_ENABLED()
-    Timers:RemoveInactiveTimers()
-end
-
 function Diminish:PLAYER_REGEN_DISABLED()
     if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 20 then
         -- UPDATE_BATTLEFIELD_SCORE is not always ran on player joined/left BG so
         -- trigger on player joined combat to check for any new players
         RequestBattlefieldScoreData()
-        --self:UPDATE_BATTLEFIELD_SCORE()
 
         self.prevRegenCheckRan = GetTime()
     end
 end
 
 function Diminish:UPDATE_BATTLEFIELD_SCORE()
-    -- Build a list with every hunter in BG found and save their name
-    -- This is so we can check if the player is a hunter when UNIT_DIED is fired,
-    -- without having an unitID available (only CLEU destName). When hunters use Feign Death it triggers UNIT_DIED so
-    -- we use this list to ignore hunters when removing timers from units that died.
-    -- For outdoors we just cache UnitClass(unitID) when available instead, accuracy isn't really a big deal there
     local GetBattlefieldScore = _G.GetBattlefieldScore
     for i = 1, GetNumBattlefieldScores() do
         local name, _, _, _, _, _, _, _, classToken = GetBattlefieldScore(i)
         if name and classToken == "HUNTER" then
             if not hunterList[name] then
+                -- Used to detect if unit is hunter in combat log later on by checking destName
+                -- We do this so we can ignore hunters in UNIT_DIED event since Feign Death triggers UNIT_DIED
                 hunterList[name] = true
                 NS.Info("Add %s to hunter list.", name)
             end
@@ -330,16 +320,13 @@ do
 
             local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
-                -- Track stuns/taunt for PvE if enabled
-                if not self.isWatchingNPCs then
-                    return
-                else
-                    if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet
-                        if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT then
-                            -- only show taunt and stun for normal mobs
-                            -- player pets will show all
-                            return
-                        end
+                if not self.isWatchingNPCs then return end
+
+                if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet
+                    if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT then
+                        -- only show taunt and stun for normal mobs
+                        -- player pets will show all
+                        return
                     end
                 end
             else
@@ -374,15 +361,19 @@ do
         end
 
         if eventType == "UNIT_DIED" or eventType == "PARTY_KILL" then
-            if self.currInstanceType ~= "arena" then
-                if destGUID == self.PLAYER_GUID then
-                    -- Delete ALL timers when player died
-                    -- TODO: might want to remove this for better accurracy, needs more testing
-                    return Timers:ResetAll()
+            if self.currInstanceType == "arena" then return end
+
+            if destGUID == self.PLAYER_GUID then
+                if self.PLAYER_CLASS == "HUNTER" then
+                    if NS.GetAuraDuration("player", 5384) then return end -- is feign deathing
                 end
-                -- Delete all timers for single unit
-                Timers:Remove(destGUID, false)
+
+                -- Delete all timers when player died
+                return Timers:ResetAll()
             end
+
+            -- Delete all timers for single unit
+            Timers:Remove(destGUID, false)
         end
     end
 end

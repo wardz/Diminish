@@ -66,7 +66,10 @@ do
 
             player = {
                 enabled = true,
-                zones = { pvp = true, arena = true, none = true, party = false, raid = false, scenario = false  },
+                zones = {
+                    pvp = true, arena = true, none = true,
+                    party = false, raid = false, scenario = false,
+                },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = true,
                 iconSize = 18,
@@ -78,7 +81,10 @@ do
 
             party = {
                 enabled = false,
-                zones = { pvp = false, arena = true, none = true, party = false, raid = false, scenario = false  },
+                zones = {
+                    pvp = false, arena = true, none = true,
+                    party = false, raid = false, scenario = false,
+                },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = true,
                 iconSize = 24,
@@ -90,7 +96,10 @@ do
 
             arena = {
                 enabled = true,
-                zones = { pvp = false, arena = true, none = false, party = false, raid = false, scenario = false  },
+                zones = {
+                    pvp = false, arena = true, none = false,
+                    party = false, raid = false, scenario = false,
+                },
                 disabledCategories = defaultsDisabledCategories,
                 iconSize = 22,
                 iconPadding = 6,
