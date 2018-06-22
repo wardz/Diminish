@@ -27,7 +27,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.displayMode == "ON_AURA_END" and not testMode then
             -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
-            -- but update timer if it already exists & there's less than 4 sec left or else it's possible that a CC aura is applied
+            -- but update timer immediately if it already exists & there's less than 4 sec left or else it's possible that a CC aura is applied
             -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 local timer = activeTimers[unitGUID][category]
@@ -41,7 +41,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     else -- SPELL_AURA_REMOVED
         if NS.db.displayMode == "ON_AURA_START" then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
-                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
+                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied, nil, true)
             end
         end
     end
@@ -74,10 +74,10 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     end
 
     activeTimers[unitGUID][category] = timer
-    StartTimers(timer, isApplied)
+    StartTimers(timer, isApplied, nil, nil, nil, not isApplied)
 end
 
-function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName)
+function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
         if isApplied or updateApplied then
@@ -95,7 +95,7 @@ function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateA
     timer.isFriendly = isFriendly
     timer.expiration = GetTime() + (not timer.testMode and DR_TIME - 0.1 or random(6, DR_TIME))
 
-    StartTimers(timer, true, nil, true)
+    StartTimers(timer, true, nil, true, nil, onAuraEnd)
 end
 
 function Timers:Remove(unitGUID, category, noStop)
@@ -180,13 +180,11 @@ function Timers:Refresh(unitID)
     end
 end
 
-function Timers:RemoveInactiveTimers()
-    -- Remove inactive timers on player left combat incase they
+C_Timer.NewTicker(60, function()
+    -- Remove inactive timers every 60 seconds incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
-    -- Timers are also reset every loading screen.
-    self.inactiveCheckRan = self.inactiveCheckRan and (self.inactiveCheckRan + 1) or 0
 
-    if self.inactiveCheckRan > 3  then -- we don't need to check every time player left combat
+    if NS.currInstanceType ~= "arena" then
         for guid, categories in pairs(activeTimers) do
             for cat, timer in pairs(categories) do
                 if TimerIsFinished(timer) then
@@ -194,9 +192,8 @@ function Timers:RemoveInactiveTimers()
                 end
             end
         end
-        self.inactiveCheckRan = 0
     end
-end
+end)
 
 function Timers:ResetAll(clearGUIDs)
     for guid, categories in pairs(activeTimers) do
@@ -237,7 +234,7 @@ do
         "party1", "party2", "party3",
     }
 
-    local function Start(timer, isApplied, unitID, isUpdate, isRefresh)
+    local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)
         local origUnitID
         if unitID == "player-party" then -- CompactRaidFrame for player (no partyX id available for player)
             unitID = "party"  -- just so we can use party settings below
@@ -267,7 +264,7 @@ do
             end
         end
 
-        Icons:StartCooldown(timer, origUnitID and "player-party" or unitID)
+        Icons:StartCooldown(timer, origUnitID and "player-party" or unitID, onAuraEnd)
         Debug("%s timer %s:%s", isUpdate and "Updated" or "Started", origUnitID and "player-party" or unitID, timer.category)
     end
 
@@ -282,18 +279,18 @@ do
         end
     end
 
-    function StartTimers(timer, isApplied, unit, isUpdate, isRefresh)
+    function StartTimers(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
         if timer.testMode then
             -- When testing, we want to show timers for all enabled frames
             for i = 1, #testModeUnits do
-                Start(timer, isApplied, testModeUnits[i], isUpdate, isRefresh)
+                Start(timer, isApplied, testModeUnits[i], isUpdate, isRefresh, onAuraEnd)
             end
             return
         end
 
         if unit then
             -- Start/update timer only for this unitID
-            return Start(timer, isApplied, unit, isUpdate, isRefresh)
+            return Start(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
         end
 
         -- Start timer for every unitID that matches timer unit guid
@@ -302,11 +299,11 @@ do
         local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
-                Start(timer, isApplied, unit, isUpdate, isRefresh)
+                Start(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
 
                 if unit == "player" then
                     if NS.useCompactPartyFrames and NS.db.unitFrames.party.isEnabledForZone then
-                        Start(timer, isApplied, "player-party", isUpdate, isRefresh)
+                        Start(timer, isApplied, "player-party", isUpdate, isRefresh, onAuraEnd)
                     end
                 end
             end

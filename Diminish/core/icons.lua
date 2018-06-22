@@ -206,7 +206,7 @@ do
         cooldown:SetHideCountdownNumbers(not db.timerText)
         cooldown:SetDrawSwipe(db.timerSwipe)
         cooldown:SetDrawEdge(false)
-        cooldown:SetSwipeColor(0, 0, 0, 0.6)
+        cooldown:SetSwipeColor(0, 0, 0, 0.65)
         cooldown:SetScript("OnShow", CooldownOnShow)
         cooldown:SetScript("OnHide", CooldownOnHide)
         cooldown.parent = frame -- avoids calling :GetParent() later on
@@ -314,6 +314,7 @@ do
     local indicatorColors = NS.DR_STATES_COLORS
     local GetSpellTexture = _G.GetSpellTexture
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
+    local DR_TIME = NS.DR_TIME
 
     local indicatorTexts = { "50%", "75%", "100%" }
 
@@ -369,7 +370,7 @@ do
         end
     end
 
-    function Icons:StartCooldown(timer, unitID)
+    function Icons:StartCooldown(timer, unitID, onAuraEnd)
         local frame = self:GetFrame(unitID, timer.category)
         if not frame then return end
 
@@ -381,12 +382,21 @@ do
         SetIndicators(frame, timer.applied, timer.category)
 
         if frame.shown then
-            --if ((frame.cooldown:GetCooldownDuration() / 1000) - expiration) > 1.1 then
-                if not timer.testMode then
-                    -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc
+            if not timer.testMode then
+                if not onAuraEnd then
+                    -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
                     frame.cooldown:SetCooldown(now, expiration)
+                else
+                    -- Refresh cooldown without resetting timer swipe
+                    -- Thanks to sArena for this
+                    local startTime, startDuration = frame.cooldown:GetCooldownTimes()
+                    startTime, startDuration = startTime/1000, startDuration/1000
+
+                    local newDuration = DR_TIME / (1 - ((GetTime() - startTime) / startDuration))
+                    local newStartTime = DR_TIME + GetTime() - newDuration
+                    frame.cooldown:SetCooldown(newStartTime, newDuration)
                 end
-            --end
+            end
         else
             frame.shown = true
             frame.cooldown:SetCooldown(now, expiration)
