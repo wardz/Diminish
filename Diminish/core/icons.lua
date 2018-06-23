@@ -11,6 +11,7 @@ local GetTime = _G.GetTime
 local gsub = _G.string.gsub
 local format = _G.string.format
 local strmatch = _G.string.match
+local math_max = _G.math.max
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 
 function Icons:GetAnchor(unitID, defaultAnchor)
@@ -225,7 +226,7 @@ do
         -- label above an icon that displays category text
         local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
         ctext:SetFont(STANDARD_TEXT_FONT, 8)
-        ctext:SetPoint("TOP", 0, 10)
+        ctext:SetPoint("TOP", 0, 12)
         ctext:SetShown(db.showCategoryText)
         if strlen(category) >= 10 then
             ctext:SetText(strsub(category, 1, 5)) -- truncate
@@ -281,7 +282,12 @@ do
 
                 if NS.db.colorBlind then
                     frame.countdown:SetPoint("CENTER", 0, 3)
-                    frame.border:SetVertexColor(1, 1, 1, 1)
+                    frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
+                    if frame.indicator then
+                        frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                        frame.indicator:ClearAllPoints()
+                        frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, 0, 0)
+                    end
                 else
                     frame.countdown:SetPoint("CENTER", 0, 0)
                 end
@@ -316,31 +322,34 @@ do
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local DR_TIME = NS.DR_TIME
 
-    local indicatorTexts = { "50%", "75%", "100%" }
+    local indicatorTexts = { "\194\189", "\194\190", "x" }
 
     local function SetIndicators(frame, applied, category)
-        if NS.db.colorBlind then
-            if not frame.indicator then
-                frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, 9, "OUTLINE")
-                frame.indicator:SetPoint("BOTTOMRIGHT", 0, 0)
-                frame.countdown:SetPoint("CENTER", 0, 3)
-            end
-
-            if category ~= CATEGORY_TAUNT then
-                frame.indicator:SetText(indicatorTexts[applied])
-            else
-                frame.indicator:SetText(applied <= 4 and applied or indicatorTexts[3])
-            end
-            return
-        end
-
         local color
         if category ~= CATEGORY_TAUNT then
             color = indicatorColors[applied]
             if not color then return end
         else
             color = applied <= 4 and indicatorColors[1] or indicatorColors[3]
+        end
+
+        if NS.db.colorBlind then
+            if not frame.indicator then
+                frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", 0, 0)
+                frame.countdown:SetPoint("CENTER", 0, 3)
+                frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
+            end
+
+            if category ~= CATEGORY_TAUNT then
+                frame.indicator:SetTextColor(color[1], color[2], color[3], 1)
+                frame.indicator:SetText(indicatorTexts[applied])
+            else
+                frame.indicator:SetTextColor(color[1], color[2], color[3], 1)
+                frame.indicator:SetText(applied <= 4 and applied or indicatorTexts[3])
+            end
+            return
         end
 
         if Icons.MSQGroup then
