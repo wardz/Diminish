@@ -26,6 +26,12 @@ Panel:CreateChild("Profiles", function(panel)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
 
+        if DiminishDB.profileKeys[NS.PLAYER_NAME] == NS.PLAYER_NAME then
+            -- set current values to nil so CopyDefaults() works correctly
+            -- (could add an extra copytable function but rather just reuse this)
+            DiminishDB.profiles[NS.PLAYER_NAME] = nil
+        end
+
         DIMINISH_NS.CopyDefaults({
             [NS.PLAYER_NAME] = DiminishDB.profiles[value]
         }, DiminishDB.profiles)
@@ -54,10 +60,11 @@ Panel:CreateChild("Profiles", function(panel)
         DiminishDB.profileKeys[value] = nil
         DiminishDB.profiles[value] = nil
 
-        for i = 1, #profiles do
-            for k, v in pairs(profiles[i]) do
+        for i, profile in ipairs(profiles) do
+            for k, v in pairs(profile) do
                 if v == value then
                     tremove(profiles, i)
+                    break
                 end
             end
         end
