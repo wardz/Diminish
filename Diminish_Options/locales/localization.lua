@@ -13,8 +13,10 @@ L["ANCHORDRAG"] = [=[%s
 Grows: %s]=]
 L["ARENA"] = "Arena"
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking."
-L["COLORBLIND"] = "Enable Colorblind Mode"
-L["COLORBLIND_TOOLTIP"] = "Show DR indicators using text instead of colors."
+L["COLORBLIND"] = "Show Indicators Using Text"
+L["COLORBLIND_TOOLTIP"] = [=[Show DR indicators using text only instead of colors. Works best when using large icons.
+
+Disabling "%s" will put the indicator text in the middle of the icon.]=]
 L["COMBATLOCKDOWN_ERROR"] = "Must leave combat before doing that."
 L["COMPACTFRAMES_ERROR"] = "Unable to test raid frames while not in a group."
 L["COPY"] = "Copy"
@@ -65,6 +67,7 @@ L["TARGETTIP"] = "Target/focus yourself to see all frames."
 L["TEST"] = "Test Frames"
 L["TEST_TOOLTIP"] = "Test all *enabled* DR frames."
 L["TEXTURE_BRIGHT"] = "Bright"
+L["TEXTURE_GLOW"] = "Default, with glow"
 L["TEXTURE_NONE"] = "None"
 L["TIMERCOLORS"] = "Show Countdown Indicator"
 L["TIMERCOLORS_TOOLTIP"] = "Toggles DR indicator coloring of the countdown text."

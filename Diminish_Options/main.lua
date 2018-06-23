@@ -148,7 +148,7 @@ function Panel:Setup()
     end)
     frames.spellBookTextures:SetPoint("LEFT", frames.trackNPCs, 0, -40)
 
-    frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, L.COLORBLIND_TOOLTIP, function()
+    frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, format(L.COLORBLIND_TOOLTIP, L.TIMERTEXT), function()
         db.colorBlind = not db.colorBlind
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end)
@@ -160,15 +160,14 @@ function Panel:Setup()
             edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
             layer = "BORDER",
             edgeSize = 2.5,
-            name = L.DEFAULT,
+            name = L.DEFAULT, -- keep a reference to text in db so we can set correct dropdown value on login
         }},
 
-        -- TODO: localization
-        { text = "Default, with glow", value = {
+        { text = L.TEXTURE_GLOW, value = {
             edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
             layer = "OVERLAY",
             edgeSize = 1,
-            name = "Default, with glow",
+            name = L.TEXTURE_GLOW,
         }},
 
         { text = L.TEXTURE_BRIGHT, value = {
@@ -193,7 +192,6 @@ function Panel:Setup()
     frames.border.OnValueChanged = function(self, value)
         if not value or value == EMPTY then return end
         db.border = value
-        print(value.name)
         DIMINISH_NS.Icons:OnFrameConfigChanged()
     end
 
