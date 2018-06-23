@@ -255,7 +255,7 @@ do
                 if expirationTime and expirationTime > 0 then
                     timer.expiration = (expirationTime or GetTime()) + DR_TIME
 
-                    if timer.applied >= 2 and duration >= 6 then
+                    if timer.applied >= 2 and duration >= 5 then
                         -- is no DR but timer shows immune
                         -- may happen if server reset DR before our timer did & new CC got applied
                         timer.applied = 1
