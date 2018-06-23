@@ -1,7 +1,7 @@
 local _, NS = ...
 
 -- How long a diminshing return lasts.
-NS.DR_TIME = 18
+NS.DR_TIME = 18.5
 
 -- "enum" for categories
 NS.CATEGORIES = {

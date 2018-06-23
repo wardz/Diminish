@@ -31,7 +31,8 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
             -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 local timer = activeTimers[unitGUID][category]
-                if timer.expiration - GetTime() <= 4 then
+                local duration = timer.expiration - GetTime()
+                if duration <= 5 and duration > 0.5 then
                     self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
                 end
             end
@@ -227,6 +228,7 @@ end
 
 do
     local GetAuraDuration = NS.GetAuraDuration
+    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
 
     local testModeUnits = {
         "player", "player-party", "target", "focus",
@@ -256,9 +258,13 @@ do
                     timer.expiration = (expirationTime or GetTime()) + DR_TIME
 
                     if timer.applied >= 2 and duration >= 5 then
-                        -- is no DR but timer shows immune
+                        -- is no DR but timer shows immune/75%
                         -- may happen if server reset DR before our timer did & new CC got applied
                         timer.applied = 1
+                    elseif timer.applied > 3 and duration > 0 then
+                        if timer.category ~= CATEGORY_TAUNT then
+                            timer.applied = 1
+                        end
                     end
                 end
             end
