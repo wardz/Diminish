@@ -24,6 +24,7 @@ NS.CreateNewProfile = function()
 
         DIMINISH_NS.db = DiminishDB.profiles[NS.PLAYER_NAME]
         DIMINISH_NS.activeProfile = NS.PLAYER_NAME
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
     end
 end
 
