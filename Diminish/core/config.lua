@@ -33,7 +33,10 @@ do
 
     local defaultsTarget = {
         enabled = true,
-        zones = { pvp = true, arena = false, none = true, party = false, raid = false, scenario = false },
+        zones = {
+            pvp = true, arena = false, none = true,
+            party = false, raid = false, scenario = false
+        },
         disabledCategories = defaultsDisabledCategories,
         watchFriendly = false,
         iconSize = 24,

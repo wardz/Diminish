@@ -401,8 +401,8 @@ do
                     local startTime, startDuration = frame.cooldown:GetCooldownTimes()
                     startTime, startDuration = startTime/1000, startDuration/1000
 
-                    local newDuration = DR_TIME / (1 - ((GetTime() - startTime) / startDuration))
-                    local newStartTime = DR_TIME + GetTime() - newDuration
+                    local newDuration = DR_TIME / (1 - ((now - startTime) / startDuration))
+                    local newStartTime = DR_TIME + now - newDuration
                     frame.cooldown:SetCooldown(newStartTime, newDuration)
                 end
             end
