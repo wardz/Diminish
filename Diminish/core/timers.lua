@@ -118,11 +118,12 @@ function Timers:Remove(unitGUID, category, noStop)
     elseif category == false then
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
+        local Diminish = NS.Diminish
         for cat, t in pairs(timers) do
             -- UNIT_DIED is fired for Feign Death so ignore hunters here
             if t.unitClass == "HUNTER" then return end
-            if NS.Diminish:UnitIsHunter(t.destName) then return end
-            if NS.currInstanceType ~= "pvp" and not t.unitClass then return end
+            if Diminish:UnitIsHunter(t.destName) then return end -- TODO: run only once
+            if Diminish.currInstanceType ~= "pvp" and not t.unitClass then return end
 
             if not noStop then
                 StopTimers(t, nil, true)
@@ -185,7 +186,7 @@ C_Timer.NewTicker(60, function()
     -- Remove inactive timers every 60 seconds incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
 
-    if NS.currInstanceType ~= "arena" then
+    if NS.Diminish.currInstanceType ~= "arena" then
         for guid, categories in pairs(activeTimers) do
             for cat, timer in pairs(categories) do
                 if TimerIsFinished(timer) then
