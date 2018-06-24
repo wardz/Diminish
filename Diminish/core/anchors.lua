@@ -13,6 +13,8 @@ NS.anchors = {
         "oUF_Player",
         "SUI_playerFrame",
         "gUI4_UnitPlayer",
+        "oUF_Adirelle_Player",
+        "Stuf.units.player",
         "PlayerFrame", -- Blizzard frame should always be last
     },
 
@@ -28,6 +30,8 @@ NS.anchors = {
         "oUF_Target",
         "SUI_targetFrame",
         "gUI4_UnitTarget",
+        "oUF_Adirelle_Target",
+        "Stuf.units.target",
         "TargetFrame",
     },
 
@@ -43,6 +47,8 @@ NS.anchors = {
         "oUF_Focus",
         "SUI_focusFrame",
         "gUI4_UnitFocus",
+        "oUF_Adirelle_Focus",
+        "Stuf.units.focus",
         "FocusFrame",
     },
 
@@ -56,6 +62,7 @@ NS.anchors = {
         "oUF_Raid%d",
         "GwPartyFrame%d",
         "gUI4_GroupFramesGroup5UnitButton%d",
+        "Stuf.units.party%d",
         "PartyMemberFrame%d",
     },
 
@@ -71,6 +78,8 @@ NS.anchors = {
         "barena%dUnitFrame",
         "oUF_Arena%d",
         --"GladiusClassIconFramearena%d",
+        "oUF_Adirelle_Arena%d",
+        "Stuf.units.arena%d",
         "ArenaEnemyFrame%d",
     },
 }
