@@ -217,6 +217,8 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             if not InCombatLockdown() then
                 btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
                 NS.TestMode:Test()
+            else
+                print("Diminish: " .. L.COMBATLOCKDOWN_ERROR)
             end
         end)
         frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
