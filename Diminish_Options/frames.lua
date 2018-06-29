@@ -39,11 +39,7 @@ local function Refresh(self)
     -- Refresh categories
     for k, category in pairs(DIMINISH_NS.CATEGORIES) do
         if frames.categories[k] then
-            if unitFrameSettings.disabledCategories[category] then
-                frames.categories[k]:SetChecked(false)
-            else
-                frames.categories[k]:SetChecked(true)
-            end
+            frames.categories[k]:SetChecked(not unitFrameSettings.disabledCategories[category])
         end
     end
 
@@ -52,7 +48,6 @@ local function Refresh(self)
         for label, instance in pairs(zones) do
             if frames.zones[label] then
                 if type(instance) == "table" then
-                    -- special case for L.ZONE_DUNGEONS
                     for i = 1, #instance do
                         frames.zones[label]:SetChecked(unitFrameSettings.zones[instance[i]])
                         break -- if first is true or false, then all other is same value
@@ -63,6 +58,7 @@ local function Refresh(self)
             end
         end
 
+        -- Toggle widgets for taunt/zone dungeon depending on if PvE mode is enabled
         if frames.zones[L.ZONE_DUNGEONS] then
             if DIMINISH_NS.db.trackNPCs then
                 frames.zones[L.ZONE_DUNGEONS]:Enable()
@@ -75,8 +71,6 @@ local function Refresh(self)
     end
 end
 
-
--- TODO: probably want to reuse frames here
 for unitFrame, unit in pairs(NS.unitFrames) do
     Panel:CreateChild(unitFrame, function(panel)
         Widgets:CreateHeader(panel, unitFrame, false, format(L.HEADER_UNITFRAME, unitFrame))
@@ -101,10 +95,6 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             end
 
             DIMINISH_NS.Diminish:ToggleForZone()
-
-            if unit == "party" then
-                DIMINISH_NS.Icons:AnchorPartyFrames()
-            end
         end)
         frames.enabled:SetPoint("LEFT", subVisuals, 10, -70)
 
@@ -134,30 +124,33 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
         frames.iconSize = Widgets:CreateSlider(panel, L.ICONSIZE, L.ICONSIZE_TOOLTIP, 10, 80, 1, function(frame, value)
             db.iconSize = value
-            --DIMINISH_NS.Timers:ResetAll()
             DIMINISH_NS.Icons:OnFrameConfigChanged()
-            --NS.TestMode:UpdateAnchors()
         end)
-        frames.iconSize:SetPoint("LEFT", frames.growLeft, 10, -50)
+        frames.iconSize:SetPoint("LEFT", frames.growLeft, 10, -55)
 
 
         frames.iconPadding = Widgets:CreateSlider(panel, L.ICONPADDING, L.ICONPADDING_TOOLTIP, 0, 40, 1, function(frame, value)
             db.iconPadding = value
             DIMINISH_NS.Icons:OnFrameConfigChanged()
         end)
-        frames.iconPadding:SetPoint("LEFT", frames.iconSize, 0, -70)
+        frames.iconPadding:SetPoint("LEFT", frames.iconSize, 0, -50)
 
 
         -------------------------------------------------------------------
 
         do
             local subCategories = Widgets:CreateSubHeader(panel, L.HEADER_CATEGORIES)
-            subCategories:SetPoint("TOPRIGHT", -64, -50)
+            if unit ~= "arena" then
+                subCategories:SetPoint("LEFT", 16, -100)
+            else
+                subCategories:SetPoint("TOPRIGHT", -64, -50)
+            end
 
             frames.categories = {}
-            local x = -60
+            local x, y = -60, 10
             local dbCategories = NS.GetDBProxy("unitFrames", unit, "disabledCategories")
 
+            local i = 1
             for k, category in pairs(DIMINISH_NS.CATEGORIES) do
                 local continue = true
                 if category == DIMINISH_NS.CATEGORIES.TAUNT and unit ~= "focus" and unit ~= "target" then
@@ -170,9 +163,16 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                         dbCategories[category] = self:GetChecked() == false and true or false
                     end)
 
-                    frames.categories[k]:SetPoint("LEFT", subCategories, 10, x)
+                    frames.categories[k]:SetPoint("LEFT", subCategories, y, x)
                     frames.categories[k]:SetChecked(true)
                     x = x - 30
+                    i = i + 1
+
+                    if i > (unit == "arena" and 3 or 4) then
+                        i = 1
+                        x = -60
+                        y = y + 120
+                    end
                 end
             end
         end
@@ -181,7 +181,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
         if unit ~= "arena" then
             local subZones = Widgets:CreateSubHeader(panel, L.HEADER_ZONE)
-            subZones:SetPoint("LEFT", 16, -100)
+            subZones:SetPoint("TOPRIGHT", -64, -50)
 
             frames.zones = {}
             local x = -60

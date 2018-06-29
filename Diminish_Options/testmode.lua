@@ -17,10 +17,9 @@ NS.TestMode = TestMode
 local function CalcPoint(frame)
     local parentX, parentY = frame:GetParent():GetCenter()
     local frameX, frameY = frame:GetCenter()
+    if not frameX then return end
 
     parentX, parentY, frameX, frameY = parentX + 0.5, parentY + 0.5, frameX + 0.5, frameY + 0.5
-
-    if not frameX then return end
 
     local scale = frame:GetScale()
 
@@ -34,20 +33,16 @@ end
 local function OnDragStop(self)
     self:StopMovingOrSizing()
 
-    -- Create new profile after moving frames if we're still on Default profile
-    NS.CreateNewProfile()
-
     -- frames loses relativity to parent and is instead relative to UIParent after dragging
-    -- so we cant just use self:GetPoint()
+    -- so we cant just use self:GetPoint() here
     local xOfs, yOfs = CalcPoint(self)
 
     local db = DIMINISH_NS.db.unitFrames[self.realUnit]
-    --db.point = "CENTER"
     db.offsetY = yOfs
     db.offsetX = xOfs
 
     local isArena = strfind(self.unit, "arena")
-    local isParty = strfind(self.unit, "party") or strfind(self.unit, "player-party")
+    local isParty = strfind(self.unit, "party")
 
     -- Update position for all party/arena frames after draggin 1 of them
     if isArena or isParty then
@@ -64,22 +59,20 @@ local function OnEnter(self)
     SetCursor("Interface\\CURSOR\\UI-Cursor-Move")
 end
 
-local function OnLeave(self)
-    ResetCursor()
+local function PartyOnHide(self)
+    if not TestMode:IsTestingOrAnchoring() then return end
+
+    -- If you hit Escape or Cancel in InterfaceOptions instead of "Okay" button then for some reason
+    -- blizzard auto hides the PartyMember frames so hook them and prevent hiding when testing
+    if not InCombatLockdown() and not self:IsForbidden() then
+        if not GetCVarBool("useCompactPartyFrames") then -- user toggling cvar while testing would prevent hiding permanently
+            self:Show()
+        end
+    end
 end
 
 function TestMode:IsTestingOrAnchoring()
     return isTesting or isAnchoring
-end
-
-local function PartyOnHide(self)
-    -- If you hit Escape or Cancel in InterfaceOptions instead of "Okay" button then for some reason
-    -- blizzard auto hides the PartyMember frames so hook them and prevent hiding when testing
-    if not InCombatLockdown() and isTesting or isAnchoring then
-        if not GetCVarBool("useCompactPartyFrames") then -- toggling cvar while testing would prevent hiding permanently
-            self:Show()
-        end
-    end
 end
 
 function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
@@ -102,6 +95,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     if forceHide or settings.arena.enabled and not isInArena then
         ArenaEnemyFrames:SetShown(showFlag)
+
         if LibStub and LibStub("AceAddon-3.0", true) then
             local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
             if sArena and sArena.ArenaEnemyFrames then
@@ -123,8 +117,12 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         local E = unpack(ElvUI)
         local UF = E and E:GetModule("UnitFrames")
         if UF then
-            UF:ToggleForceShowGroupFrames('arena', 3)
-            UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
+            if settings.arena.enabled then
+                UF:ToggleForceShowGroupFrames('arena', 3)
+            end
+            if settings.party.enabled then
+                UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
+            end
             return
         end
     end
@@ -143,7 +141,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
                 if frame then
                     frame:SetShown(showFlag)
                     if not frame.Diminish_isHooked then
-                        frame:HookScript("OnHide", PartyOnHide) -- fixes blizzard bug
+                        frame:HookScript("OnHide", PartyOnHide)
                         frame.Diminish_isHooked = true
                     end
                 end
@@ -158,7 +156,7 @@ function TestMode:HideAnchors()
         self.pool:Release(frame)
     end
     isAnchoring = false
-    TestMode:ToggleArenaAndPartyFrames(false)
+    self:ToggleArenaAndPartyFrames(false)
 end
 
 function TestMode:CreateDummyAnchor(parent, unit, unitID)
@@ -196,7 +194,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
         frame:SetFrameStrata("HIGH")
 
         frame:SetScript("OnEnter", OnEnter)
-        frame:SetScript("OnLeave", OnLeave)
+        frame:SetScript("OnLeave", ResetCursor)
     end
 
     frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unitID or unit), db.growLeft and L.LEFT or L.RIGHT)

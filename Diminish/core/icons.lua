@@ -281,7 +281,7 @@ do
                 end
 
                 if NS.db.colorBlind then
-                    frame.countdown:SetPoint("CENTER", 0, 3)
+                    frame.countdown:SetPoint("CENTER", 0, 5)
                     frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
                     if frame.indicator then
                         frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
@@ -338,7 +338,7 @@ do
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
                 frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", 0, 0)
-                frame.countdown:SetPoint("CENTER", 0, 3)
+                frame.countdown:SetPoint("CENTER", 0, 5)
                 frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
             end
 
