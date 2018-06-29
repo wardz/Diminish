@@ -57,7 +57,7 @@ function Diminish:ToggleForZone()
             end
         else -- unitframe is not enabled for tracking at all
             settings.isEnabledForZone = false
-            if self:IsEventRegistered(event) then
+            if event and self:IsEventRegistered(event) then
                 self:UnregisterEvent(event)
                 NS.Debug("Unregistered %s for instance %s.", event, instanceType)
             end
