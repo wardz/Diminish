@@ -48,8 +48,8 @@ L["NEWPROFILE"] = "Create New Profile"
 L["NEWPROFILE_TOOLTIP"] = "Create a new profile with current active settings as a starting point."
 L["PARTY"] = "Party"
 L["PLAYER"] = "Player"
-L["RESET"] = "Reset Profile"
-L["RESET_TOOLTIP"] = "Reset current profile to default settings."
+L["RESETPROFILE"] = "Reset Profile"
+L["RESETPROFILE_TOOLTIP"] = "Delete current profile and reset to default settings."
 L["RIGHT"] = "right"
 L["SELECTBORDER"] = "Select Border Style"
 L["SELECTBORDER_TOOLTIP"] = "Choose between different border textures for the DR icons. You may also skin the icons using Masque."
@@ -90,7 +90,11 @@ L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle DR tracking for friendly players. (Cast b
 
 Enabling this will drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
-L["ZONE_BATTLEGROUNDS"] = "Battlegrounds"
+L["ZONE_BATTLEGROUNDS"] = "Battlegrounds & Brawls"
 L["ZONE_DUNGEONS"] = "Dungeons & Raids"
 L["ZONE_OUTDOORS"] = "Outdoors"
 L["ZONES_TOOLTIP"] = "Enable tracking for this zone."
+
+L.PROFILES = "Profiles"
+L.RESETPOS = "Reset Position"
+L.RESETPOS_TOOLTIP = "Reset icon positions for this unitframe back to default values."

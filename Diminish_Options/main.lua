@@ -14,20 +14,6 @@ NS.unitFrames = {
     [L.ARENA] = "arena",
 }
 
-NS.CreateNewProfile = function()
-    if DIMINISH_NS.activeProfile == "Default" then
-        DiminishDB.profileKeys[NS.PLAYER_NAME] = NS.PLAYER_NAME
-
-        DIMINISH_NS.CopyDefaults({
-            [NS.PLAYER_NAME] = DIMINISH_NS.db
-        }, DiminishDB.profiles)
-
-        DIMINISH_NS.db = DiminishDB.profiles[NS.PLAYER_NAME]
-        DIMINISH_NS.activeProfile = NS.PLAYER_NAME
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
-    end
-end
-
 -- Proxy table for diminish savedvariables
 -- Spaghetti code inc, im just too lazy to rewrite all of this
 NS.GetDBProxy = function(key1, key2, key3)
@@ -45,10 +31,6 @@ NS.GetDBProxy = function(key1, key2, key3)
         end,
 
         __newindex = function(self, key, value)
-            -- If we still use Default profile and change a DB option,
-            -- create a new profile for the current player
-            NS.CreateNewProfile()
-
             local tbl
             if key3 then
                 tbl = DIMINISH_NS.db[key1][key2][key3]
@@ -69,7 +51,7 @@ function Panel:Setup()
     local db = NS.GetDBProxy()
 
     local notes = GetAddOnMetadata(self.name, "Notes-" .. GetLocale()) or GetAddOnMetadata(self.name, "Notes")
-    Widgets:CreateHeader(self, self.name, GetAddOnMetadata("Diminish", "Version"), notes)
+    Widgets:CreateHeader(self, gsub(self.name, "_", " "), GetAddOnMetadata("Diminish", "Version"), notes)
 
     local subCooldown = Widgets:CreateSubHeader(self, L.HEADER_COOLDOWN)
     subCooldown:SetPoint("TOPLEFT", 16, -50)
@@ -130,16 +112,12 @@ function Panel:Setup()
 
         for _, unit in pairs({ "target", "focus" }) do
             local cfg = db.unitFrames[unit]
-            if db.trackNPCs then
-                cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = false
-            elseif not db.trackNPCs then
-                cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = true
-            end
-
+            cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = not db.trackNPCs
             cfg.zones.party = db.trackNPCs
             cfg.zones.scenario = db.trackNPCs
             cfg.zones.raid = db.trackNPCs
         end
+
         DIMINISH_NS.Diminish:ToggleForZone()
     end)
     frames.trackNPCs:SetPoint("LEFT", frames.showCategoryText, 0, -40)
@@ -156,44 +134,47 @@ function Panel:Setup()
     frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
 
 
-    local textures = {
-        { text = L.DEFAULT, value = {
-            edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
-            layer = "BORDER",
-            edgeSize = 2.5,
-            name = L.DEFAULT, -- keep a reference to text in db so we can set correct dropdown value on login
-        }},
+    do
+        local textures = {
+            { text = L.DEFAULT, value = {
+                edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+                layer = "BORDER",
+                edgeSize = 2.5,
+                name = L.DEFAULT, -- keep a reference to text in db so we can set correct dropdown value on login
+            }},
 
-        { text = L.TEXTURE_GLOW, value = {
-            edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
-            layer = "OVERLAY",
-            edgeSize = 1,
-            name = L.TEXTURE_GLOW,
-        }},
+            { text = L.TEXTURE_GLOW, value = {
+                edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
+                layer = "OVERLAY",
+                edgeSize = 1,
+                name = L.TEXTURE_GLOW,
+            }},
 
-        { text = L.TEXTURE_BRIGHT, value = {
-            edgeFile = "Interface\\BUTTONS\\WHITE8X8",
-            --isBackdrop = true,
-            edgeSize = 1.5,
-            layer = "BORDER",
-            name = L.TEXTURE_BRIGHT,
-        }},
+            { text = L.TEXTURE_BRIGHT, value = {
+                edgeFile = "Interface\\BUTTONS\\WHITE8X8",
+                --isBackdrop = true,
+                edgeSize = 1.5,
+                layer = "BORDER",
+                name = L.TEXTURE_BRIGHT,
+            }},
 
-        { text = L.TEXTURE_NONE, value = {
-            layer = "BORDER",
-            edgeFile = "",
-            edgeSize = 0,
-            name = L.TEXTURE_NONE,
-        }},
-    }
+            { text = L.TEXTURE_NONE, value = {
+                layer = "BORDER",
+                edgeFile = "",
+                edgeSize = 0,
+                name = L.TEXTURE_NONE,
+            }},
+        }
 
-    frames.border = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
-    frames.border:SetPoint("LEFT", frames.colorBlind, 7, -55)
-    frames.border:SetWidth(180)
-    frames.border.OnValueChanged = function(self, value)
-        if not value or value == EMPTY then return end
-        db.border = value
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        frames.border = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
+        frames.border:SetPoint("LEFT", frames.colorBlind, 7, -55)
+        frames.border:SetWidth(180)
+
+        frames.border.OnValueChanged = function(self, value)
+            if not value or value == EMPTY then return end
+            db.border = value
+            DIMINISH_NS.Icons:OnFrameConfigChanged()
+        end
     end
 
     -------------------------------------------------------------------

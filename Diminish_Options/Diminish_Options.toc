@@ -10,6 +10,7 @@ widgets\libs\PhanxConfig-Dropdown.lua
 widgets\widgets.lua
 widgets\button.lua
 widgets\checkbox.lua
+widgets\editbox.lua
 widgets\slider.lua
 widgets\header.lua
 widgets\panel.lua
