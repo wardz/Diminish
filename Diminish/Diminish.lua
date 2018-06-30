@@ -1,6 +1,7 @@
 local _, NS = ...
 local Timers = NS.Timers
-local hunterList = {}
+local Icons = NS.Icons
+local Info = NS.Info
 
 local Diminish = CreateFrame("Frame")
 Diminish:RegisterEvent("PLAYER_LOGIN")
@@ -12,16 +13,34 @@ end)
 NS.Diminish = Diminish
 _G.DIMINISH_NS = NS
 
+local IsInBrawl = _G.C_PvP.IsInBrawl
+local hunterList = {}
+
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
     focus = "PLAYER_FOCUS_CHANGED",
     party = "GROUP_ROSTER_UPDATE",
     arena = "ARENA_OPPONENT_UPDATE",
+    player = "COMBAT_LOG_EVENT_UNFILTERED",
 }
 
-function Diminish:ToggleForZone()
+function Diminish:ToggleForZone(dontRunEnable)
     local _, instanceType = IsInInstance()
     local registeredOnce = false
+
+    if instanceType == "arena" then
+        -- check if inside arena brawl, C_PvP.IsInBrawl() doesn't
+        -- work on PLAYER_ENTERING_WORLD so delay it with this event
+       self:RegisterEvent("PVP_BRAWL_INFO_UPDATED")
+    else
+        self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
+    end
+
+     -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone
+    if instanceType == "arena" and IsInBrawl() then
+        instanceType = "pvp" -- treat arena brawl as a battleground
+        self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
+    end
 
     -- (Un)register unit events for current zone depending on user settings
     for unit, settings in pairs(NS.db.unitFrames) do -- DR tracking for focus/target etc each have their own seperate settings
@@ -30,29 +49,22 @@ function Diminish:ToggleForZone()
         if settings.enabled then
             -- Loop through every zone/instance enabled and see if we're currently in that instance
             for zone, state in pairs(settings.zones) do
-                if unit ~= "player" then
-                    if state and zone == instanceType then
-                        registeredOnce = true
-                        settings.isEnabledForZone = true -- cache for later
+                if state and zone == instanceType then
+                    registeredOnce = true
+                    settings.isEnabledForZone = true -- cache for later
 
-                        if not self:IsEventRegistered(event) then
-                            self:RegisterEvent(event)
-                            NS.Debug("Registered %s for instance %s.", event, instanceType)
-                        end
-
-                        break
-                    else
-                        settings.isEnabledForZone = false
-                        if self:IsEventRegistered(event) then
-                            self:UnregisterEvent(event)
-                            NS.Debug("Unregistered %s for instance %s.", event, instanceType)
-                        end
+                    if not self:IsEventRegistered(event) then
+                        self:RegisterEvent(event)
+                        NS.Debug("Registered %s for instance %s.", event, instanceType)
                     end
+
+                    break
                 else
-                    -- Make sure CLEU etc is still registered when only "player" is being tracked for a zone
-                    -- (There's no unit event that need registration for Player)
-                    registeredOnce = registeredOnce or zone == instanceType
-                    settings.isEnabledForZone = registeredOnce
+                    settings.isEnabledForZone = false
+                    if self:IsEventRegistered(event) then
+                        self:UnregisterEvent(event)
+                        NS.Debug("Unregistered %s for instance %s.", event, instanceType)
+                    end
                 end
             end
         else -- unitframe is not enabled for tracking at all
@@ -62,6 +74,12 @@ function Diminish:ToggleForZone()
                 NS.Debug("Unregistered %s for instance %s.", event, instanceType)
             end
         end
+    end
+
+    if dontRunEnable then
+        -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone again,
+        -- so dont run Enable twice
+        return self:SetCLEUWatchVariables()
     end
 
     if registeredOnce then
@@ -123,14 +141,14 @@ function Diminish:Disable()
     Timers:ResetAll(true)
     wipe(hunterList)
 
-    NS.Info("Disabled for zone %s.", select(2, IsInInstance()))
+    Info("Disabled addon for zone %s.", select(2, IsInInstance()))
 end
 
 function Diminish:Enable()
-    self.currInstanceType = select(2, IsInInstance())
     Timers:ResetAll(true)
-
     wipe(hunterList)
+
+    self.currInstanceType = select(2, IsInInstance())
     if self.currInstanceType == "pvp" then
         self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
         self:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -142,7 +160,7 @@ function Diminish:Enable()
     self:SetCLEUWatchVariables()
     self:GROUP_ROSTER_UPDATE()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    NS.Info("Enabled for zone %s.", self.currInstanceType)
+    Info("Enabled addon for zone %s.", self.currInstanceType)
 end
 
 function Diminish:UnitIsHunter(name) -- for BGs only
@@ -189,12 +207,17 @@ function Diminish:InitDB()
     }, DiminishDB.profiles)
 
     -- Reference to active db profile
-    -- Always use this directly or pointer will be invalid
+    -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
 
-    NS.DEFAULT_SETTINGS = nil
+    if not IsAddOnLoaded("Diminish_Options") then -- TODO: retest
+        -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
+        NS.DEFAULT_SETTINGS = nil
+        NS.CopyDefaults = nil
+        Icons.OnFrameConfigChanged = nil
+    end
     self.InitDB = nil
 end
 
@@ -220,7 +243,15 @@ end
 function Diminish:CVAR_UPDATE(name, value)
     if name == "USE_RAID_STYLE_PARTY_FRAMES" then
         NS.useCompactPartyFrames = value ~= "0"
-        NS.Icons:AnchorPartyFrames()
+        Icons:AnchorPartyFrames()
+    end
+end
+
+function Diminish:PVP_BRAWL_INFO_UPDATED()
+    if not IsInBrawl() then
+        self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
+    else
+        self:ToggleForZone(true)
     end
 end
 
@@ -255,14 +286,14 @@ function Diminish:PLAYER_FOCUS_CHANGED()
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
-    if status == "seen" and not C_PvP.IsInBrawl() and not strfind(unitID, "pet") then
+    if status == "seen" and not IsInBrawl() and not strfind(unitID, "pet") then
         Timers:Refresh(unitID)
     end
 end
 
 function Diminish:GROUP_ROSTER_UPDATE()
     local members = min(GetNumGroupMembers(), 4)
-    NS.Icons:AnchorPartyFrames(members)
+    Icons:AnchorPartyFrames(members)
 
     for i = 1, members do
         Timers:Refresh("party"..i)
@@ -288,7 +319,7 @@ function Diminish:UPDATE_BATTLEFIELD_SCORE()
                 -- Used to detect if unit is hunter in combat log later on by checking destName
                 -- We do this so we can ignore hunters in UNIT_DIED event since Feign Death triggers UNIT_DIED
                 hunterList[name] = true
-                NS.Info("Add %s to hunter list.", name)
+                Info("Add %s to hunter list.", name)
             end
         end
     end
@@ -317,6 +348,8 @@ do
         if auraType == "DEBUFF" then
             local category = spellList[spellID] -- DR category
             if not category then return end
+
+            -- TODO: faster to add eventType blacklist here?
 
             local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
@@ -361,7 +394,7 @@ do
         end
 
         if eventType == "UNIT_DIED" or eventType == "PARTY_KILL" then
-            if self.currInstanceType == "arena" then return end
+            if self.currInstanceType == "arena" and not IsInBrawl() then return end
 
             if destGUID == self.PLAYER_GUID then
                 if self.PLAYER_CLASS == "HUNTER" then
