@@ -222,5 +222,14 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             end
         end)
         frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
+
+
+        frames.resetPosBtn = Widgets:CreateButton(panel, L.RESETPOS, L.RESETPOS_TOOLTIP, function(btn)
+            local defaults = DIMINISH_NS.DEFAULT_SETTINGS.unitFrames[unit]
+            db.offsetY = defaults.offsetY
+            db.offsetX = defaults.offsetX
+            db.growLeft = defaults.growLeft
+        end)
+        frames.resetPosBtn:SetPoint("BOTTOMRIGHT", frames.testBtn, -120, 0)
     end)
 end
