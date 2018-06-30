@@ -1,6 +1,6 @@
 local _, NS = ...
 
--- How long a diminshing return lasts.
+-- How long a diminishing return lasts.
 NS.DR_TIME = 18.5
 
 -- "enum" for categories
@@ -35,7 +35,7 @@ do
         enabled = true,
         zones = {
             pvp = true, arena = false, none = true,
-            party = false, raid = false, scenario = false
+            party = false, raid = false, scenario = false,
         },
         disabledCategories = defaultsDisabledCategories,
         watchFriendly = false,

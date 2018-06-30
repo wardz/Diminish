@@ -14,8 +14,8 @@ if select(4, GetBuildInfo()) < 80000 then
         [186387]  = C.DISORIENT,       -- Bursting Shot
         [224729]  = C.DISORIENT,       -- Bursting Shot 2
         [198909]  = C.DISORIENT,       -- Song of Chi-ji
-        [202274]  = C.DISORIENT,       -- Incendiary Brew (Incorrect?)
-        [33786]   = C.DISORIENT,       -- Cyclone (Incorrect?)
+        [202274]  = C.DISORIENT,       -- Incendiary Brew
+        [33786]   = C.DISORIENT,       -- Cyclone
         [209753]  = C.DISORIENT,       -- Cyclone Honor Talent
         [31661]   = C.DISORIENT,       -- Dragon's Breath
         [105421]  = C.DISORIENT,       -- Blinding Light
@@ -99,7 +99,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [221562]  = C.STUN,            -- Asphyxiate (blood)
         [91800]   = C.STUN,            -- Gnaw
         [212332]  = C.STUN,            -- Smash
-        [91797]   = C.STUN,            -- Monstrous Blow (No longer used?)
+        [91797]   = C.STUN,            -- Monstrous Blow
         [207171]  = C.STUN,            -- Winter is Coming
         [22570]   = C.STUN,            -- Maim
         [203123]  = C.STUN,            -- Maim (Stun effect)
@@ -182,7 +182,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [62124]   = C.TAUNT,           -- Hand of Reckoning
         [17735]   = C.TAUNT,           -- Suffering (Voidwalker)
         [355]     = C.TAUNT,           -- Taunt
-        [36213]   = C.TAUNT,           -- Angered Earth (Earth Elemental) FIXME: no spell aura
+--      [36213]   = C.TAUNT,           -- Angered Earth (Earth Elemental)
     }
 else -- bfa beta
     NS.spellList = {
@@ -207,7 +207,7 @@ else -- bfa beta
         [236748]  = C.DISORIENT,       -- Intimidating Roar
         [226943]  = C.DISORIENT,       -- Mind Bomb
         [2637]    = C.DISORIENT,       -- Hibernate
-        --[xxxx]  = C.DISORIENT,       -- Holographic Horror Projector
+--      [xxxx]    = C.DISORIENT,       -- Holographic Horror Projector
 
         [99]      = C.INCAPACITATE,    -- Incapacitating Roar
         [203126]  = C.INCAPACITATE,    -- Maim (Blood trauma)
@@ -253,7 +253,7 @@ else -- bfa beta
         [217832]  = C.INCAPACITATE,    -- Imprison
         [221527]  = C.INCAPACITATE,    -- Imprison (Honor Talent)
         [197214]  = C.INCAPACITATE,    -- Sundering
-        --[274930]  = C.INCAPACITATE,  -- Organic Discombobulation Grenade
+ --     [274930]  = C.INCAPACITATE,  -- Organic Discombobulation Grenade
 
         [47476]   = C.SILENCE,         -- Strangulate
         [204490]  = C.SILENCE,         -- Sigil of Silence
@@ -279,7 +279,7 @@ else -- bfa beta
         [5211]    = C.STUN,            -- Mighty Bash
         [19577]   = C.STUN,            -- Intimidation (no longer used?)
         [24394]   = C.STUN,            -- Intimidation
-    --  [232055]  = C.STUN,            -- Fists of Fury
+--      [232055]  = C.STUN,            -- Fists of Fury
         [119381]  = C.STUN,            -- Leg Sweep
         [853]     = C.STUN,            -- Hammer of Justice
         [1833]    = C.STUN,            -- Cheap Shot
@@ -307,7 +307,7 @@ else -- bfa beta
         [204437]  = C.STUN,            -- Lightning Lasso
         [255723]  = C.STUN,            -- Bull Rush
         [202244]  = C.STUN,            -- Overrun (Also a knockback)
-    --    [213688]  = C.STUN,          -- Fel Cleave (doesn't seem to DR)
+--      [213688]  = C.STUN,            -- Fel Cleave (doesn't seem to DR)
 
         [204085]  = C.ROOT,            -- Deathchill
         [339]     = C.ROOT,            -- Entangling Roots

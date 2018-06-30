@@ -15,7 +15,9 @@ NS.anchors = {
         "gUI4_UnitPlayer",
         "oUF_Adirelle_Player",
         "Stuf.units.player",
-        "PlayerFrame", -- Blizzard frame should always be last
+        "PlayerFrame",
+        -- Blizzard frame should always be last
+        -- Frames are cached so don't worry about performance
     },
 
     target = {
