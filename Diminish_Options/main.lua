@@ -15,11 +15,12 @@ NS.unitFrames = {
 }
 
 -- Proxy table for diminish savedvariables
--- Spaghetti code inc, im just too lazy to rewrite all of this
+-- Was originally used to automatically create a new DB profile on any DB option change,
+-- now it's just a lazy way to keep correct db reference to DiminishDB profile
 NS.GetDBProxy = function(key1, key2, key3)
     return setmetatable({}, {
         __index = function(self, key)
-            if key3 then -- proxy for nested tables.
+            if key3 then -- proxy for nested tables
                 return DIMINISH_NS.db[key1][key2][key3][key]
             elseif key2 then
                 return DIMINISH_NS.db[key1][key2][key]
@@ -47,6 +48,7 @@ NS.GetDBProxy = function(key1, key2, key3)
 end
 
 function Panel:Setup()
+    local Icons = DIMINISH_NS.Icons
     local frames = self.frames
     local db = NS.GetDBProxy()
 
@@ -65,7 +67,7 @@ function Panel:Setup()
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
         db.timerSwipe = not db.timerSwipe
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
     end)
     frames.timerSwipe:SetPoint("LEFT", frames.displayMode, 0, -40)
 
@@ -75,14 +77,14 @@ function Panel:Setup()
         Widgets:ToggleState(frames.timerTextSize, frames.timerText:GetChecked())
 
         db.timerText = not db.timerText
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
     end)
     frames.timerText:SetPoint("LEFT", frames.timerSwipe, 0, -40)
 
 
     frames.timerColors = Widgets:CreateCheckbox(self, L.TIMERCOLORS, L.TIMERCOLORS_TOOLTIP, function()
         db.timerColors = not db.timerColors
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
         DIMINISH_NS.Timers:ResetAll()
     end)
     frames.timerColors:SetPoint("LEFT", frames.timerText, 15, -40)
@@ -90,7 +92,7 @@ function Panel:Setup()
 
     frames.timerTextSize = Widgets:CreateSlider(self, L.TIMERTEXTSIZE, L.TIMERTEXTSIZE_TOOLTIP, 7, 35, 1, function(_, value)
         db.timerTextSize = value
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
     end)
     frames.timerTextSize:SetPoint("LEFT", frames.timerColors, 10, -50)
 
@@ -102,7 +104,7 @@ function Panel:Setup()
 
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
         db.showCategoryText = not db.showCategoryText
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
     end)
     frames.showCategoryText:SetPoint("RIGHT", -225, 160)
 
@@ -129,7 +131,7 @@ function Panel:Setup()
 
     frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, format(L.COLORBLIND_TOOLTIP, L.TIMERTEXT), function()
         db.colorBlind = not db.colorBlind
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        Icons:OnFrameConfigChanged()
     end)
     frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
 
@@ -173,7 +175,7 @@ function Panel:Setup()
         frames.border.OnValueChanged = function(self, value)
             if not value or value == EMPTY then return end
             db.border = value
-            DIMINISH_NS.Icons:OnFrameConfigChanged()
+            Icons:OnFrameConfigChanged()
         end
     end
 
@@ -210,15 +212,15 @@ function Panel:Setup()
 
     -- Test mode for timers
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
-        if not InCombatLockdown() then
-            btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
-            if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled or tip:IsShown() then
-                tip:SetShown(btn:GetText() ~= L.TEST)
-            end
-            TestMode:Test()
-        else
-            print("Diminish: " .. L.COMBATLOCKDOWN_ERROR)
+        if InCombatLockdown() then
+            return print(L.COMBATLOCKDOWN_ERROR)
         end
+
+        btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
+        if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled or tip:IsShown() then
+            tip:SetShown(btn:GetText() ~= L.TEST)
+        end
+        TestMode:Test()
     end)
     testBtn:SetSize(200, 25)
     --testBtn:SetAttribute("type", "macro")
