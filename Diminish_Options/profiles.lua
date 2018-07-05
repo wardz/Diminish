@@ -75,7 +75,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
         if deleteProfile then
             DiminishDB.profileKeys[NS.PLAYER_NAME] = "Default"
             DIMINISH_NS.activeProfile = "Default"
-            DIMINISH_NS.db = DiminishDB.profiles["Default"] -- TODO: check if works without copyTable
+            DIMINISH_NS.db = DiminishDB.profiles["Default"]
         else
             DiminishDB.profiles[profile] = CopyTable(DIMINISH_NS.DEFAULT_SETTINGS, DiminishDB.profiles[profile])
             DIMINISH_NS.db = DiminishDB.profiles[profile]
