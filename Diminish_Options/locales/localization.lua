@@ -14,7 +14,7 @@ Grows: %s]=]
 L["ARENA"] = "Arena"
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking."
 L["COLORBLIND"] = "Show Indicators Using Text"
-L["COLORBLIND_TOOLTIP"] = [=[Show DR indicators using text only instead of colors. Works best when using large icons.
+L["COLORBLIND_TOOLTIP"] = [=[Show DR indicators using text only instead of colors. Works best when using larger icons. May not work with some Masque skins.
 
 Disabling "%s" will put the indicator text in the center of the icon.]=]
 L["COMBATLOCKDOWN_ERROR"] = "Must leave combat before doing that."
@@ -48,8 +48,8 @@ L["NEWPROFILE"] = "Create New Profile"
 L["NEWPROFILE_TOOLTIP"] = "Create a new profile with current active settings as a starting point."
 L["PARTY"] = "Party"
 L["PLAYER"] = "Player"
-L["PROFILEEXISTS"] = "Profile with that name already exists."
 L["PROFILEACTIVE"] = "That profile is already active."
+L["PROFILEEXISTS"] = "Profile with that name already exists."
 L["PROFILES"] = "Profiles"
 L["RESETPOS"] = "Reset Position"
 L["RESETPOS_TOOLTIP"] = "Reset icon positions for this unitframe back to default values."
