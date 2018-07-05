@@ -224,8 +224,8 @@ do
         frame.border = border
 
         -- label above an icon that displays category text
-        local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalMed2")
-        ctext:SetFont(STANDARD_TEXT_FONT, 8)
+        local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        ctext:SetFont(ctext:GetFont(), 9)
         ctext:SetPoint("TOP", 0, 12)
         ctext:SetShown(db.showCategoryText)
         if strlen(category) >= 10 then
