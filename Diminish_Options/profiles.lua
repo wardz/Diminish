@@ -1,6 +1,7 @@
 local _, NS = ...
 local Panel = NS.Panel
 local Widgets = NS.Widgets
+local TestMode = NS.TestMode
 local L = NS.L
 
 local Dropdown = LibStub("PhanxConfig-Dropdown")
@@ -21,13 +22,66 @@ local function DropdownInsert(value, text)
     profiles[#profiles + 1] = { value = value, text = text or value }
 end
 
+local function ShowError(errorMsg)
+    if not StaticPopupDialogs["DIMINISH_PROFILEERROR"] then
+        StaticPopupDialogs["DIMINISH_PROFILEERROR"] = {
+            button1 = OKAY or "Okay",
+            timeout = 0,
+            whileDead = true,
+            hideOnEscape = true,
+            preferredIndex = 3,
+        }
+    end
+
+    StaticPopupDialogs["DIMINISH_PROFILEERROR"].text = errorMsg
+    StaticPopup_Show("DIMINISH_PROFILEERROR")
+end
+
+local function CopyTable(src, dest)
+    if type(dest) ~= "table" then dest = {} end
+    if type(src) == "table" then
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                v = CopyTable(v, dest[k])
+            end
+            dest[k] = v
+        end
+    end
+    return dest
+end
+
 Panel:CreateChild(L.PROFILES, function(panel)
     Widgets:CreateHeader(panel, panel.name, false, L.HEADER_PROFILES)
 
     for k, v in pairs(DiminishDB.profiles) do
-        if k ~= "Default" and k ~= DIMINISH_NS.activeProfile then
-            profiles[#profiles + 1] = { value = k, text = k }
+        profiles[#profiles + 1] = { value = k, text = k }
+    end
+
+    local function RefreshPanelAndIcons()
+        if TestMode:IsTestingOrAnchoring() then
+            TestMode:HideAnchors()
+            TestMode:Test(true)
         end
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
+        panel.refresh()
+    end
+
+    local function ResetProfile(deleteProfile)
+        local profile = DIMINISH_NS.activeProfile
+        if DiminishDB.profiles[profile] then
+            DiminishDB.profiles[profile] = nil
+        end
+
+        if deleteProfile then
+            DiminishDB.profileKeys[NS.PLAYER_NAME] = "Default"
+            DIMINISH_NS.activeProfile = "Default"
+            DIMINISH_NS.db = DiminishDB.profiles["Default"] -- TODO: check if works without copyTable
+        else
+            DiminishDB.profiles[profile] = CopyTable(DIMINISH_NS.DEFAULT_SETTINGS, DiminishDB.profiles[profile])
+            DIMINISH_NS.db = DiminishDB.profiles[profile]
+        end
+
+        RefreshPanelAndIcons()
     end
 
 
@@ -39,21 +93,16 @@ Panel:CreateChild(L.PROFILES, function(panel)
     local shareBtn = Widgets:CreateButton(panel, L.USEPROFILE, L.USEPROFILE_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
-        if DIMINISH_NS.activeProfile == value then return end
+        if DIMINISH_NS.activeProfile == value then
+            return ShowError(L.PROFILEACTIVE)
+        end
 
         DiminishDB.profileKeys[NS.PLAYER_NAME] = value
-
         DIMINISH_NS.db = DiminishDB.profiles[value]
         DIMINISH_NS.activeProfile = value
 
         selectProfile:SetValue(nil)
-        panel.refresh()
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
-
-        if NS.TestMode:IsTestingOrAnchoring() then
-            NS.TestMode:HideAnchors()
-            NS.TestMode:Test(true) -- hide timers + arena/party frames
-        end
+        RefreshPanelAndIcons()
     end)
     shareBtn:SetPoint("RIGHT", selectProfile, 75, -8)
     shareBtn:SetWidth(70)
@@ -62,32 +111,16 @@ Panel:CreateChild(L.PROFILES, function(panel)
     local copyBtn = Widgets:CreateButton(panel, L.COPY, L.COPY_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
-        if DIMINISH_NS.activeProfile == value then return end
-
-        if DiminishDB.profileKeys[NS.PLAYER_NAME] == NS.PLAYER_NAME then
-            -- set current values to nil so CopyDefaults() works correctly
-            -- (could add an extra copytable function but rather just reuse CopyDefaults)
-            DiminishDB.profiles[NS.PLAYER_NAME] = nil
+        if DIMINISH_NS.activeProfile == value then
+            return ShowError(L.PROFILEACTIVE)
         end
 
-        -- TODO: should create new profile if using default, or copy directly to Default?
-        DIMINISH_NS.CopyDefaults({
-            [NS.PLAYER_NAME] = DiminishDB.profiles[value]
-        }, DiminishDB.profiles)
-
-        DiminishDB.profileKeys[NS.PLAYER_NAME] = NS.PLAYER_NAME
-
-        DIMINISH_NS.db = DiminishDB.profiles[NS.PLAYER_NAME]
-        DIMINISH_NS.activeProfile = NS.PLAYER_NAME
+        local profile = DIMINISH_NS.activeProfile
+        DiminishDB.profiles[profile] = CopyTable(DiminishDB.profiles[value], DiminishDB.profiles[profile])
+        DIMINISH_NS.db = DiminishDB.profiles[profile]
 
         selectProfile:SetValue(nil)
-        panel.refresh()
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
-
-        if NS.TestMode:IsTestingOrAnchoring() then
-            NS.TestMode:HideAnchors()
-            NS.TestMode:Test(true)
-        end
+        RefreshPanelAndIcons()
     end)
     copyBtn:SetPoint("LEFT", shareBtn, 75, 0)
     copyBtn:SetWidth(70)
@@ -96,13 +129,17 @@ Panel:CreateChild(L.PROFILES, function(panel)
     local deleteBtn = Widgets:CreateButton(panel, L.DELETE, L.DELETE_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
-        if DIMINISH_NS.activeProfile == value then return end
+
         DiminishDB.profileKeys[value] = nil
         DiminishDB.profiles[value] = nil
+        selectProfile:SetValue(nil)
+
+        if DIMINISH_NS.activeProfile == value then
+            ResetProfile(true)
+        end
 
         DropdownRemove(value)
-        selectProfile:SetList(profiles) -- TODO: needeD?
-        selectProfile:SetValue(nil)
+        selectProfile:SetList(profiles)
     end)
     deleteBtn:SetPoint("LEFT", copyBtn, 75, 0)
     deleteBtn:SetWidth(70)
@@ -113,19 +150,17 @@ Panel:CreateChild(L.PROFILES, function(panel)
     local editBox = Widgets:CreateEditbox(panel, L.NEWPROFILE, L.NEWPROFILE_TOOLTIP)
     editBox:SetPoint("LEFT", selectProfile, 8, -80)
     editBox:SetScript("OnEditFocusGained", function()
-        if DIMINISH_NS.activeProfile ~= NS.PLAYER_NAME then
-            if not DiminishDB.profiles[value] then
-                editBox:SetText(NS.PLAYER_NAME or "")
-            end
+        if not DiminishDB.profiles[NS.PLAYER_NAME] then
+            editBox:SetText(NS.PLAYER_NAME or "")
         end
     end)
 
     local editOkay = Widgets:CreateButton(panel, OKAY or "Okay", nil, function(btn)
-        local value = editBox:GetText()
+        local value = (editBox:GetText() or ""):match("^%s*(.*%S)")
         if not value or value == "" then return end
 
         if DiminishDB.profiles[value] then
-            return print("Profile already exists")
+            return ShowError(L.PROFILEEXISTS)
         end
 
         DiminishDB.profileKeys[NS.PLAYER_NAME] = value
@@ -136,34 +171,18 @@ Panel:CreateChild(L.PROFILES, function(panel)
 
         DIMINISH_NS.db = DiminishDB.profiles[value]
         DIMINISH_NS.activeProfile = value
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
 
-        panel.refresh()
         editBox:SetText("")
         editBox:ClearFocus()
         DropdownInsert(value)
+        RefreshPanelAndIcons()
     end)
     editOkay:SetPoint("RIGHT", editBox, 75, 0)
     editOkay:SetWidth(70)
 
     -------------------------------------------------------------------
 
-    local resetBtn = Widgets:CreateButton(panel, L.RESETPROFILE, L.RESETPROFILE_TOOLTIP, function(btn)
-        if DiminishDB.profiles[DIMINISH_NS.activeProfile] then
-            DiminishDB.profiles[DIMINISH_NS.activeProfile] = nil
-        end
-
-        DiminishDB.profileKeys[NS.PLAYER_NAME] = "Default"
-        DIMINISH_NS.activeProfile = "Default"
-        DIMINISH_NS.db = DIMINISH_NS.DEFAULT_SETTINGS
-
-        if NS.TestMode:IsTestingOrAnchoring() then
-            NS.TestMode:HideAnchors()
-            NS.TestMode:Test(true)
-        end
-        DIMINISH_NS.Icons:OnFrameConfigChanged()
-        panel.refresh()
-    end)
+    local resetBtn = Widgets:CreateButton(panel, L.RESETPROFILE, L.RESETPROFILE_TOOLTIP, function() ResetProfile(false) end)
     resetBtn:SetPoint("LEFT", editBox, 0, -100)
 
 
