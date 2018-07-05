@@ -226,6 +226,14 @@ function Panel:Setup()
     --testBtn:SetAttribute("type", "macro")
     --testBtn:SetAttribute("macrotext", "/target [@player]\n/focus [@player]\n/diminishtest")
     testBtn:SetPoint("BOTTOMRIGHT", self, -15, 15)
+
+    self.default = function()
+        if InCombatLockdown() then
+            return print(L.COMBATLOCKDOWN_ERROR)
+        end
+        wipe(DiminishDB)
+        ReloadUI()
+    end
 end
 
 function Panel:refresh()
