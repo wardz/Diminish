@@ -7,6 +7,7 @@ local frames = {}
 NS.iconFrames = frames
 
 local _G = _G
+local UnitGUID = _G.UnitGUID
 local GetTime = _G.GetTime
 local gsub = _G.string.gsub
 local format = _G.string.format
@@ -48,8 +49,6 @@ function Icons:GetAnchor(unitID, defaultAnchor)
 end
 
 do
-    local UnitGUID = _G.UnitGUID
-
     local function FindCompactRaidFrameByUnit(unitID)
         local guid = UnitGUID(unitID)
         if not guid then return end
@@ -366,8 +365,10 @@ do
 
     local function SetSpellTexture(frame, timer)
         if NS.db.spellBookTextures then
-            if not textureCachePlayer[timer.category] and timer.srcGUID == NS.Diminish.PLAYER_GUID then
-                textureCachePlayer[timer.category] = GetSpellTexture(timer.spellID)
+            if not textureCachePlayer[timer.category] then
+                if timer.srcGUID == NS.Diminish.PLAYER_GUID or timer.srcGUID == UnitGUID("pet") then
+                    textureCachePlayer[timer.category] = GetSpellTexture(timer.spellID)
+                end
             end
         end
 
