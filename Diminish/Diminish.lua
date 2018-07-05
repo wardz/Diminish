@@ -212,7 +212,7 @@ function Diminish:InitDB()
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
 
-    if not IsAddOnLoaded("Diminish_Options") then -- TODO: retest
+    if not IsAddOnLoaded("Diminish_Options") then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil
         NS.CopyDefaults = nil
@@ -340,16 +340,16 @@ do
     local build = select(4, GetBuildInfo())
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED(_, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType)
-        -- TODO: remove args & build when bfa is live
+        -- TODO: remove this when bfa is live
         if build >= 80000 then
             _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
         end
 
         if auraType == "DEBUFF" then
+            if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
+
             local category = spellList[spellID] -- DR category
             if not category then return end
-
-            -- TODO: faster to add eventType blacklist here?
 
             local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
