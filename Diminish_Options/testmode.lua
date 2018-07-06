@@ -218,7 +218,7 @@ function TestMode:ShowAnchors()
             for i = 0, 3 do
                 local unit = i == 0 and "player-party" or "party"..i
                 local anchor = DIMINISH_NS.Icons:GetAnchor(unit)
-                TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
+                TestMode:CreateDummyAnchor(anchor, unitID, unit)
             end
         else
             local anchor = DIMINISH_NS.Icons:GetAnchor(unitID)
