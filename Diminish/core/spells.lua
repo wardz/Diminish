@@ -146,7 +146,7 @@ if select(4, GetBuildInfo()) < 80000 then
         [247564]  = C.ROOT,            -- Entangling Roots
         [201589]  = C.ROOT,            -- Entangling Roots
         [235963]  = C.ROOT,            -- Entangling Roots
-        [45334]   = C.ROOT,            -- Immobilized (Wild Charge)
+--      [45334]   = C.ROOT,            -- Immobilized (Wild Charge)
         [102359]  = C.ROOT,            -- Mass Entanglement
         [53148]   = C.ROOT,            -- Charge (Hunter pet)
         [162480]  = C.ROOT,            -- Steel Trap
@@ -314,7 +314,7 @@ else -- bfa beta
         [170855]  = C.ROOT,            -- Entangling Roots (Nature's Grasp)
         [201589]  = C.ROOT,            -- Entangling Roots (Tree of Life)
         [235963]  = C.ROOT,            -- Entangling Roots (Feral honor talent)
-        [45334]   = C.ROOT,            -- Immobilized (Wild Charge) TODO: does not cause DR?
+--      [45334]   = C.ROOT,            -- Immobilized (Wild Charge)
         [102359]  = C.ROOT,            -- Mass Entanglement
         [53148]   = C.ROOT,            -- Charge (Hunter pet)
         [162480]  = C.ROOT,            -- Steel Trap
