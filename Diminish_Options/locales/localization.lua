@@ -17,7 +17,7 @@ L["COLORBLIND"] = "Show Indicators Using Text"
 L["COLORBLIND_TOOLTIP"] = [=[Show DR indicators using text only instead of colors. Works best when using larger icons. May not work with some Masque skins.
 
 Disabling "%s" will put the indicator text in the center of the icon.]=]
-L["COMBATLOCKDOWN_ERROR"] = "Must leave combat before doing that."
+L["COMBATLOCKDOWN_ERROR"] = "Must leave combat or battleground before doing that."
 L["COMPACTFRAMES_ERROR"] = "Unable to test raid frames while not in a group."
 L["COPY"] = "Copy"
 L["COPY_TOOLTIP"] = "Copies settings from one existing profile into the currently active profile."
