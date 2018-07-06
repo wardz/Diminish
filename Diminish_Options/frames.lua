@@ -229,6 +229,11 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             db.offsetY = defaults.offsetY
             db.offsetX = defaults.offsetX
             db.growLeft = defaults.growLeft
+
+            if NS.TestMode:IsTestingOrAnchoring() then
+                NS.TestMode:HideAnchors()
+                NS.TestMode:Test(true)
+            end
         end)
         frames.resetPosBtn:SetPoint("BOTTOMRIGHT", frames.testBtn, -120, 0)
     end)
