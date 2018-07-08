@@ -72,7 +72,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
             DiminishDB.profiles[profile] = nil
         end
 
-        if deleteProfile and profile ~= "Default" then
+        if deleteProfile then
             DiminishDB.profileKeys[NS.PLAYER_NAME] = "Default"
             DIMINISH_NS.activeProfile = "Default"
             DIMINISH_NS.db = DiminishDB.profiles["Default"]
@@ -128,7 +128,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
 
     local deleteBtn = Widgets:CreateButton(panel, L.DELETE, L.DELETE_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
-        if not value or value == EMPTY then return end
+        if not value or value == EMPTY or value == "Default" then return end
 
         DiminishDB.profileKeys[value] = nil
         DiminishDB.profiles[value] = nil
@@ -142,10 +142,8 @@ Panel:CreateChild(L.PROFILES, function(panel)
             ResetProfile(true)
         end
 
-        if value ~= "Default" then
-            DropdownRemove(value)
-            selectProfile:SetList(profiles)
-        end
+        DropdownRemove(value)
+        selectProfile:SetList(profiles)
     end)
     deleteBtn:SetPoint("LEFT", copyBtn, 75, 0)
     deleteBtn:SetWidth(70)
@@ -165,7 +163,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
 
     local editOkay = Widgets:CreateButton(panel, OKAY or "Okay", nil, function(btn)
         local value = (editBox:GetText() or ""):match("^%s*(.*%S)")
-        if not value or value == "" then return end
+        if not value or value == "" or value == "Default" then return end
 
         if DiminishDB.profiles[value] then
             return ShowError(L.PROFILEEXISTS)
