@@ -2,6 +2,8 @@ local _, NS = ...
 local Timers = NS.Timers
 local Icons = NS.Icons
 local Info = NS.Info
+local IsInBrawl = _G.C_PvP.IsInBrawl
+local hunterList = {}
 
 local Diminish = CreateFrame("Frame")
 Diminish:RegisterEvent("PLAYER_LOGIN")
@@ -12,9 +14,6 @@ end)
 -- used for Diminish_Options
 NS.Diminish = Diminish
 _G.DIMINISH_NS = NS
-
-local IsInBrawl = _G.C_PvP.IsInBrawl
-local hunterList = {}
 
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
@@ -30,7 +29,8 @@ function Diminish:ToggleForZone(dontRunEnable)
 
     if instanceType == "arena" then
         -- check if inside arena brawl, C_PvP.IsInBrawl() doesn't
-        -- work on PLAYER_ENTERING_WORLD so delay it with this event
+        -- work on PLAYER_ENTERING_WORLD so delay it with this event.
+        -- Once event is fired it'll call ToggleForZone again
        self:RegisterEvent("PVP_BRAWL_INFO_UPDATED")
     else
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
@@ -51,7 +51,7 @@ function Diminish:ToggleForZone(dontRunEnable)
             for zone, state in pairs(settings.zones) do
                 if state and zone == instanceType then
                     registeredOnce = true
-                    settings.isEnabledForZone = true -- cache for later
+                    settings.isEnabledForZone = true
 
                     if not self:IsEventRegistered(event) then
                         self:RegisterEvent(event)
@@ -78,7 +78,7 @@ function Diminish:ToggleForZone(dontRunEnable)
 
     if dontRunEnable then
         -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone again,
-        -- so dont run Enable twice
+        -- so dont run Enable() twice, just update vars
         return self:SetCLEUWatchVariables()
     end
 
@@ -141,7 +141,8 @@ function Diminish:Disable()
     Timers:ResetAll(true)
     wipe(hunterList)
 
-    Info("Disabled addon for zone %s.", select(2, IsInInstance()))
+    self.currInstanceType = select(2, IsInInstance())
+    Info("Disabled addon for zone %s.", self.currInstanceType)
 end
 
 function Diminish:Enable()
@@ -163,34 +164,17 @@ function Diminish:Enable()
     Info("Enabled addon for zone %s.", self.currInstanceType)
 end
 
-function Diminish:UnitIsHunter(name) -- for BGs only
+-- for BGs only
+-- @see :UPDATE_BATTLEFIELD_SCORE()
+function Diminish:UnitIsHunter(name)
     return hunterList[name]
 end
 
 function Diminish:InitDB()
     DiminishDB = DiminishDB and next(DiminishDB) ~= nil and DiminishDB or {
-        version = GetAddOnMetadata("Diminish", "Version"),
         profileKeys = {},
         profiles = {},
     }
-
-    -- Reset config completly if updating from 2.0.0b-0.1
-    -- TODO: remove this when bfa beta is over
-    if not DiminishDB.version then
-        wipe(DiminishDB)
-        self:InitDB()
-        return
-    end
-    DiminishDB.version = DiminishDB.version or GetAddOnMetadata("Diminish", "Version")
-
-    -- Reset config when updating from 2.0.0b-0.2/0.3 to 0.4
-    -- (due to new icon size logic)
-    -- TODO: remove this when bfa beta is over
-    if DiminishDB.version == "2.0.0b" then
-        wipe(DiminishDB)
-        self:InitDB()
-        return
-    end
 
     local playerName = UnitName("player") .. "-" .. GetRealmName()
     local profile = DiminishDB.profileKeys[playerName]
@@ -260,19 +244,17 @@ function Diminish:PLAYER_ENTERING_WORLD()
 
     -- If both Diminish and sArena DR tracking is enabled for arena, then
     -- disable sArena tracking since they overlap each other
-    if not self.sArenaDetectRan and self.currInstanceType == "arena" then
-        if NS.db.unitFrames.arena.enabled then
-            if LibStub and LibStub("AceAddon-3.0", true) then
-                local _, sArena = pcall(function()
-                    return LibStub("AceAddon-3.0"):GetAddon("sArena")
-                end)
+    if not self.sArenaDetectRan and NS.db.unitFrames.arena.enabled then
+        if LibStub and LibStub("AceAddon-3.0", true) then
+            local _, sArena = pcall(function()
+                return LibStub("AceAddon-3.0"):GetAddon("sArena")
+            end)
 
-                if sArena and sArena.db.profile.drtracker.enabled then
-                    sArena.db.profile.drtracker.enabled = false
-                    sArena:RefreshConfig()
-                end
-                self.sArenaDetectRan = true
+            if sArena and sArena.db.profile.drtracker.enabled then
+                sArena.db.profile.drtracker.enabled = false
+                sArena:RefreshConfig()
             end
+            self.sArenaDetectRan = true
         end
     end
 end
@@ -286,6 +268,7 @@ function Diminish:PLAYER_FOCUS_CHANGED()
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
+    -- FIXME: rogues restealthing will cause this to be ran unnecessarily
     if status == "seen" and not IsInBrawl() and not strfind(unitID, "pet") then
         Timers:Refresh(unitID)
     end
@@ -301,7 +284,7 @@ function Diminish:GROUP_ROSTER_UPDATE()
 end
 
 function Diminish:PLAYER_REGEN_DISABLED()
-    if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 20 then
+    if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 16 then
         -- UPDATE_BATTLEFIELD_SCORE is not always ran on player joined/left BG so
         -- trigger on player joined combat to check for any new players
         RequestBattlefieldScoreData()
@@ -325,6 +308,7 @@ function Diminish:UPDATE_BATTLEFIELD_SCORE()
     end
 end
 
+-- Combat log scanning for DRs
 do
     local COMBATLOG_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY)
     local COMBATLOG_OBJECT_REACTION_FRIENDLY = _G.COMBATLOG_OBJECT_REACTION_FRIENDLY
@@ -337,13 +321,8 @@ do
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local spellList = NS.spellList
 
-    local build = select(4, GetBuildInfo())
-
-    function Diminish:COMBAT_LOG_EVENT_UNFILTERED(_, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType)
-        -- TODO: remove this when bfa is live
-        if build >= 80000 then
-            _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
-        end
+    function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
+        local _, eventType, _, srcGUID, _, _, _, destGUID, destName, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
 
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
@@ -393,19 +372,22 @@ do
             end
         end
 
+        -------------------------------------------------------------------------------------------------------
+
         if eventType == "UNIT_DIED" or eventType == "PARTY_KILL" then
             if self.currInstanceType == "arena" and not IsInBrawl() then return end
 
+            -- Delete all timers when player died
             if destGUID == self.PLAYER_GUID then
                 if self.PLAYER_CLASS == "HUNTER" then
-                    if NS.GetAuraDuration("player", 5384) then return end -- is feign deathing
+                    -- Don't delete if player is Feign Deathing
+                    if NS.GetAuraDuration("player", 5384) then return end
                 end
 
-                -- Delete all timers when player died
                 return Timers:ResetAll()
             end
 
-            -- Delete all timers for single unit
+            -- Delete all timers for unit that died
             Timers:Remove(destGUID, false)
         end
     end

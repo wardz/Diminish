@@ -24,19 +24,10 @@ NS.CopyDefaults = function(src, dst)
     return dst
 end
 
--- UnitAura by spellname was removed in patch 8.0.0 so we have to
--- loop through every debuff and find the spell ourself using indices
+-- Find debuff duration by aura indices
 local UnitAura = _G.UnitAura
-local GetSpellInfo = _G.GetSpellInfo
-local build = select(4, GetBuildInfo())
 NS.GetAuraDuration = function(unitID, spellID)
     if not unitID or not spellID then return end
-
-    -- TODO: remove when bfa beta is over
-    if build < 80000 then
-        local name, _, _, _, _, duration, expirationTime = UnitAura(unitID, GetSpellInfo(spellID), nil, "HARMFUL")
-        return duration, expirationTime
-    end
 
     for i = 1, 40 do
         local _, _, _, _, duration, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
@@ -48,6 +39,8 @@ NS.GetAuraDuration = function(unitID, spellID)
     end
 end
 
+-- Pool for reusing tables. Sacrifices slight performance for less memory usage
+-- (Tables can't be garbage collected in combat)
 do
     local pool = {}
     local wipe = _G.table.wipe
@@ -62,12 +55,13 @@ do
 
     NS.RemoveTable = function(tbl)
         if tbl then
-            -- wipe returns pointer to tbl here
-            pool[wipe(tbl)] = true -- allow next()
+            pool[wipe(tbl)] = true -- allow next(), wipe returns pointer to tbl here
         end
     end
 
     NS.ReleaseTables = function()
+        -- Remove tbl refs from pool to allow garbage collecting
+        -- Only use this after every tbl reference has been removed elsewhere aswell
         pool = {}
     end
 end

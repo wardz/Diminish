@@ -1,5 +1,7 @@
 local _, NS = ...
 
+-- Third-party addon's unitframe anchors.
+-- Blizzard frame should always be last
 NS.anchors = {
     player = {
         "SUFUnitplayer",
@@ -16,8 +18,6 @@ NS.anchors = {
         "oUF_Adirelle_Player",
         "Stuf.units.player",
         "PlayerFrame",
-        -- Blizzard frame should always be last
-        -- Frames are cached so don't worry about performance
     },
 
     target = {
@@ -79,7 +79,6 @@ NS.anchors = {
         "TukuiArena%d",
         "barena%dUnitFrame",
         "oUF_Arena%d",
-        --"GladiusClassIconFramearena%d",
         "oUF_Adirelle_Arena%d",
         "Stuf.units.arena%d",
         "ArenaEnemyFrame%d",
