@@ -72,7 +72,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
             DiminishDB.profiles[profile] = nil
         end
 
-        if deleteProfile then
+        if deleteProfile and profile ~= "Default" then
             DiminishDB.profileKeys[NS.PLAYER_NAME] = "Default"
             DIMINISH_NS.activeProfile = "Default"
             DIMINISH_NS.db = DiminishDB.profiles["Default"]
@@ -134,12 +134,18 @@ Panel:CreateChild(L.PROFILES, function(panel)
         DiminishDB.profiles[value] = nil
         selectProfile:SetValue(nil)
 
+        if value == NS.PLAYER_NAME then
+            DiminishDB.profileKeys[value] = "Default"
+        end
+
         if DIMINISH_NS.activeProfile == value then
             ResetProfile(true)
         end
 
-        DropdownRemove(value)
-        selectProfile:SetList(profiles)
+        if value ~= "Default" then
+            DropdownRemove(value)
+            selectProfile:SetList(profiles)
+        end
     end)
     deleteBtn:SetPoint("LEFT", copyBtn, 75, 0)
     deleteBtn:SetWidth(70)
@@ -151,7 +157,9 @@ Panel:CreateChild(L.PROFILES, function(panel)
     editBox:SetPoint("LEFT", selectProfile, 8, -80)
     editBox:SetScript("OnEditFocusGained", function()
         if not DiminishDB.profiles[NS.PLAYER_NAME] then
-            editBox:SetText(NS.PLAYER_NAME or "")
+            if editBox:GetText() == "" then
+                editBox:SetText(NS.PLAYER_NAME or "")
+            end
         end
     end)
 
