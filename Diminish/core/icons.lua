@@ -316,12 +316,11 @@ end
 
 do
     local textureCachePlayer = {}
-    local indicatorColors = NS.DR_STATES_COLORS
     local GetSpellTexture = _G.GetSpellTexture
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
+    local indicatorColors = NS.DR_STATES_COLORS
+    local indicatorTexts = NS.DR_STATES_TEXT
     local DR_TIME = NS.DR_TIME
-
-    local indicatorTexts = { "\194\189", "\194\190", "x" }
 
     local function SetIndicators(frame, applied, category)
         local color

@@ -3,6 +3,16 @@ local _, NS = ...
 -- How long a diminishing return lasts.
 NS.DR_TIME = 18.5
 
+-- Border/text indicator colors
+NS.DR_STATES_COLORS = {
+    { 0, 1, 0, 1 }, -- applied 1, green
+    { 1, 1, 0, 1 }, -- applied 2, yellow
+    { 1, 0, 0, 1 }, -- applied 3, red
+}
+
+-- Indicator texts (1/2, 3/4, x)
+NS.DR_STATES_TEXT = { "\194\189", "\194\190", "x" }
+
 -- "enum" for categories
 NS.CATEGORIES = {
     DISORIENT = NS.L.DISORIENT,
@@ -12,13 +22,6 @@ NS.CATEGORIES = {
     ROOT = NS.L.ROOT,
     DISARM = NS.L.DISARM,
     TAUNT = NS.L.TAUNT,
-}
-
--- Border/text indicator colors
-NS.DR_STATES_COLORS = {
-    [1] = { 0, 1, 0, 1 }, -- applied 1, green
-    [2] = { 1, 1, 0, 1 }, -- yellow
-    [3] = { 1, 0, 0, 1 }, -- red
 }
 
 -------------------------------------------------------
