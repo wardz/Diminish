@@ -101,5 +101,5 @@ Enabling this will drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
 L["ZONE_BATTLEGROUNDS"] = "Battlegrounds & Brawls"
 L["ZONE_DUNGEONS"] = "Dungeons & Raids"
-L["ZONE_OUTDOORS"] = "Outdoors"
+L["ZONE_OUTDOORS"] = "World"
 L["ZONES_TOOLTIP"] = "Enable tracking for this zone."
