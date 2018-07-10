@@ -1,9 +1,7 @@
 local _, NS = ...
 local Icons = {}
-NS.Icons = Icons
-
-local anchorCache = {}
 local frames = {}
+NS.Icons = Icons
 NS.iconFrames = frames
 
 local _G = _G
@@ -14,6 +12,8 @@ local format = _G.string.format
 local strmatch = _G.string.match
 local math_max = _G.math.max
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
+
+local anchorCache = {}
 
 function Icons:GetAnchor(unitID, defaultAnchor)
     if anchorCache[unitID] and not defaultAnchor then
@@ -142,8 +142,7 @@ do
         local timer = frame.timerRef
 
         if timer and GetTime() >= (timer.expiration or 0) then
-            NS.Timers:Remove(timer.unitGUID, timer.category)
-            return
+            return NS.Timers:Remove(timer.unitGUID, timer.category)
         end
 
         if not frame:IsVisible() then
@@ -192,7 +191,6 @@ do
 
         local size = frame.unitSettingsRef.iconSize
         frame:SetSize(size, size)
-
         frame:SetFrameStrata("HIGH")
         frame:EnableMouse(false)
         frame:Hide()
@@ -331,7 +329,18 @@ do
             color = applied <= 4 and indicatorColors[1] or indicatorColors[3]
         end
 
-        if NS.db.colorBlind then
+        if not NS.db.colorBlind then
+            if Icons.MSQGroup then
+                frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
+                frame.border:SetVertexColor(frame.border.__MSQ_Color)
+            else
+                frame.border:SetVertexColor(color[1], color[2], color[3], 1)
+            end
+
+            if NS.db.timerText and NS.db.timerColors then
+                frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
+            end
+        else
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
@@ -347,18 +356,6 @@ do
                 frame.indicator:SetTextColor(color[1], color[2], color[3], 1)
                 frame.indicator:SetText(applied <= 4 and applied or indicatorTexts[3])
             end
-            return
-        end
-
-        if Icons.MSQGroup then
-            frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
-            frame.border:SetVertexColor(frame.border.__MSQ_Color)
-        else
-            frame.border:SetVertexColor(color[1], color[2], color[3], 1)
-        end
-
-        if NS.db.timerText and NS.db.timerColors then
-            frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
         end
     end
 
