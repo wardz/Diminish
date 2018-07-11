@@ -1,14 +1,6 @@
 local _, NS = ...
 local Widgets = NS.Widgets
 
-local function OnEnter(self)
-    if self.tooltipText and not GameTooltip:IsForbidden() then
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
-        GameTooltip:Show()
-    end
-end
-
 function Widgets:CreateButton(parent, text, tooltipText, func)
     local button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
     button:GetFontString():SetPoint("CENTER", -1, 0)
@@ -20,7 +12,7 @@ function Widgets:CreateButton(parent, text, tooltipText, func)
     button.tooltipText = tooltipText
 
     button:SetScript("OnClick", func)
-    button:SetScript("OnEnter", OnEnter)
+    button:SetScript("OnEnter", Widgets.OnEnter)
     button:SetScript("OnLeave", GameTooltip_Hide)
 
     return button

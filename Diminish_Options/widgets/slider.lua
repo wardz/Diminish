@@ -1,6 +1,5 @@
 local ADDON_NAME, NS = ...
 local Widgets = NS.Widgets
-local L = NS.L
 
 local count = 0
 
@@ -11,7 +10,7 @@ local function OnValueChanged(self, value)
     if self.callbackFunc and self.hasRefreshed then
         self.callbackFunc(self, val)
     end
-    self.hasRefreshed = true -- only run callback after panel.refresh() has been triggered once
+    self.hasRefreshed = true -- only run callback after panel.refresh() has been triggered once after startup
 end
 
 function Widgets:CreateSlider(parent, text, tooltipText, minValue, maxValue, valueStep, func)

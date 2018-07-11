@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
 ## Dependencies: Diminish

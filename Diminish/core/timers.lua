@@ -25,7 +25,7 @@ end
 
 function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate)
     if isApplied then -- SPELL_AURA_APPLIED
-        if NS.db.displayMode == "ON_AURA_END" and not testMode then
+        if NS.db.timerStartAuraEnd and not testMode then
             -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
             -- but update timer immediately if it already exists & there's less than 4 sec left or else it's possible that a CC aura is applied
             -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
@@ -40,7 +40,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
             return
         end
     else -- SPELL_AURA_REMOVED
-        if NS.db.displayMode == "ON_AURA_START" then
+        if not NS.db.timerStartAuraEnd then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied, nil, true)
             end
@@ -68,7 +68,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.destName = destName
     timer.testMode = testMode
 
-    if ranFromUpdate and NS.db.displayMode == "ON_AURA_START" then
+    if ranFromUpdate and not NS.db.timerStartAuraEnd then
         -- SPELL_AURA/APPLIED/BROKEN didn't detect DR, but REFRESH did
         -- and also since the aura was refreshed it means we're atleast 2 on applied
         timer.applied = 2
@@ -252,7 +252,7 @@ do
         if settings.disabledCategories[timer.category] then return end
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
-        if isApplied and NS.db.displayMode == "ON_AURA_START" then
+        if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
                 local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
                 if expirationTime and expirationTime > 0 then

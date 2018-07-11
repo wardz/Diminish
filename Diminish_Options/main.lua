@@ -59,17 +59,17 @@ function Panel:Setup()
     subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
-    frames.displayMode = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
-        db.displayMode = cb:GetChecked() and "ON_AURA_START" or "ON_AURA_END"
+    frames.timerOnAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
+        db.timerOnAuraEnd = not db.timerOnAuraEnd
     end)
-    frames.displayMode:SetPoint("LEFT", subCooldown, 10, -70)
+    frames.timerOnAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
 
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
         db.timerSwipe = not db.timerSwipe
         Icons:OnFrameConfigChanged()
     end)
-    frames.timerSwipe:SetPoint("LEFT", frames.displayMode, 0, -40)
+    frames.timerSwipe:SetPoint("LEFT", frames.timerOnAuraEnd, 0, -40)
 
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
@@ -191,12 +191,13 @@ function Panel:Setup()
     -- Show drag anchors
     local unlock = Widgets:CreateButton(self, L.UNLOCK, L.UNLOCK_TOOLTIP, function(btn)
         if InCombatLockdown() then
-            return print(L.COMBATLOCKDOWN_ERROR)
+            return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end
 
         if btn:GetText() == L.UNLOCK then
             btn:SetText(L.STOP)
-            if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled then
+            local cfg = DIMINISH_NS.db.unitFrames
+            if cfg.target.enabled or cfg.focus.enabled then
                 tip:Show()
             end
             TestMode:ShowAnchors()
@@ -213,45 +214,26 @@ function Panel:Setup()
     -- Test mode for timers
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
         if InCombatLockdown() or InActiveBattlefield() or IsActiveBattlefieldArena() then
-            return print(L.COMBATLOCKDOWN_ERROR)
+            return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end
 
         btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
-        if DIMINISH_NS.db.unitFrames.target.enabled or DIMINISH_NS.db.unitFrames.focus.enabled or tip:IsShown() then
+        local cfg = DIMINISH_NS.db.unitFrames
+        if cfg.target.enabled or cfg.focus.enabled or tip:IsShown() then
             tip:SetShown(btn:GetText() ~= L.TEST)
         end
         TestMode:Test()
     end)
     testBtn:SetSize(200, 25)
-    --testBtn:SetAttribute("type", "macro")
-    --testBtn:SetAttribute("macrotext", "/target [@player]\n/focus [@player]\n/diminishtest")
     testBtn:SetPoint("BOTTOMRIGHT", self, -15, 15)
 end
 
 function Panel:refresh()
-    local frames = self.frames
-
-    -- Refresh value of all widgets
-    for setting, value in pairs(DIMINISH_NS.db) do
-        if frames[setting] then
-            if frames[setting]:IsObjectType("Slider") then
-                frames[setting]:SetValue(value)
-            elseif frames[setting]:IsObjectType("CheckButton") then
-                if value == "ON_AURA_END" then
-                    value = false
-                elseif value == "ON_AURA_START" then
-                    value = true
-                end
-                frames[setting]:SetChecked(value)
-            elseif frames[setting].items then -- phanx dropdown
-                frames[setting]:SetValue(value.name)
-            end
-        end
-    end
+    Widgets:RefreshWidgets(DIMINISH_NS.db, self)
 
     -- Disable rest of timer options if timer countdown is not checked
-    Widgets:ToggleState(frames.timerColors, frames.timerText:GetChecked())
-    Widgets:ToggleState(frames.timerTextSize, frames.timerText:GetChecked())
+    Widgets:ToggleState(self.frames.timerColors, self.frames.timerText:GetChecked())
+    Widgets:ToggleState(self.frames.timerTextSize, self.frames.timerText:GetChecked())
 end
 
 SLASH_DIMINISH1 = "/diminish"

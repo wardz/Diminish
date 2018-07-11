@@ -1,14 +1,6 @@
 local _, NS = ...
 local Widgets = NS.Widgets
 
-local function OnEnter(self)
-    if self.tooltipText and not GameTooltip:IsForbidden() then
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
-        GameTooltip:Show()
-    end
-end
-
 function Widgets:CreateEditbox(parent, labelText, tooltipText)
     local editbox = CreateFrame("EditBox", nil, parent, "InputBoxTemplate")
     editbox:SetSize(180, 22)
@@ -20,7 +12,7 @@ function Widgets:CreateEditbox(parent, labelText, tooltipText)
     editbox:SetMaxLetters(40)
 
     editbox.tooltipText = tooltipText
-    editbox:SetScript("OnEnter", OnEnter)
+    editbox:SetScript("OnEnter", Widgets.OnEnter)
     editbox:SetScript("OnLeave", GameTooltip_Hide)
 
     local label = editbox:CreateFontString(nil, "ARTWORK", "GameFontNormal")

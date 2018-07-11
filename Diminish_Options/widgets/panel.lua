@@ -1,9 +1,14 @@
 local ADDON_NAME, NS = ...
 
+-- Panel:refresh() -- refresh main panel
+-- Panel:Setup() - initialize main panel
+-- Panel:CreateChild() initialize child panel
+
 local Panel = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
 Panel.name = ADDON_NAME
 Panel.frames = {}
 Panel:Hide()
+NS.Panel = Panel
 
 local function RefreshOnShow(self)
     if self.refresh then
@@ -20,6 +25,7 @@ local function InitializePanel(self)
         self.Setup = nil
     end
 
+    -- Create all child panel frames
     if self.callbacks then
         for i = 1, #self.callbacks do
             self.callbacks[i]()
@@ -29,16 +35,16 @@ local function InitializePanel(self)
 
         if InCombatLockdown() then
             -- If we don't do this then child buttons (InterfaceOptionsFrameAddOnsButtonXToggle)
-            -- won't be shown when you load the panel in combat
+            -- won't be shown when you initialize the panel in combat
             InterfaceOptionsFrame_OpenToCategory(Panel.lastCreatedChild)
             InterfaceOptionsFrame_OpenToCategory(Panel)
         end
     end
 
     -- allow garbage collection of widget methods
-    -- since we dont need them any more after initialization (except ToggleState())
+    -- since we dont need them any more after initialization
     for k, v in pairs(NS.Widgets) do
-        if k ~= "ToggleState" then
+        if strfind(k, "Create") then -- make sure helper functions are not deleted
             NS.Widgets[k] = nil
         end
     end
@@ -70,6 +76,7 @@ local function OnShow(self)
     end
 end
 
+-- Create child panel for main panel
 function Panel:CreateChild(name, callback)
     if not self.callbacks then
         self.callbacks = {}
@@ -89,6 +96,5 @@ function Panel:CreateChild(name, callback)
     end
 end
 
-Panel:SetScript("OnShow", OnShow)
-NS.Panel = Panel
 InterfaceOptions_AddCategory(Panel)
+Panel:SetScript("OnShow", OnShow)

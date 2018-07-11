@@ -77,6 +77,7 @@ end
 
 function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     if isTesting or isAnchoring then return end
+    if InCombatLockdown() then return end
 
     local settings = DIMINISH_NS.db.unitFrames
 

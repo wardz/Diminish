@@ -17,3 +17,57 @@ function Widgets:ToggleState(widget, state)
         end
     end
 end
+
+function Widgets:CopyTable(src, dest)
+    if type(dest) ~= "table" then dest = {} end
+    if type(src) == "table" then
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                v = self:CopyTable(v, dest[k])
+            end
+            dest[k] = v
+        end
+    end
+    return dest
+end
+
+function Widgets:ShowError(text)
+    if not StaticPopupDialogs["DIMINISH_ERRORMESSAGE"] then
+        StaticPopupDialogs["DIMINISH_ERRORMESSAGE"] = {
+            button1 = OKAY or "Okay",
+            timeout = 0,
+            whileDead = true,
+            hideOnEscape = true,
+            preferredIndex = 3,
+        }
+    end
+
+    StaticPopupDialogs["DIMINISH_ERRORMESSAGE"].text = text
+    StaticPopup_Show("DIMINISH_ERRORMESSAGE")
+end
+
+function Widgets:RefreshWidgets(db, panel)
+    local frames = panel.frames
+
+    for setting, value in pairs(db) do
+        if frames[setting] then
+            if frames[setting].IsObjectType then
+                if frames[setting]:IsObjectType("Slider") then
+                    frames[setting]:SetValue(value)
+                elseif frames[setting]:IsObjectType("CheckButton") then
+                    frames[setting]:SetChecked(value)
+                elseif frames[setting].items then -- phanx dropdown
+                    frames[setting]:SetValue(value.name)
+                end
+            end
+        end
+    end
+end
+
+function Widgets.OnEnter(self)
+    if self.tooltipText and not GameTooltip:IsForbidden() then
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+        GameTooltip:Show()
+    end
+end

@@ -23,18 +23,7 @@ local function Refresh(self)
         frames.testBtn:Enable()
     end
 
-    -- Refresh value of all widgets except zones/categories
-    for setting, value in pairs(unitFrameSettings) do
-        if setting ~= "zones" and setting ~= "categories" then
-            if frames[setting] then
-                if frames[setting]:IsObjectType("Slider") then
-                    frames[setting]:SetValue(value)
-                elseif frames[setting]:IsObjectType("CheckButton") then
-                    frames[setting]:SetChecked(value)
-                end
-            end
-        end
-    end
+    Widgets:RefreshWidgets(unitFrameSettings, self)
 
     -- Refresh categories
     for k, category in pairs(DIMINISH_NS.CATEGORIES) do
@@ -71,6 +60,7 @@ local function Refresh(self)
     end
 end
 
+-- TODO: reuse frames
 for unitFrame, unit in pairs(NS.unitFrames) do
     Panel:CreateChild(unitFrame, function(panel)
         Widgets:CreateHeader(panel, unitFrame, false, format(L.HEADER_UNITFRAME, unitFrame))
@@ -214,12 +204,11 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
         frames.testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
-            if not InCombatLockdown() then
-                btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
-                NS.TestMode:Test()
-            else
-                print("Diminish: " .. L.COMBATLOCKDOWN_ERROR)
+            if InCombatLockdown() then
+                return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
             end
+            btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
+            NS.TestMode:Test()
         end)
         frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
 

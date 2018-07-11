@@ -7,7 +7,7 @@ local L = NS.L
 local Dropdown = LibStub("PhanxConfig-Dropdown")
 local profiles = {}
 
-local function DropdownRemove(value)
+local function RemoveProfileFromTable(value)
     for i, profile in ipairs(profiles) do
         for k, v in pairs(profile) do
             if v == value then
@@ -16,38 +16,6 @@ local function DropdownRemove(value)
             end
         end
     end
-end
-
-local function DropdownInsert(value, text)
-    profiles[#profiles + 1] = { value = value, text = text or value }
-end
-
-local function ShowError(errorMsg)
-    if not StaticPopupDialogs["DIMINISH_PROFILEERROR"] then
-        StaticPopupDialogs["DIMINISH_PROFILEERROR"] = {
-            button1 = OKAY or "Okay",
-            timeout = 0,
-            whileDead = true,
-            hideOnEscape = true,
-            preferredIndex = 3,
-        }
-    end
-
-    StaticPopupDialogs["DIMINISH_PROFILEERROR"].text = errorMsg
-    StaticPopup_Show("DIMINISH_PROFILEERROR")
-end
-
-local function CopyTable(src, dest)
-    if type(dest) ~= "table" then dest = {} end
-    if type(src) == "table" then
-        for k, v in pairs(src) do
-            if type(v) == "table" then
-                v = CopyTable(v, dest[k])
-            end
-            dest[k] = v
-        end
-    end
-    return dest
 end
 
 Panel:CreateChild(L.PROFILES, function(panel)
@@ -77,24 +45,26 @@ Panel:CreateChild(L.PROFILES, function(panel)
             DIMINISH_NS.activeProfile = "Default"
             DIMINISH_NS.db = DiminishDB.profiles["Default"]
         else
-            DiminishDB.profiles[profile] = CopyTable(DIMINISH_NS.DEFAULT_SETTINGS, DiminishDB.profiles[profile])
+            DiminishDB.profiles[profile] = Widgets:CopyTable(DIMINISH_NS.DEFAULT_SETTINGS, DiminishDB.profiles[profile])
             DIMINISH_NS.db = DiminishDB.profiles[profile]
         end
 
         RefreshPanelAndIcons()
     end
 
+    -------------------------------------------------------------------
 
     local selectProfile = Dropdown.CreateDropdown(panel, L.SELECTPROFILE, L.SELECTPROFILE_TOOLTIP, profiles)
     selectProfile:SetPoint("TOPLEFT", panel, 30, -80)
     selectProfile:SetWidth(200)
 
 
+    -- Reuse an existing profile
     local shareBtn = Widgets:CreateButton(panel, L.USEPROFILE, L.USEPROFILE_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
         if DIMINISH_NS.activeProfile == value then
-            return ShowError(L.PROFILEACTIVE)
+            return Widgets:ShowError(L.PROFILEACTIVE)
         end
 
         DiminishDB.profileKeys[NS.PLAYER_NAME] = value
@@ -108,15 +78,16 @@ Panel:CreateChild(L.PROFILES, function(panel)
     shareBtn:SetWidth(70)
 
 
+    -- Copy an existing profile's variables
     local copyBtn = Widgets:CreateButton(panel, L.COPY, L.COPY_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY then return end
         if DIMINISH_NS.activeProfile == value then
-            return ShowError(L.PROFILEACTIVE)
+            return Widgets:ShowError(L.PROFILEACTIVE)
         end
 
         local profile = DIMINISH_NS.activeProfile
-        DiminishDB.profiles[profile] = CopyTable(DiminishDB.profiles[value], DiminishDB.profiles[profile])
+        DiminishDB.profiles[profile] = Widgets:CopyTable(DiminishDB.profiles[value], DiminishDB.profiles[profile])
         DIMINISH_NS.db = DiminishDB.profiles[profile]
 
         selectProfile:SetValue(nil)
@@ -126,6 +97,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
     copyBtn:SetWidth(70)
 
 
+    -- Delete existing profile
     local deleteBtn = Widgets:CreateButton(panel, L.DELETE, L.DELETE_TOOLTIP, function(btn)
         local value = selectProfile:GetValue()
         if not value or value == EMPTY or value == "Default" then return end
@@ -142,7 +114,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
             ResetProfile(true)
         end
 
-        DropdownRemove(value)
+        RemoveProfileFromTable(value)
         selectProfile:SetList(profiles)
     end)
     deleteBtn:SetPoint("LEFT", copyBtn, 75, 0)
@@ -161,12 +133,14 @@ Panel:CreateChild(L.PROFILES, function(panel)
         end
     end)
 
+    -- Create new profile with given name if it doesn't exists
+    -- Uses current active settings as starting point
     local editOkay = Widgets:CreateButton(panel, OKAY or "Okay", nil, function(btn)
         local value = (editBox:GetText() or ""):match("^%s*(.*%S)")
         if not value or value == "" or value == "Default" then return end
 
         if DiminishDB.profiles[value] then
-            return ShowError(L.PROFILEEXISTS)
+            return Widgets:ShowError(L.PROFILEEXISTS)
         end
 
         DiminishDB.profileKeys[NS.PLAYER_NAME] = value
@@ -178,9 +152,14 @@ Panel:CreateChild(L.PROFILES, function(panel)
         DIMINISH_NS.db = DiminishDB.profiles[value]
         DIMINISH_NS.activeProfile = value
 
+        -- Insert to dropdown
+        profiles[#profiles + 1] = {
+            value = value,
+            text = text or value
+        }
+
         editBox:SetText("")
         editBox:ClearFocus()
-        DropdownInsert(value)
         RefreshPanelAndIcons()
     end)
     editOkay:SetPoint("RIGHT", editBox, 75, 0)
@@ -188,6 +167,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
 
     -------------------------------------------------------------------
 
+    -- Reset current profile but not delete
     local resetBtn = Widgets:CreateButton(panel, L.RESETPROFILE, L.RESETPROFILE_TOOLTIP, function() ResetProfile(false) end)
     resetBtn:SetPoint("LEFT", editBox, 0, -100)
 

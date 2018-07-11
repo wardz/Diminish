@@ -54,7 +54,7 @@ do
         timerText = true,
         timerSwipe = true,
         timerColors = false,
-        displayMode = "ON_AURA_START",
+        timerStartAuraEnd = false,
         spellBookTextures = false,
         showCategoryText = false,
         colorBlind = false,
