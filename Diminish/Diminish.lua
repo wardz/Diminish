@@ -250,7 +250,7 @@ function Diminish:PLAYER_ENTERING_WORLD()
                 return LibStub("AceAddon-3.0"):GetAddon("sArena")
             end)
 
-            if sArena and sArena.db and sArena.db.profile.drtracker.enabled then
+            if sArena and type(sArena) == "table" and sArena.db.profile.drtracker.enabled then
                 sArena.db.profile.drtracker.enabled = false
                 sArena:RefreshConfig()
             end
