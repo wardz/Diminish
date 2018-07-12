@@ -233,6 +233,7 @@ end
 
 function Diminish:PVP_BRAWL_INFO_UPDATED()
     if not IsInBrawl() then
+        -- TODO: needed?
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
     else
         self:ToggleForZone(true)

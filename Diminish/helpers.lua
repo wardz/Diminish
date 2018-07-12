@@ -40,7 +40,6 @@ NS.GetAuraDuration = function(unitID, spellID)
 end
 
 -- Pool for reusing tables. Sacrifices slight performance for less memory usage
--- (Tables can't be garbage collected in combat)
 do
     local pool = {}
     local wipe = _G.table.wipe
@@ -48,14 +47,14 @@ do
 
     NS.NewTable = function()
         local t = next(pool) or {}
-        pool[t] = nil -- disallow next() with nil
+        pool[t] = nil -- remove from pool
 
         return t
     end
 
     NS.RemoveTable = function(tbl)
         if tbl then
-            pool[wipe(tbl)] = true -- allow next(), wipe returns pointer to tbl here
+            pool[wipe(tbl)] = true -- add to pool, wipe returns pointer to tbl here
         end
     end
 

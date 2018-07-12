@@ -44,7 +44,7 @@ local function OnDragStop(self)
     local isArena = strfind(self.unit, "arena")
     local isParty = strfind(self.unit, "party")
 
-    -- Update position for all party/arena frames after draggin 1 of them
+    -- Update position for all party/arena anchor frames (not icons) after dragging 1 of them
     if isArena or isParty then
         for frame in TestMode.pool:EnumerateActive() do
             if isArena and strfind(frame.unit, "arena") or isParty and strfind(frame.unit, "party") then

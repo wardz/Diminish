@@ -26,8 +26,8 @@ end
 function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.timerStartAuraEnd and not testMode then
-            -- ON_AURA_END mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
-            -- but update timer immediately if it already exists & there's less than 4 sec left or else it's possible that a CC aura is applied
+            -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
+            -- but update timer immediately if it already exists & there's less than 5 sec left or else it's possible that a CC aura is applied
             -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 local timer = activeTimers[unitGUID][category]
@@ -42,6 +42,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     else -- SPELL_AURA_REMOVED
         if not NS.db.timerStartAuraEnd then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
+                -- Update timer expiration without updating indicator color for this mode
                 return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied, nil, true)
             end
         end
@@ -49,7 +50,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
 
     local timers = activeTimers[unitGUID]
     if timers and timers[category] then
-        -- Timer already active
+        -- Timer already active, update everything
         return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, true)
     end
 
@@ -118,11 +119,11 @@ function Timers:Remove(unitGUID, category, noStop)
     elseif category == false then
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
-        local Diminish = NS.Diminish
+
         for cat, t in pairs(timers) do
             -- UNIT_DIED is fired for Feign Death so ignore hunters here
             if t.unitClass == "HUNTER" then return end
-            if Diminish:UnitIsHunter(t.destName) then return end -- TODO: run only once
+            if Diminish:UnitIsHunter(t.destName) then return end
             if Diminish.currInstanceType ~= "pvp" and not t.unitClass then return end
 
             if not noStop then
@@ -165,7 +166,7 @@ function Timers:Refresh(unitID)
 
     local _, englishClass = UnitClass(unitID)
 
-    -- Start (or delete) timers belonging to current guid
+    -- Start or delete timers belonging to current guid
     if activeTimers[unitGUID] then
         for category, timer in pairs(activeTimers[unitGUID]) do
             if not timer.unitClass then
@@ -182,8 +183,8 @@ function Timers:Refresh(unitID)
     end
 end
 
-C_Timer.NewTicker(60, function()
-    -- Remove inactive timers every 60 seconds incase they
+C_Timer.NewTicker(50, function()
+    -- Remove inactive timers every X seconds incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
 
     if NS.Diminish.currInstanceType ~= "arena" then
@@ -255,6 +256,7 @@ do
         if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
                 local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+
                 if expirationTime and expirationTime > 0 then
                     timer.expiration = (expirationTime or GetTime()) + DR_TIME
 

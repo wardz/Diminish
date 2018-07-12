@@ -81,10 +81,10 @@ do
                 if unit == "player" then
                     unit = "player-party"
                 end
-
                 anchorCache[unit] = parent
+
                 if frames[unit] then
-                    -- Anchor DR icons to new parent
+                    -- Anchor existing DR icons to new parent
                     for category, frame in pairs(frames[unit]) do
                         frame:ClearAllPoints()
                         frame:SetParent(parent)
@@ -145,6 +145,8 @@ do
             return NS.Timers:Remove(timer.unitGUID, timer.category)
         end
 
+        -- Seems to be an extremely rare occassion that the frame itself is not shown
+        -- but the cooldown frame is. No idea why, so always force show here
         if not frame:IsVisible() then
             frame.shown = true
             frame:Show()
@@ -157,10 +159,8 @@ do
         local frame = self.parent
         local timer = frame.timerRef
 
-        if timer then
-            if self:GetCooldownDuration() <= 0.3 then
-                NS.Timers:Remove(timer.unitGUID, timer.category)
-            end
+        if timer and self:GetCooldownDuration() <= 0.3 then
+            NS.Timers:Remove(timer.unitGUID, timer.category)
         end
 
         if frame:IsVisible() then
@@ -254,43 +254,46 @@ do
         return frame
     end
 
+    -- Refresh everything for icons. Called by Diminish_Options.
+    -- Function is deleted if options is not loaded.
     function Icons:OnFrameConfigChanged()
+        local db = NS.db
         for _, tbl in pairs(frames) do
             for _, frame in pairs(tbl) do
-                frame.unitSettingsRef = NS.db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
-                frame.cooldown:SetHideCountdownNumbers(not NS.db.timerText)
-                frame.cooldown:SetDrawSwipe(NS.db.timerSwipe)
-                frame.countdown:SetFont(frame.countdown:GetFont(), NS.db.timerTextSize)
-                frame.categoryText:SetShown(NS.db.showCategoryText)
+                frame.unitSettingsRef = db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
+                frame.cooldown:SetHideCountdownNumbers(not db.timerText)
+                frame.cooldown:SetDrawSwipe(db.timerSwipe)
+                frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
+                frame.categoryText:SetShown(db.showCategoryText)
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
 
                 if not NS.MasqueGroup then
-                    frame.border:SetDrawLayer(NS.db.border.layer or "BORDER")
-                    frame.border:SetTexture(NS.db.border.edgeFile)
-                    frame.border:SetPoint("TOPLEFT", -NS.db.border.edgeSize, NS.db.border.edgeSize)
-                    frame.border:SetPoint("BOTTOMRIGHT", NS.db.border.edgeSize, -NS.db.border.edgeSize)
+                    frame.border:SetDrawLayer(db.border.layer or "BORDER")
+                    frame.border:SetTexture(db.border.edgeFile)
+                    frame.border:SetPoint("TOPLEFT", -db.border.edgeSize, db.border.edgeSize)
+                    frame.border:SetPoint("BOTTOMRIGHT", db.border.edgeSize, -db.border.edgeSize)
                 end
 
-                frame.cooldown.noCooldownCount = NS.db.timerColors or not NS.db.timerText -- toggle OmniCC
-                if NS.db.timerText and not NS.db.timerColors then
+                frame.cooldown.noCooldownCount = db.timerColors or not db.timerText -- toggle OmniCC
+                if db.timerText and not db.timerColors then
                     frame.countdown:SetTextColor(1, 1, 1, 1)
                 end
 
-                if NS.db.colorBlind then
+                if db.colorBlind then
                     frame.countdown:SetPoint("CENTER", 0, 5)
                     frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
                     if frame.indicator then
                         frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
                         frame.indicator:ClearAllPoints()
-                        frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, 0, 0)
+                        frame.indicator:SetPoint(db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, 0, 0)
                     end
                 else
                     frame.countdown:SetPoint("CENTER", 0, 0)
                 end
 
                 if frame.indicator then
-                    frame.indicator:SetShown(NS.db.colorBlind)
+                    frame.indicator:SetShown(db.colorBlind)
                 end
 
                 UpdatePositions(frame.cooldown)
@@ -326,6 +329,7 @@ do
             color = indicatorColors[applied]
             if not color then return end
         else
+            -- Taunts aren't immune until fifth applied
             color = applied <= 4 and indicatorColors[1] or indicatorColors[3]
         end
 
@@ -340,7 +344,7 @@ do
             if NS.db.timerText and NS.db.timerColors then
                 frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
             end
-        else
+        else -- Show indicators using text only
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                 frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
@@ -388,20 +392,20 @@ do
         SetIndicators(frame, timer.applied, timer.category)
 
         if frame.shown then
-            if not timer.testMode then
-                if not onAuraEnd or NS.db.timerStartAuraEnd then
-                    -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
-                    frame.cooldown:SetCooldown(now, expiration)
-                else
-                    -- Refresh cooldown without resetting timer swipe
-                    -- Thanks to sArena for this
-                    local startTime, startDuration = frame.cooldown:GetCooldownTimes()
-                    startTime, startDuration = startTime/1000, startDuration/1000
+            if timer.testMode then return end
 
-                    local newDuration = DR_TIME / (1 - ((now - startTime) / startDuration))
-                    local newStartTime = DR_TIME + now - newDuration
-                    frame.cooldown:SetCooldown(newStartTime, newDuration)
-                end
+            if not onAuraEnd or NS.db.timerStartAuraEnd then
+                -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
+                frame.cooldown:SetCooldown(now, expiration)
+            else
+                -- Refresh cooldown without resetting timer swipe (on aura broke/end for mode timerStartAuraEnd=false)
+                -- Thanks to sArena for this
+                local startTime, startDuration = frame.cooldown:GetCooldownTimes()
+                startTime, startDuration = startTime/1000, startDuration/1000
+
+                local newDuration = DR_TIME / (1 - ((now - startTime) / startDuration))
+                local newStartTime = DR_TIME + now - newDuration
+                frame.cooldown:SetCooldown(newStartTime, newDuration)
             end
         else
             frame.shown = true

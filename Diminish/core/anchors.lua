@@ -68,12 +68,6 @@ NS.anchors = {
         "PartyMemberFrame%d",
     },
 
-    --[[raid = {
-        "Vd1H%dBgBarlcBarFIBar",
-        "GridLayoutHeader1UnitButton%d",
-        "CompactRaidFrame%d",
-    },]]
-
     arena =  {
         "ElvUF_Arena%d",
         "TukuiArena%d",
