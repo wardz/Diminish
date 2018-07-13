@@ -87,7 +87,8 @@ Panel:CreateChild(L.PROFILES, function(panel)
         end
 
         local profile = DIMINISH_NS.activeProfile
-        DiminishDB.profiles[profile] = Widgets:CopyTable(DiminishDB.profiles[value], DiminishDB.profiles[profile])
+        DiminishDB.profiles[profile] = nil -- delete all values no matter what
+        DiminishDB.profiles[profile] = Widgets:CopyTable(DiminishDB.profiles[value])
         DIMINISH_NS.db = DiminishDB.profiles[profile]
 
         selectProfile:SetValue(nil)
