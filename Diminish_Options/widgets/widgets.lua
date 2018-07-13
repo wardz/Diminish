@@ -1,4 +1,4 @@
-local _, NS = ...
+local ADDON_NAME, NS = ...
 local Widgets = {}
 NS.Widgets = Widgets
 
@@ -32,8 +32,8 @@ function Widgets:CopyTable(src, dest)
 end
 
 function Widgets:ShowError(text)
-    if not StaticPopupDialogs["DIMINISH_ERRORMESSAGE"] then
-        StaticPopupDialogs["DIMINISH_ERRORMESSAGE"] = {
+    if not StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"] then
+        StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"] = {
             button1 = OKAY or "Okay",
             timeout = 0,
             whileDead = true,
@@ -42,8 +42,8 @@ function Widgets:ShowError(text)
         }
     end
 
-    StaticPopupDialogs["DIMINISH_ERRORMESSAGE"].text = text
-    StaticPopup_Show("DIMINISH_ERRORMESSAGE")
+    StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"].text = text
+    StaticPopup_Show(ADDON_NAME .. "_ERRORMESSAGE")
 end
 
 function Widgets:RefreshWidgets(db, panel)
