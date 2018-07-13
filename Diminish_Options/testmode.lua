@@ -63,7 +63,7 @@ local function PartyOnHide(self)
     if not TestMode:IsTestingOrAnchoring() then return end
 
     -- If you hit Escape or Cancel in InterfaceOptions instead of "Okay" button then for some reason
-    -- blizzard auto hides the PartyMember frames so hook them and prevent hiding when testing
+    -- blizzard auto hides the spawned PartyMember frames so hook them and prevent hiding when testing
     if not InCombatLockdown() and not self:IsForbidden() then
         if not GetCVarBool("useCompactPartyFrames") then -- user toggling cvar while testing would prevent hiding permanently
             self:Show()
@@ -93,7 +93,6 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     local isInArena = select(2, IsInInstance()) == "arena"
-
     if forceHide or settings.arena.enabled and not isInArena then
         ArenaEnemyFrames:SetShown(showFlag)
 

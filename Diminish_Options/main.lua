@@ -124,10 +124,12 @@ function Panel:Setup()
     end)
     frames.trackNPCs:SetPoint("LEFT", frames.showCategoryText, 0, -40)
 
+
     frames.spellBookTextures = Widgets:CreateCheckbox(self, L.SPELLBOOKTEXTURES, L.SPELLBOOKTEXTURES_TOOLTIP, function()
         db.spellBookTextures = not db.spellBookTextures
     end)
     frames.spellBookTextures:SetPoint("LEFT", frames.trackNPCs, 0, -40)
+
 
     frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, format(L.COLORBLIND_TOOLTIP, L.TIMERTEXT), function()
         db.colorBlind = not db.colorBlind

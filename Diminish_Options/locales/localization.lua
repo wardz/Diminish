@@ -79,7 +79,7 @@ L["TIMERCOLORS_TOOLTIP"] = "Toggles DR indicator coloring of the countdown text.
 L["TIMERSWIPE"] = "Show Swipe for Cooldowns"
 L["TIMERSWIPE_TOOLTIP"] = "Toggles the cooldown swipe animation for all frames."
 L["TIMERTEXT"] = "Show Countdown for Cooldowns"
-L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all frames.
+L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all DR timers.
 
 (Esc -> Interface -> ActionBars -> Show Numbers for Cooldowns)]=]
 L["TIMERTEXTSIZE"] = "Countdown Size"

@@ -54,6 +54,7 @@ NS.anchors = {
         "FocusFrame",
     },
 
+    -- FIXME: dynamically generated frames won't work here if TestMode is ran first
     party = {
         "SUFHeaderpartyUnitButton%d",
         "XPerl_party%d",
