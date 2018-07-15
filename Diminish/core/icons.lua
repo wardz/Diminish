@@ -79,6 +79,8 @@ do
 
             if parent then
                 if unit == "player" then
+                    -- we need to difference "player" for PlayerFrame and
+                    -- "player" for CompactRaidFrame
                     unit = "player-party"
                 end
                 anchorCache[unit] = parent
@@ -226,7 +228,9 @@ do
         ctext:SetPoint("TOP", 0, 12)
         ctext:SetShown(db.showCategoryText)
         if strlen(category) >= 10 then
-            ctext:SetText(strsub(category, 1, 5)) -- truncate
+            -- truncate text. Could set max width instead but it adds "..." at the end
+            -- and changes text position
+            ctext:SetText(strsub(category, 1, 5))
         else
             ctext:SetText(category)
         end
