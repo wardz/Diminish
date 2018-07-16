@@ -117,6 +117,7 @@ NS.spellList = {
     [30283]   = C.STUN,            -- Shadowfury
     [46968]   = C.STUN,            -- Shockwave
     [132168]  = C.STUN,            -- Shockwave (Protection)
+    [145047]  = C.STUN,            -- Shockwave (Proving Grounds PvE)
     [132169]  = C.STUN,            -- Storm Bolt
     [64044]   = C.STUN,            -- Psychic Horror
     [200200]  = C.STUN,            -- Holy Word: Chastise Censure
