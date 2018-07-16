@@ -31,6 +31,7 @@ Panel:CreateChild(L.PROFILES, function(panel)
             TestMode:Test(true)
         end
         DIMINISH_NS.Icons:OnFrameConfigChanged()
+        DIMINISH_NS.Diminish:ToggleForZone()
         panel.refresh()
     end
 
