@@ -2,10 +2,10 @@
 Lightweight diminishing returns tracker for friendly and enemy units.
 
 ## Download
-Use one of these for downloading. Installing from source wont work.
-[Curseforge Download](https://www.curseforge.com/wow/addons/diminish)
-[WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)
-[Github Download](https://github.com/wardz/Diminish/releases)
+Use one of these for downloading. Installing from source wont work.  
+[Curseforge Download](https://www.curseforge.com/wow/addons/diminish)  
+[WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)  
+[Github Download](https://github.com/wardz/Diminish/releases)  
 
 ## Configuration
 Type ```/diminish``` to open the options panel.
