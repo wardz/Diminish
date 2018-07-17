@@ -1,0 +1,16 @@
+enable-nolib-creation: no
+
+externals:
+  Diminish_Options/libs/LibStub:
+    url: svn://svn.wowace.com/wow/libstub/mainline/trunk
+  Diminish_Options/libs/PhanxConfig-Dropdown:
+    url: git://github.com/phanx-wow/PhanxConfig-Dropdown
+
+move-folders:
+    Diminish/Diminish_Options: Diminish_Options
+
+ignore:
+    - README.md
+    - .travis.yml
+    - Diminish/Diminish_Options/libs/LibStub/LibStub.toc
+    - Diminish/Diminish_Options/libs/LibStub/tests

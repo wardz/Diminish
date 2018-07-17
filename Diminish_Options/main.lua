@@ -4,6 +4,10 @@ local Panel = NS.Panel
 local TestMode = NS.TestMode
 local L = NS.L
 
+-- TODO: option anchor to UIParent
+-- TODO: option show friendly timers AND show enemy timers toggles (target/focus)
+-- TODO: option indicator text size & position?
+
 NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 
 NS.unitFrames = {

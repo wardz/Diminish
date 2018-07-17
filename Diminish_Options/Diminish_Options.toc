@@ -3,10 +3,11 @@
 ## Notes: Configuration for Diminish.
 ## Dependencies: Diminish
 
+libs\LibStub\LibStub.lua
+libs\PhanxConfig-Dropdown\PhanxConfig-Dropdown.lua
+
 locales\localization.lua
 
-widgets\libs\LibStub.lua
-widgets\libs\PhanxConfig-Dropdown.lua
 widgets\widgets.lua
 widgets\button.lua
 widgets\checkbox.lua
