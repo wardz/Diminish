@@ -9,6 +9,8 @@ externals:
 move-folders:
     Diminish/Diminish_Options: Diminish_Options
 
+manual-changelog: CHANGELOG.txt
+
 ignore:
     - README.md
     - .travis.yml
