@@ -12,5 +12,5 @@ move-folders:
 ignore:
     - README.md
     - .travis.yml
-    - Diminish/Diminish_Options/libs/LibStub/LibStub.toc
-    - Diminish/Diminish_Options/libs/LibStub/tests
+    - Diminish_Options/libs/LibStub/LibStub.toc
+    - Diminish_Options/libs/LibStub/tests
