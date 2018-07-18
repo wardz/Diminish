@@ -87,7 +87,7 @@ do
 
                 if frames[unit] then
                     -- Anchor existing DR icons to new parent
-                    -- if parent:IsForbidden() then return print("isForbidden") end
+                    if parent:IsForbidden() then return end -- TODO: need testing
                     for category, frame in pairs(frames[unit]) do
                         frame:ClearAllPoints()
                         frame:SetParent(parent)
