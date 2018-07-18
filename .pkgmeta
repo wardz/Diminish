@@ -10,7 +10,7 @@ move-folders:
     Diminish/Diminish_Options: Diminish_Options
 
 manual-changelog: CHANGELOG.txt
-wowi_gen_changelog=false
+wowi-create-changelog=no
 
 ignore:
     - README.md
