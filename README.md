@@ -1,5 +1,5 @@
 # Diminish (Battle for Azeroth)
-Lightweight diminishing returns tracker for friendly and enemy units.
+Lightweight diminishing returns tracker for friendly and enemy units in World of Warcraft.
 
 ## Download
 Use one of these for downloading. Installing from source wont work.  
@@ -11,9 +11,13 @@ Use one of these for downloading. Installing from source wont work.
 Type ```/diminish``` to open the options panel.
 
 ## License
-[Copyright 2018 Wardz | MIT License](https://opensource.org/licenses/mit-license.php).
+Copyright 2018 Wardz | [MIT License](https://opensource.org/licenses/mit-license.php).
 
 ## Contributing
+- [Submit a pull request.](https://gist.github.com/Chaser324/ce0505fbed06b947d962)  
+    When forking the addon you should save the folder outside your WoW AddOns directory and  
+    instead have two symlinks inside the AddOns folder pointing to
+    ```Diminish/``` and ```Diminish_Options/```.
+- [Report bugs or missing spells.](https://wow.curseforge.com/projects/diminish/issues)
 - [Help translate.](https://wow.curseforge.com/projects/diminish/localization)
-- [Report bugs](https://wow.curseforge.com/projects/diminish/issues) or submit a [pull request.](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
-- [Donate.](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ)
+- [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)]((https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ))
