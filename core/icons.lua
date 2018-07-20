@@ -119,17 +119,15 @@ do
 
     local function UpdatePositions(cooldownFrame)
         local anchor = cooldownFrame.parent
-        local unitFrame = anchor:GetParent()
-        local unit = anchor.unit
-
         local cfg = anchor.unitSettingsRef
-        local ofsX = not cfg.growLeft and (cfg.iconSize + cfg.iconPadding) or (-cfg.iconSize - cfg.iconPadding)
+
+        local ofsX = cfg.growLeft and (-cfg.iconSize - cfg.iconPadding) or (cfg.iconSize + cfg.iconPadding)
         local first = true
 
-        for _, frame in pairs(frames[unit]) do
+        for _, frame in pairs(frames[anchor.unit]) do
             if frame.shown then
                 if first then
-                    frame:SetPoint("CENTER", unitFrame, cfg.offsetX, cfg.offsetY)
+                    frame:SetPoint("CENTER", anchor:GetParent(), cfg.offsetX, cfg.offsetY)
                     first = false
                 else
                     frame:SetPoint("CENTER", anchor, ofsX, 0)
@@ -328,14 +326,21 @@ do
     local indicatorTexts = NS.DR_STATES_TEXT
     local DR_TIME = NS.DR_TIME
 
-    local function SetIndicators(frame, applied, category)
-        local color
+    local function GetIndicatorColor(category)
         if category ~= CATEGORY_TAUNT then
-            color = indicatorColors[applied]
-            if not color then return end
+            return indicatorColors[applied]
         else
             -- Taunts aren't immune until fifth applied
-            color = applied <= 4 and indicatorColors[1] or indicatorColors[3]
+            return applied <= 4 and indicatorColors[1] or indicatorColors[3]
+        end
+    end
+
+    local function SetIndicators(frame, applied, category)
+        local color = GetIndicatorColor(category)
+        if not color then return end
+
+        if NS.db.timerText and NS.db.timerColors then
+            frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
         end
 
         if not NS.db.colorBlind then
@@ -344,10 +349,6 @@ do
                 frame.border:SetVertexColor(frame.border.__MSQ_Color)
             else
                 frame.border:SetVertexColor(color[1], color[2], color[3], 1)
-            end
-
-            if NS.db.timerText and NS.db.timerColors then
-                frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
             end
         else -- Show indicators using text only
             if not frame.indicator then
