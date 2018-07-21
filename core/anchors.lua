@@ -71,7 +71,7 @@ NS.anchors = {
 
     arena =  {
         "ElvUF_Arena%d",
-        "TukuiArena%d",
+        "oUF_TukuiArena%d",
         "barena%dUnitFrame",
         "oUF_Arena%d",
         "oUF_Adirelle_Arena%d",
