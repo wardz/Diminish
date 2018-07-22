@@ -239,7 +239,7 @@ function TestMode:ShowAnchors()
         elseif unitID == "party" then
             for i = 0, 4 do
                 local unit = i == 0 and "player-party" or "party"..i
-                local anchor = DIMINISH_NS.Icons:GetAnchor(unit, true)
+                local anchor = DIMINISH_NS.Icons:GetAnchor(unit, DIMINISH_NS.db.unitFrames.party.anchorUIParent)
                 TestMode:CreateDummyAnchor(anchor, unitID, unit)
             end
         else

@@ -65,13 +65,14 @@ do
     end
 
     function Icons:AnchorPartyFrames(members)
-        if not NS.db.unitFrames.party.enabled then return end
+        local cfg = NS.db.unitFrames.party
+        if not cfg.enabled then return end
 
         for i = (NS.useCompactPartyFrames and 0 or 1), (members or 4) do
             local unit = i == 0 and "player" or "party"..i
             local parent
 
-            if NS.useCompactPartyFrames then
+            if NS.useCompactPartyFrames and not cfg.anchorUIParent then
                 parent = FindCompactRaidFrameByUnit(unit)
             else
                 parent = Icons:GetAnchor(unit, true)
@@ -341,7 +342,10 @@ do
                 else
                     anchorCache[frame.unitFormatted] = nil -- grab new cache on next anchor call
                     frame:ClearAllPoints()
-                    frame:SetParent(Icons:GetAnchor(frame.unit, true, true))
+                    local anchor = Icons:GetAnchor(frame.unit, true, true)
+                    if anchor then
+                        frame:SetParent(anchor)
+                    end
                 end
 
                 UpdatePositions(frame.cooldown)

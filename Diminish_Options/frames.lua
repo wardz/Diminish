@@ -116,6 +116,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
             DIMINISH_NS.Icons:CreateUIParentOffsets(db, unit)
             DIMINISH_NS.Icons:OnFrameConfigChanged() -- reanchors from UIParent to UnitFrame or vice versa
+            DIMINISH_NS.Diminish:GROUP_ROSTER_UPDATE()
             if NS.TestMode:IsTestingOrAnchoring() then
                 NS.TestMode:HideAnchors()
             end
