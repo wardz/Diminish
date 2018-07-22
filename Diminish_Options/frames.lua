@@ -215,7 +215,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
         frames.testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
-            if InCombatLockdown() then
+            if InCombatLockdown() or InActiveBattlefield() or IsActiveBattlefieldArena() then
                 return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
             end
             btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
