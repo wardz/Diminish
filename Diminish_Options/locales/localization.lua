@@ -11,6 +11,8 @@ NS.L = L
 
 L["ANCHORDRAG"] = [=[%s
 Grows: %s]=]
+L["ANCHORUIPARENT"] = "Anchor to UIParent"
+L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and anchors them to the screen (UIParent) instead. Requires re-positioning."
 L["ARENA"] = "Arena"
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking."
 L["COLORBLIND"] = "Show Indicators Using Text"
@@ -44,6 +46,7 @@ L["ICONPADDING_TOOLTIP"] = "Set padding between all active DR icons."
 L["ICONSIZE"] = "Frame Size"
 L["ICONSIZE_TOOLTIP"] = "Set size of the DR icons."
 L["LEFT"] = "left"
+L["NAMEPLATES"] = "Nameplates"
 L["NEWPROFILE"] = "Create New Profile"
 L["NEWPROFILE_TOOLTIP"] = "Create a new profile with current active settings as a starting point."
 L["PARTY"] = "Party"

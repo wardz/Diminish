@@ -15,7 +15,7 @@ local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 
 local anchorCache = {}
 
-function Icons:GetAnchor(unitID, defaultAnchor)
+function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
     if anchorCache[unitID] and not defaultAnchor then
         return anchorCache[unitID]
     end
@@ -31,15 +31,15 @@ function Icons:GetAnchor(unitID, defaultAnchor)
             name = format(name, strmatch(unitID, "%d+")) -- add unit index to frame name
         end
 
-        local frame = _G[name]
+        local frame
+        if not noUIParent and NS.db.unitFrames[unit].anchorUIParent then
+            frame = UIParent
+        else
+            frame = _G[name]
+        end
 
         if frame then
-            if unit ~= "party" and unit ~= "arena" then
-                -- cleanup target/focus/player table since these only need to be ran once
-                NS.anchors[unit] = nil
-            end
-
-            if unit ~= "party" then -- AnchorPartyFrames() will handle party frames cache instead
+            if unit ~= "party" and not defaultAnchor then -- AnchorPartyFrames() will handle party frames cache instead
                 anchorCache[unitID] = frame
             end
 
@@ -121,13 +121,21 @@ do
         local anchor = cooldownFrame.parent
         local cfg = anchor.unitSettingsRef
 
+        local spawnOfsX
+        local ofsY = cfg.offsetY
         local ofsX = cfg.growLeft and (-cfg.iconSize - cfg.iconPadding) or (cfg.iconSize + cfg.iconPadding)
         local first = true
+
+        if cfg.anchorUIParent then
+            local id = tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
+            ofsY = cfg.offsetsY[id]
+            spawnOfsX = cfg.offsetsX[id]
+        end
 
         for _, frame in pairs(frames[anchor.unit]) do
             if frame.shown then
                 if first then
-                    frame:SetPoint("CENTER", anchor:GetParent(), cfg.offsetX, cfg.offsetY)
+                    frame:SetPoint("CENTER", anchor:GetParent(), spawnOfsX or cfg.offsetX, ofsY)
                     first = false
                 else
                     frame:SetPoint("CENTER", anchor, ofsX, 0)
@@ -172,6 +180,28 @@ do
         UpdatePositions(self)
     end
 
+    function Icons:CreateUIParentOffsets(db, unit)
+        if not db.offsetsY or not db.offsetsX then
+            -- When anchoring to UIParent we need to setup new offsets for every frame belonging to this unitID
+            db.offsetsY = { db.offsetY }
+            db.offsetsX = { 0 }
+
+            if strfind(unit, "arena") or strfind(unit, "party") then
+                -- Array index 2 here will be for arena2 and so on
+                -- Kinda ugly but saves a lot of memory, especially when using profiles
+                db.offsetsY[2] = db.offsetY - db.iconSize
+                db.offsetsY[3] = db.offsetY - (db.iconSize * 1) -- move next frame down so they dont default spawn inside each other
+                db.offsetsY[4] = db.offsetY - (db.iconSize * 1.5)
+                db.offsetsY[5] = db.offsetY - (db.iconSize * 2)
+
+                db.offsetsX[2] = 0
+                db.offsetsX[3] = 0
+                db.offsetsX[4] = 0
+                db.offsetsX[5] = 0
+            end
+        end
+    end
+
     local function CreateIcon(unitID, category)
         local anchor = Icons:GetAnchor(unitID)
         if not anchor then return end
@@ -189,6 +219,10 @@ do
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
+
+        if frame.unitSettingsRef.anchorUIParent then
+            Icons:CreateUIParentOffsets(frame.unitSettingsRef, unitID)
+        end
 
         local size = frame.unitSettingsRef.iconSize
         frame:SetSize(size, size)
@@ -299,6 +333,17 @@ do
                     frame.indicator:SetShown(db.colorBlind)
                 end
 
+                if frame.unitSettingsRef.anchorUIParent then
+                    Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
+                    anchorCache[frame.unitFormatted] = UIParent
+                    frame:ClearAllPoints()
+                    frame:SetParent(UIParent)
+                else
+                    anchorCache[frame.unitFormatted] = nil -- grab new cache on next anchor call
+                    frame:ClearAllPoints()
+                    frame:SetParent(Icons:GetAnchor(frame.unit, true, true))
+                end
+
                 UpdatePositions(frame.cooldown)
             end
         end
@@ -326,7 +371,7 @@ do
     local indicatorTexts = NS.DR_STATES_TEXT
     local DR_TIME = NS.DR_TIME
 
-    local function GetIndicatorColor(category)
+    local function GetIndicatorColor(applied, category)
         if category ~= CATEGORY_TAUNT then
             return indicatorColors[applied]
         else
@@ -336,7 +381,7 @@ do
     end
 
     local function SetIndicators(frame, applied, category)
-        local color = GetIndicatorColor(category)
+        local color = GetIndicatorColor(applied, category)
         if not color then return end
 
         if NS.db.timerText and NS.db.timerColors then

@@ -36,8 +36,16 @@ local function OnDragStop(self)
     -- frames loses relativity to parent and is instead relative to UIParent after dragging
     -- so we cant just use self:GetPoint() here
     local xOfs, yOfs = CalcPoint(self)
-
     local db = DIMINISH_NS.db.unitFrames[self.realUnit]
+
+    if db.anchorUIParent then
+        -- when anchoring to UIParent for partyX/arenaX each frame has their own position values
+        local id = tonumber(strmatch(self.unitID or self.unit, "%d+")) or 1 -- 1 if target/focus
+        db.offsetsY[id] = yOfs
+        db.offsetsX[id] = xOfs
+        return
+    end
+
     db.offsetY = yOfs
     db.offsetX = xOfs
 
@@ -113,32 +121,40 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     if ElvUI then
-        -- Show/Hide doesn't seem to work for ElvUI so use ElvUI built in functions to toggle arena/party frames
+        -- :Show doesn't seem to work for ElvUI so use ElvUI built in functions to toggle arena/party frames
         local E = unpack(ElvUI)
         local UF = E and E:GetModule("UnitFrames")
         if UF then
             if settings.arena.enabled then
-                UF:ToggleForceShowGroupFrames('arena', 3)
+                UF:ToggleForceShowGroupFrames('arena', 5)
             end
             if settings.party.enabled then
                 UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
             end
             return
         end
+    elseif Tukui then
+        local T = Tukui:unpack()
+        local Test = T and T["TestUI"]
+        if Test then
+            return Test:EnableOrDisable()
+        end
     end
 
-    for i = 1, 3 do
+    for i = 1, 5 do
         if not isInArena then
-            local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i)
-            if frame and frame:IsVisible() or settings.arena.enabled then
-                frame:SetShown(showFlag)
+            local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
+            if frame and frame ~= UIParent then
+                if frame:IsVisible() or settings.arena.enabled then
+                    frame:SetShown(showFlag)
+                end
             end
         end
 
         if forceHide or not useCompact and settings.party.enabled then
             if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
-                local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true)
-                if frame then
+                local frame = DIMINISH_NS.Icons:GetAnchor("party"..i, true, true)
+                if frame and frame ~= UIParent then
                     frame:SetShown(showFlag)
                     if not frame.Diminish_isHooked then
                         frame:HookScript("OnHide", PartyOnHide)
@@ -177,6 +193,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
     end
 
     frame.unit = unit
+    frame.unitID = unitID
 
     if isNew then
         frame.tooltip = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -199,7 +216,12 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
 
     frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unitID or unit), db.growLeft and L.LEFT or L.RIGHT)
     frame:SetSize(db.iconSize, db.iconSize)
-    frame:SetPoint("CENTER", parent, db.offsetX, db.offsetY)
+    if not db.anchorUIParent then
+        frame:SetPoint("CENTER", parent, db.offsetX, db.offsetY)
+    else
+        local id = tonumber(strmatch(unitID or unit, "%d+")) or 1
+        frame:SetPoint("CENTER", parent, db.offsetsX[id], db.offsetsY[id])
+    end
     frame:Show()
 
     isAnchoring = true
@@ -210,14 +232,14 @@ function TestMode:ShowAnchors()
 
     for _, unitID in pairs(NS.unitFrames) do
         if unitID == "arena" then
-            for i = 1, 3 do
-                local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i)
+            for i = 1, 5 do
+                local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i, true)
                 TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
             end
         elseif unitID == "party" then
-            for i = 0, 3 do
+            for i = 0, 4 do
                 local unit = i == 0 and "player-party" or "party"..i
-                local anchor = DIMINISH_NS.Icons:GetAnchor(unit)
+                local anchor = DIMINISH_NS.Icons:GetAnchor(unit, true)
                 TestMode:CreateDummyAnchor(anchor, unitID, unit)
             end
         else

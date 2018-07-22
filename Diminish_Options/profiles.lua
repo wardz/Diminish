@@ -72,6 +72,11 @@ Panel:CreateChild(L.PROFILES, function(panel)
         DIMINISH_NS.db = DiminishDB.profiles[value]
         DIMINISH_NS.activeProfile = value
 
+        -- Copy any default settings if they don't exists in copied profile
+        DIMINISH_NS.CopyDefaults({
+            [value] = DIMINISH_NS.DEFAULT_SETTINGS
+        }, DiminishDB.profiles)
+
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()
     end)
@@ -91,6 +96,11 @@ Panel:CreateChild(L.PROFILES, function(panel)
         DiminishDB.profiles[profile] = nil -- delete all values no matter what
         DiminishDB.profiles[profile] = Widgets:CopyTable(DiminishDB.profiles[value])
         DIMINISH_NS.db = DiminishDB.profiles[profile]
+
+        -- Copy any default settings if they don't exists in copied profile
+        DIMINISH_NS.CopyDefaults({
+            [profile] = DIMINISH_NS.DEFAULT_SETTINGS
+        }, DiminishDB.profiles)
 
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()

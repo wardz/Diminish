@@ -111,12 +111,23 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             frames.growLeft:SetPoint("LEFT", frames.enabled, 0, -40)
         end
 
+        frames.anchorUIParent = Widgets:CreateCheckbox(panel, L.ANCHORUIPARENT, L.ANCHORUIPARENT_TOOLTIP, function()
+            db.anchorUIParent = not db.anchorUIParent
+
+            DIMINISH_NS.Icons:CreateUIParentOffsets(db, unit)
+            DIMINISH_NS.Icons:OnFrameConfigChanged() -- reanchors from UIParent to UnitFrame or vice versa
+            if NS.TestMode:IsTestingOrAnchoring() then
+                NS.TestMode:HideAnchors()
+            end
+        end)
+        frames.anchorUIParent:SetPoint("LEFT", frames.growLeft, 0, -40)
+
 
         frames.iconSize = Widgets:CreateSlider(panel, L.ICONSIZE, L.ICONSIZE_TOOLTIP, 10, 80, 1, function(frame, value)
             db.iconSize = value
             DIMINISH_NS.Icons:OnFrameConfigChanged()
         end)
-        frames.iconSize:SetPoint("LEFT", frames.growLeft, 10, -55)
+        frames.iconSize:SetPoint("LEFT", frames.anchorUIParent, 10, -55)
 
 
         frames.iconPadding = Widgets:CreateSlider(panel, L.ICONPADDING, L.ICONPADDING_TOOLTIP, 0, 40, 1, function(frame, value)
@@ -218,7 +229,10 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             db.offsetY = defaults.offsetY
             db.offsetX = defaults.offsetX
             db.growLeft = defaults.growLeft
+            db.offsetsY = nil
+            db.offsetsX = nil
 
+            DIMINISH_NS.Icons:OnFrameConfigChanged()
             if NS.TestMode:IsTestingOrAnchoring() then
                 NS.TestMode:HideAnchors()
                 NS.TestMode:Test(true)
