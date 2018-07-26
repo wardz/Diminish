@@ -247,7 +247,7 @@ function Diminish:PLAYER_ENTERING_WORLD()
     -- disable sArena tracking since they overlap each other
     if not self.sArenaDetectRan and NS.db.unitFrames.arena.enabled then
         if LibStub and LibStub("AceAddon-3.0", true) then
-            local _, sArena = pcall(function()
+            local _, sArena = pcall(function() -- suppress libstub/ace errors
                 return LibStub("AceAddon-3.0"):GetAddon("sArena")
             end)
 
@@ -279,6 +279,8 @@ function Diminish:GROUP_ROSTER_UPDATE()
     local members = min(GetNumGroupMembers(), 4)
     Icons:AnchorPartyFrames(members)
 
+    -- Refresh every single party member, even if they have already just been refreshed
+    -- incase unit IDs have been shifted
     for i = 1, members do
         Timers:Refresh("party"..i)
     end

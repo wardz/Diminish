@@ -19,8 +19,8 @@ local gsub = _G.string.gsub
 local pairs = _G.pairs
 local next = _G.next
 
-local function TimerIsFinished(timer)
-    return GetTime() >= (timer.expiration or 0)
+local function TimerIsFinished(timer, timestamp)
+    return (timestamp or GetTime()) >= (timer.expiration or 0)
 end
 
 function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate)
@@ -120,11 +120,16 @@ function Timers:Remove(unitGUID, category, noStop)
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
         local Diminish = NS.Diminish
+        local hunterCheckRan = false
+
         for cat, t in pairs(timers) do
-            -- UNIT_DIED is fired for Feign Death so ignore hunters here
-            if t.unitClass == "HUNTER" then return end
-            if Diminish:UnitIsHunter(t.destName) then return end
-            if Diminish.currInstanceType ~= "pvp" and not t.unitClass then return end
+            if not hunterCheckRan then -- TODO: test
+                -- UNIT_DIED is fired for Feign Death so ignore hunters here
+                if t.unitClass == "HUNTER" then return end
+                if Diminish:UnitIsHunter(t.destName) then return end
+                if Diminish.currInstanceType ~= "pvp" and not t.unitClass then return end
+                hunterCheckRan = true -- don't run next loop iterations
+            end
 
             if not noStop then
                 StopTimers(t, nil, true)
@@ -148,6 +153,7 @@ function Timers:Refresh(unitID)
     if not unitGUID then return end
 
     -- Hide active timers belonging to previous guid
+    -- TODO: better to always just hide all frames?
     if prevGUID and prevGUID ~= unitGUID and activeTimers[prevGUID] then
         for category, timer in pairs(activeTimers[prevGUID]) do
             StopTimers(timer, unitID, true)
@@ -164,17 +170,17 @@ function Timers:Refresh(unitID)
         end
     end
 
-    local _, englishClass = UnitClass(unitID)
-
     -- Start or delete timers belonging to current guid
     if activeTimers[unitGUID] then
+        local _, englishClass = UnitClass(unitID)
+        local currTime = GetTime()
         for category, timer in pairs(activeTimers[unitGUID]) do
-            if not timer.unitClass then
+            if not timer.unitClass and englishClass == "HUNTER" then
                 -- Used to detect hunters, we need to ignore Feign Death for UNIT_DIED later on
                 timer.unitClass = englishClass
             end
 
-            if not TimerIsFinished(timer) then
+            if not TimerIsFinished(timer, currTime) then
                 StartTimers(timer, true, unitID, nil, true)
             else
                 StopTimers(timer, unitID)
@@ -183,14 +189,15 @@ function Timers:Refresh(unitID)
     end
 end
 
-C_Timer.NewTicker(50, function()
+C_Timer.NewTicker(55, function()
     -- Remove inactive timers every X seconds incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
 
     if NS.Diminish.currInstanceType ~= "arena" then
+        local currTime = GetTime()
         for guid, categories in pairs(activeTimers) do
             for cat, timer in pairs(categories) do
-                if TimerIsFinished(timer) then
+                if TimerIsFinished(timer, currTime) then
                     StopTimers(timer)
                 end
             end
@@ -255,6 +262,7 @@ do
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
+                -- TODO: only run on APPLIED/REFRESH/BROKEN ?
                 local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
 
                 if expirationTime and expirationTime > 0 then
@@ -265,6 +273,7 @@ do
                         -- may happen if server reset DR before our timer did & new CC got applied
                         timer.applied = 1
                     elseif timer.applied > 3 and duration > 0 then
+                        -- Timer shows immune but aura duration was found, so reset
                         if timer.category ~= CATEGORY_TAUNT then
                             timer.applied = 1
                         end
@@ -277,8 +286,8 @@ do
         Debug("%s timer %s:%s", isUpdate and "Updated" or "Started", origUnitID and "player-party" or unitID, timer.category)
     end
 
-    local function Stop(timer, unitID, preventRemove)
-        Icons:StopCooldown(timer, unitID, TimerIsFinished(timer))
+    local function Stop(timer, unitID, preventRemove, isFinished)
+        Icons:StopCooldown(timer, unitID, isFinished)
         Debug("Stop/pause timer %s:%s", unitID, timer.category or "nil")
 
         if not preventRemove then
@@ -302,9 +311,7 @@ do
             return Start(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
         end
 
-        -- Start timer for every unitID that matches timer unit guid
-        -- This is so we can show the *same* timer for e.g both FocusFrame and TargetFrame at the same time
-        -- without having to create duplicate tables
+        -- Start timer for EVERY unitID that matches timer unit guid.
         local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
@@ -320,24 +327,26 @@ do
     end
 
     function StopTimers(timer, unit, preventRemove)
+        local isFinished = TimerIsFinished(timer) -- cache result for loops
+
         if timer.testMode then
             for i = 1, #testModeUnits do
-                Stop(timer, testModeUnits[i], preventRemove)
+                Stop(timer, testModeUnits[i], preventRemove, isFinished)
             end
             return
         end
 
         if unit then
-            return Stop(timer, unit, preventRemove)
+            return Stop(timer, unit, preventRemove, isFinished)
         end
 
         local unitGUID = timer.unitGUID
         for unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
-                Stop(timer, unit, preventRemove)
+                Stop(timer, unit, preventRemove, isFinished)
 
                 if unit == "player" then
-                    Stop(timer, "player-party", true)
+                    Stop(timer, "player-party", true, isFinished)
                 end
             end
         end

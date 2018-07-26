@@ -106,8 +106,6 @@ do
     local pairs = _G.pairs
 
     local function MasqueAddFrame(frame)
-        if not NS.MasqueGroup then return end
-
         frame:SetNormalTexture(NS.db.borderTexture)
 
         NS.MasqueGroup:AddButton(frame, {
@@ -128,9 +126,9 @@ do
         local first = true
 
         if cfg.anchorUIParent then
-            local id = tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
-            ofsY = cfg.offsetsY[id]
-            spawnOfsX = cfg.offsetsX[id]
+            anchor.uid = anchor.uid or tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
+            ofsY = cfg.offsetsY[anchor.uid]
+            spawnOfsX = cfg.offsetsX[anchor.uid]
         end
 
         for _, frame in pairs(frames[anchor.unit]) do
@@ -187,18 +185,15 @@ do
             db.offsetsY = { db.offsetY }
             db.offsetsX = { 0 }
 
-            if strfind(unit, "arena") or strfind(unit, "party") then
+            if unit == "arena" or unit == "party" then
                 -- Array index 2 here will be for arena2 and so on
                 -- Kinda ugly but saves a lot of memory, especially when using profiles
                 db.offsetsY[2] = db.offsetY - db.iconSize
-                db.offsetsY[3] = db.offsetY - (db.iconSize * 1) -- move next frame down so they dont default spawn inside each other
-                db.offsetsY[4] = db.offsetY - (db.iconSize * 1.5)
-                db.offsetsY[5] = db.offsetY - (db.iconSize * 2)
+                db.offsetsY[3] = db.offsetY - (db.iconSize * 1.5) -- move next frame down so they dont default spawn inside each other
+                db.offsetsY[4] = db.offsetY - (db.iconSize * 2)
+                db.offsetsY[5] = db.offsetY - (db.iconSize * 2.5)
 
-                db.offsetsX[2] = 0
-                db.offsetsX[3] = 0
-                db.offsetsX[4] = 0
-                db.offsetsX[5] = 0
+                db.offsetsX = { 0, 0, 0, 0, 0 }
             end
         end
     end
@@ -217,19 +212,19 @@ do
 
         -- Note to self: Do not inherit from any actionbutton template here or taint will occur
         local frame = CreateFrame("CheckButton", nil, anchor) -- CheckButton to support Masque
+        frame:Hide()
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
 
         if frame.unitSettingsRef.anchorUIParent then
-            Icons:CreateUIParentOffsets(frame.unitSettingsRef, unitID)
+            Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
         end
 
         local size = frame.unitSettingsRef.iconSize
         frame:SetSize(size, size)
         frame:SetFrameStrata("HIGH")
         frame:EnableMouse(false)
-        frame:Hide()
 
         frame.icon = frame:CreateTexture(nil, "ARTWORK")
         frame.icon:SetAllPoints(frame)
@@ -270,7 +265,9 @@ do
         end
         frame.categoryText = ctext
 
-        MasqueAddFrame(frame)
+        if NS.MasqueGroup then
+            MasqueAddFrame(frame)
+        end
 
         return frame
     end
@@ -329,7 +326,6 @@ do
                 else
                     frame.countdown:SetPoint("CENTER", 0, 0)
                 end
-
                 if frame.indicator then
                     frame.indicator:SetShown(db.colorBlind)
                 end
@@ -453,7 +449,7 @@ do
                 -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
                 frame.cooldown:SetCooldown(now, expiration)
             else
-                -- Refresh cooldown without resetting timer swipe (on aura broke/end for mode timerStartAuraEnd=false)
+                -- Refresh cooldown without resetting timer swipe (only on aura broke/end for mode timerStartAuraEnd=false)
                 -- Thanks to sArena for this
                 local startTime, startDuration = frame.cooldown:GetCooldownTimes()
                 startTime, startDuration = startTime/1000, startDuration/1000
