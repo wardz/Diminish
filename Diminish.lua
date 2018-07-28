@@ -206,12 +206,15 @@ function Diminish:InitDB()
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
 
-    if not IsAddOnLoaded("Diminish_Options") then
+    --[[
+    -- TODO: this wont work if the addon is loaded through blizz AddOn List ingame
+    if select(5, GetAddOnInfo("Diminish_Options")) ~= "DEMAND_LOADED" then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil
         NS.CopyDefaults = nil
         Icons.OnFrameConfigChanged = nil
-    end
+    end]]
+
     self.InitDB = nil
 end
 
@@ -430,6 +433,6 @@ SlashCmdList.DIMINISH = function()
     if LoadOptions() then
         Diminish_OpenOptionsPanel()
     else
-        print(L.ERROR_LOADOPTIONS)
+        print(NS.L.ERROR_LOADOPTIONS)
     end
 end
