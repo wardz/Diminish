@@ -407,3 +407,29 @@ do
         end
     end
 end
+
+local function LoadOptions()
+    local name, title, notes, loadable, reason, security = GetAddOnInfo("Diminish_Options")
+    if reason ~= "DEMAND_LOADED" and reason ~= "INTERFACE_VERSION" then return end
+
+    if not IsAddOnLoaded("Diminish_Options") then
+        LoadAddOn("Diminish_Options")
+    end
+
+    return IsAddOnLoaded("Diminish_Options")
+end
+
+InterfaceOptionsFrame:HookScript("OnShow", function()
+    if LoadOptions() then
+        InterfaceAddOnsList_Update()
+    end
+end)
+
+SLASH_DIMINISH1 = "/diminish"
+SlashCmdList.DIMINISH = function()
+    if LoadOptions() then
+        Diminish_OpenOptionsPanel()
+    else
+        print(L.ERROR_LOADOPTIONS)
+    end
+end
