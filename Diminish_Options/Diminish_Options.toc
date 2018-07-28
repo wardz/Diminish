@@ -1,6 +1,9 @@
 ## Interface: 80000
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
+## LoadOnDemand: 1
+## LoadWith: Diminish
+## DefaultState: enabled
 ## Dependencies: Diminish
 
 libs\LibStub\LibStub.lua

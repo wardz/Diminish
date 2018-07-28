@@ -11,6 +11,7 @@ NS.L = L
 
 L["DISARM"] = "Disarm"
 L["DISORIENT"] = "Disorient"
+L["ERROR_LOADOPTIONS"] = "Error loading Diminish_Options. It's most likely set to disabled."
 L["INCAPACITATE"] = "Incapacitate"
 L["ROOT"] = "Root"
 L["SILENCE"] = "Silence"

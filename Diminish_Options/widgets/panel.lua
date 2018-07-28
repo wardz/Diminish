@@ -1,14 +1,5 @@
-local ADDON_NAME, NS = ...
-
--- Panel:refresh() -- refresh main panel
--- Panel:Setup() - initialize main panel
--- Panel:CreateChild() initialize child panel
-
-local Panel = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
-Panel.name = ADDON_NAME
-Panel.frames = {}
-Panel:Hide()
-NS.Panel = Panel
+local _, NS = ...
+local Widgets = NS.Widgets
 
 local function RefreshOnShow(self)
     if self.refresh then
@@ -36,8 +27,8 @@ local function InitializePanel(self)
         if InCombatLockdown() then
             -- If we don't do this then child buttons (InterfaceOptionsFrameAddOnsButtonXToggle)
             -- won't be shown when you initialize the panel in combat
-            InterfaceOptionsFrame_OpenToCategory(Panel.lastCreatedChild)
-            InterfaceOptionsFrame_OpenToCategory(Panel)
+            InterfaceOptionsFrame_OpenToCategory(self.lastCreatedChild)
+            InterfaceOptionsFrame_OpenToCategory(self)
         end
     end
 
@@ -66,7 +57,7 @@ local function OnShow(self)
         if not button then break end
 
         local element = button.element
-        if element and element.name == Panel.name then
+        if element and element.name == self.name then
             if element.hasChildren and element.collapsed then
                 _G[button:GetName().."Toggle"]:Click()
             end
@@ -77,7 +68,7 @@ local function OnShow(self)
 end
 
 -- Create child panel for main panel
-function Panel:CreateChild(name, callback)
+local function CreateChildPanel(self, name, callback)
     if not self.callbacks then
         self.callbacks = {}
     end
@@ -89,12 +80,24 @@ function Panel:CreateChild(name, callback)
         panel.parent = self.name
         panel.frames = {}
         InterfaceOptions_AddCategory(panel)
-        Panel.lastCreatedChild = panel
+        self.lastCreatedChild = panel
 
         callback(panel)
         panel:SetScript("OnShow", RefreshOnShow)
     end
 end
 
-InterfaceOptions_AddCategory(Panel)
-Panel:SetScript("OnShow", OnShow)
+function Widgets:CreateMainPanel(name)
+    self.ADDON_NAME = name
+
+    local panel = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
+    panel.name = name
+    panel.frames = {}
+    panel.CreateChildPanel = CreateChildPanel
+    panel:Hide()
+
+    InterfaceOptions_AddCategory(panel)
+    panel:SetScript("OnShow", OnShow)
+    return panel
+end
+

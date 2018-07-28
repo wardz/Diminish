@@ -1,23 +1,18 @@
-local ADDON_NAME, NS = ...
+local _, NS = ...
 local Widgets = {}
 NS.Widgets = Widgets
 
 -- Helper functions for Widgets
-
 function Widgets:ToggleState(widget, state)
-    if state then
-        widget:Enable()
-        if widget:IsObjectType("Slider") then
-            widget:SetAlpha(1)
-        end
-    else
-        widget:Disable()
-        if widget:IsObjectType("Slider") then
-            widget:SetAlpha(0.5) -- fade out slider when disabled, cba messing with textures
-        end
+    if state then widget:Enable() else widget:Disable() end
+
+    if widget:IsObjectType("Slider") then
+        widget.labelText:SetFontObject(state and "GameFontNormalLeft" or "GameFontDisableSmall")
+        widget.valueText:SetFontObject(state and "GameFontHighlightSmall" or "GameFontDisableSmall")
     end
 end
 
+-- TODO: remove, blizz already has function for this
 function Widgets:CopyTable(src, dest)
     if type(dest) ~= "table" then dest = {} end
     if type(src) == "table" then
@@ -32,8 +27,9 @@ function Widgets:CopyTable(src, dest)
 end
 
 function Widgets:ShowError(text)
-    if not StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"] then
-        StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"] = {
+    local name = self.ADDON_NAME .. "_ERRORMESSAGE"
+    if not StaticPopupDialogs[name] then
+        StaticPopupDialogs[name] = {
             button1 = OKAY or "Okay",
             timeout = 0,
             whileDead = true,
@@ -42,13 +38,15 @@ function Widgets:ShowError(text)
         }
     end
 
-    StaticPopupDialogs[ADDON_NAME .. "_ERRORMESSAGE"].text = text
-    StaticPopup_Show(ADDON_NAME .. "_ERRORMESSAGE")
+    StaticPopupDialogs[name].text = text or "nil"
+    StaticPopup_Show(name)
 end
 
 function Widgets:RefreshWidgets(db, panel)
     local frames = panel.frames
 
+    -- refresh every single db value for all frames found in panel.frames
+    -- db key has to match frame key
     for setting, value in pairs(db) do
         if frames[setting] then
             if frames[setting].IsObjectType then

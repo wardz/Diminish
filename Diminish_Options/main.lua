@@ -1,6 +1,5 @@
-local _, NS = ...
+local ADDON_NAME, NS = ...
 local Widgets = NS.Widgets
-local Panel = NS.Panel
 local TestMode = NS.TestMode
 local L = NS.L
 
@@ -51,6 +50,9 @@ NS.GetDBProxy = function(key1, key2, key3)
         end,
     })
 end
+
+local Panel = Widgets:CreateMainPanel(ADDON_NAME)
+NS.Panel = Panel
 
 function Panel:Setup()
     local Icons = DIMINISH_NS.Icons
@@ -243,8 +245,7 @@ function Panel:refresh()
     Widgets:ToggleState(self.frames.timerTextSize, self.frames.timerText:GetChecked())
 end
 
-SLASH_DIMINISH1 = "/diminish"
-SlashCmdList.DIMINISH = function()
+function Diminish_OpenOptionsPanel()
     InterfaceOptionsFrame_OpenToCategory(Panel)
     InterfaceOptionsFrame_OpenToCategory(Panel) -- double to fix blizz bug
 end

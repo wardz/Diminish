@@ -62,7 +62,7 @@ end
 
 -- TODO: reuse frames
 for unitFrame, unit in pairs(NS.unitFrames) do
-    Panel:CreateChild(unitFrame, function(panel)
+    Panel:CreateChildPanel(unitFrame, function(panel)
         Widgets:CreateHeader(panel, unitFrame, false, format(L.HEADER_UNITFRAME, unitFrame))
         panel.unitID = unit
         panel.refresh = Refresh

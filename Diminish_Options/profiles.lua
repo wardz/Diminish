@@ -18,7 +18,7 @@ local function RemoveProfileFromTable(value)
     end
 end
 
-Panel:CreateChild(L.PROFILES, function(panel)
+Panel:CreateChildPanel(L.PROFILES, function(panel)
     Widgets:CreateHeader(panel, panel.name, false, L.HEADER_PROFILES)
 
     for k, v in pairs(DiminishDB.profiles) do
