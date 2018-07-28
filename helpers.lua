@@ -1,5 +1,6 @@
 local _, NS = ...
 
+--@debug@
 NS.Debug = function(...)
     if false then print("|cFFFF0000[D]|r" .. format(...)) end
 end
@@ -7,6 +8,7 @@ end
 NS.Info = function(...)
     if false then print("|cFFFF0000[I]|r" .. format(...)) end
 end
+--@end-debug@
 
 -- Copies table values from src to dst if they don't exist in dst
 NS.CopyDefaults = function(src, dst)

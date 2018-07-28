@@ -55,7 +55,9 @@ function Diminish:ToggleForZone(dontRunEnable)
 
                     if not self:IsEventRegistered(event) then
                         self:RegisterEvent(event)
+                        --@debug@
                         NS.Debug("Registered %s for instance %s.", event, instanceType)
+                        --@end-debug@
                     end
 
                     break
@@ -63,7 +65,9 @@ function Diminish:ToggleForZone(dontRunEnable)
                     settings.isEnabledForZone = false
                     if self:IsEventRegistered(event) then
                         self:UnregisterEvent(event)
+                        --@debug@
                         NS.Debug("Unregistered %s for instance %s.", event, instanceType)
+                        --@end-debug@
                     end
                 end
             end
@@ -71,7 +75,9 @@ function Diminish:ToggleForZone(dontRunEnable)
             settings.isEnabledForZone = false
             if event and self:IsEventRegistered(event) then
                 self:UnregisterEvent(event)
+                --@debug@
                 NS.Debug("Unregistered %s for instance %s.", event, instanceType)
+                --@end-debug@
             end
         end
     end
@@ -142,7 +148,9 @@ function Diminish:Disable()
     wipe(hunterList)
 
     self.currInstanceType = select(2, IsInInstance())
+    --@debug@
     Info("Disabled addon for zone %s.", self.currInstanceType)
+    --@end-debug@
 end
 
 function Diminish:Enable()
@@ -161,7 +169,9 @@ function Diminish:Enable()
     self:SetCLEUWatchVariables()
     self:GROUP_ROSTER_UPDATE()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    --@debug@
     Info("Enabled addon for zone %s.", self.currInstanceType)
+    --@end-debug@
 end
 
 -- for BGs only
@@ -305,7 +315,9 @@ function Diminish:UPDATE_BATTLEFIELD_SCORE()
                 -- Used to detect if unit is hunter in combat log later on by checking destName
                 -- We do this so we can ignore hunters in UNIT_DIED event since Feign Death triggers UNIT_DIED
                 hunterList[name] = true
+                --@debug@
                 Info("Add %s to hunter list.", name)
+                --@end-debug@
             end
         end
     end

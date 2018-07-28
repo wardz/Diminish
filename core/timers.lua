@@ -153,7 +153,8 @@ function Timers:Refresh(unitID)
     if not unitGUID then return end
 
     -- Hide active timers belonging to previous guid
-    -- TODO: better to always just hide all frames?
+    -- Note, its probably faster to always just :Hide() frames but this
+    -- will also delete any old timers
     if prevGUID and prevGUID ~= unitGUID and activeTimers[prevGUID] then
         for category, timer in pairs(activeTimers[prevGUID]) do
             StopTimers(timer, unitID, true)
@@ -232,7 +233,9 @@ function Timers:ResetAll(clearGUIDs)
         activeGUIDs.player = UnitGUID("player")
     end
 
+    --@debug@
     Debug("Stopped all timers.")
+    --@end-debug@
 end
 
 do
@@ -283,12 +286,16 @@ do
         end
 
         Icons:StartCooldown(timer, origUnitID and "player-party" or unitID, onAuraEnd)
+        --@debug@
         Debug("%s timer %s:%s", isUpdate and "Updated" or "Started", origUnitID and "player-party" or unitID, timer.category)
+        --@end-debug@
     end
 
     local function Stop(timer, unitID, preventRemove, isFinished)
         Icons:StopCooldown(timer, unitID, isFinished)
+        --@debug@
         Debug("Stop/pause timer %s:%s", unitID, timer.category or "nil")
+        --@end-debug@
 
         if not preventRemove then
             -- f.cooldown OnHide script won't trigger :Remove() if the parent (unitframe) is hidden
