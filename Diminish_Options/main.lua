@@ -3,10 +3,8 @@ local Widgets = NS.Widgets
 local TestMode = NS.TestMode
 local L = NS.L
 
--- TODO: option show friendly timers AND show enemy timers toggles (target/focus)
+-- TODO: show friendly timers AND show enemy timers toggles (target/focus, nameplates?)
 -- TODO: option indicator text size & position?
--- TODO: nameplate DRs
--- TODO: option dropdown grow direction down, up etc
 
 NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 
@@ -181,7 +179,7 @@ function Panel:Setup()
         frames.border:SetPoint("LEFT", frames.colorBlind, 7, -55)
         frames.border:SetWidth(180)
 
-        frames.border.OnValueChanged = function(self, value)
+        frames.border.OnValueChanged = function(_, value)
             if not value or value == EMPTY then return end
             db.border = value
             Icons:OnFrameConfigChanged()

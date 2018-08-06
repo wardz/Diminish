@@ -167,7 +167,7 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
         -- Insert to dropdown
         profiles[#profiles + 1] = {
             value = value,
-            text = text or value
+            text = value
         }
 
         editBox:SetText("")

@@ -14,14 +14,13 @@ ignore = {
 	"211/CL", -- Unused local variable "CL"
 	"212", -- Unused argument
 	"213", -- Unused loop variable
-	-- "231", -- Set but never accessed
+--	"231", -- Set but never accessed
 	"311", -- Value assigned to a local variable is unused
-	"314", -- Value of a field in a table literal is unused
+--	"314", -- Value of a field in a table literal is unused
 	"42.", -- Shadowing a local variable, an argument, a loop variable.
-	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
-	"542", -- An empty if branch
 }
 globals = {
+	-- Addon globals
 	"LibStub",
 	"DIMINISH_NS",
 	"DiminishDB",
@@ -53,6 +52,14 @@ globals = {
 	"LoadAddOn",
 	"InterfaceOptionsFrame",
 	"InterfaceAddOnsList_Update",
+	"PanelTemplates_GetSelectedTab",
+	"PanelTemplates_UpdateTabs",
+	"PanelTemplates_Tab_OnClick",
+	"tinsert",
+	"PanelTemplates_TabResize",
+	"PanelTemplates_UpdateTabs",
+	"PanelTemplates_SetNumTabs",
+	"PanelTemplates_SetTab",
 	"SlashCmdList",
 	"GetRealmName",
 	"GetAddOnMetadata",
@@ -64,6 +71,7 @@ globals = {
 	"InActiveBattlefield",
 	"IsActiveBattlefieldArena",
 	"InterfaceOptionsFrame_OpenToCategory",
+	"InterfaceOptionsFramePanelContainer",
 	"StaticPopupDialogs",
 	"OKAY",
 	"StaticPopup_Show",
