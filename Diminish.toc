@@ -1,6 +1,6 @@
 ## Interface: 80000
 ## Title: Diminish
-## Notes: Diminishing returns tracker for unit frames.
+## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## SavedVariables: DiminishDB
 ## Version: @project-version@
 ## X-Curse-Project-ID: 92871
