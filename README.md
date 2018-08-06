@@ -1,11 +1,11 @@
 # Diminish (Battle for Azeroth)
-Lightweight diminishing returns tracker for friendly and enemy units in World of Warcraft.
+Lightweight diminishing returns tracker for (non)hostile units in World of Warcraft.
 
-## Download
-Use one of these for downloading. Installing from source wont work.  
+## Install
+Installing from source is not guaranteed to work. You can download a packaged version here:  
 [Curseforge Download](https://www.curseforge.com/wow/addons/diminish)  
 [WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)  
-[Github Download](https://github.com/wardz/Diminish/releases)  
+[Github Download](https://github.com/wardz/Diminish/releases) (Choose binary)  
 
 ## Configuration
 Type ```/diminish``` to open the options panel.
