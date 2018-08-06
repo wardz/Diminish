@@ -214,7 +214,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
         frame:SetScript("OnLeave", ResetCursor)
     end
 
-    frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unitID or unit), db.growLeft and L.LEFT or L.RIGHT)
+    frame.tooltip:SetFormattedText(L.ANCHORDRAG, strupper(unitID or unit), db.growDirection) -- TODO: test
     frame:SetSize(db.iconSize, db.iconSize)
     if not db.anchorUIParent then
         frame:SetPoint("CENTER", parent, db.offsetX, db.offsetY)

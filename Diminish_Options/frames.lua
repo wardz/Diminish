@@ -3,11 +3,20 @@ local Panel = NS.Panel
 local Widgets = NS.Widgets
 local L = NS.L
 
+local Dropdown = LibStub("PhanxConfig-Dropdown")
+
 local zones = {
     [L.ZONE_ARENA] = "arena", -- localized name, instanceType
     [L.ZONE_BATTLEGROUNDS] = "pvp",
     [L.ZONE_OUTDOORS] = "none",
     [L.ZONE_DUNGEONS] = { "party", "raid", "scenario" },
+}
+
+local growDirections = {
+    { value = "TOP", text = L.GROW_TOP },
+    { value = "BOTTOM", text = L.GROW_BOTTOM },
+    { value = "LEFT", text = L.GROW_LEFT },
+    { value = "RIGHT", text = L.GROW_RIGHT },
 }
 
 local function Refresh(self)
@@ -37,10 +46,9 @@ local function Refresh(self)
         for label, instance in pairs(zones) do
             if frames.zones[label] then
                 if type(instance) == "table" then
-                    for i = 1, #instance do
-                        frames.zones[label]:SetChecked(unitFrameSettings.zones[instance[i]])
-                        break -- if first is true or false, then all other is same value
-                    end
+                    -- TODO: test
+                    -- all values here are always the same so just set to index 1
+                    frames.zones[label]:SetChecked(unitFrameSettings.zones[instance[1]])
                 else
                     frames.zones[label]:SetChecked(unitFrameSettings.zones[instance])
                 end
@@ -97,20 +105,6 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
 
-        frames.growLeft = Widgets:CreateCheckbox(panel, L.GROWLEFT, L.GROWLEFT_TOOLTIP, function()
-            db.growLeft = not db.growLeft
-            DIMINISH_NS.Icons:OnFrameConfigChanged()
-            if NS.TestMode:IsTestingOrAnchoring() then
-                NS.TestMode:HideAnchors()
-            end
-        end)
-
-        if frames.watchFriendly then
-            frames.growLeft:SetPoint("LEFT", frames.watchFriendly, 0, -40)
-        else
-            frames.growLeft:SetPoint("LEFT", frames.enabled, 0, -40)
-        end
-
         frames.anchorUIParent = Widgets:CreateCheckbox(panel, L.ANCHORUIPARENT, L.ANCHORUIPARENT_TOOLTIP, function()
             db.anchorUIParent = not db.anchorUIParent
 
@@ -121,14 +115,33 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 NS.TestMode:HideAnchors()
             end
         end)
-        frames.anchorUIParent:SetPoint("LEFT", frames.growLeft, 0, -40)
+
+        if frames.watchFriendly then
+            frames.anchorUIParent:SetPoint("LEFT", frames.watchFriendly, 0, -40)
+        else
+            frames.anchorUIParent:SetPoint("LEFT", frames.enabled, 0, -40)
+        end
+
+
+        frames.growDirection = Dropdown.CreateDropdown(panel, L.GROWDIRECTION, L.GROWDIRECTION_TOOLTIP, growDirections)
+        frames.growDirection:SetSize(150, 45)
+        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent, 0, -45)
+        frames.growDirection.OnValueChanged = function(self, value)
+            if not value or value == EMPTY then return end
+            db.growDirection = value
+
+            DIMINISH_NS.Icons:OnFrameConfigChanged()
+            if NS.TestMode:IsTestingOrAnchoring() then
+                NS.TestMode:HideAnchors()
+            end
+        end
 
 
         frames.iconSize = Widgets:CreateSlider(panel, L.ICONSIZE, L.ICONSIZE_TOOLTIP, 10, 80, 1, function(frame, value)
             db.iconSize = value
             DIMINISH_NS.Icons:OnFrameConfigChanged()
         end)
-        frames.iconSize:SetPoint("LEFT", frames.anchorUIParent, 10, -55)
+        frames.iconSize:SetPoint("LEFT", frames.growDirection, 10, -60)
 
 
         frames.iconPadding = Widgets:CreateSlider(panel, L.ICONPADDING, L.ICONPADDING_TOOLTIP, 0, 40, 1, function(frame, value)
@@ -142,11 +155,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
         do
             local subCategories = Widgets:CreateSubHeader(panel, L.HEADER_CATEGORIES)
-            if unit ~= "arena" then
-                subCategories:SetPoint("LEFT", 16, -100)
-            else
-                subCategories:SetPoint("TOPRIGHT", -64, -50)
-            end
+            subCategories:SetPoint("RIGHT", -64, 10)
 
             frames.categories = {}
             local x, y = -60, 10
@@ -181,37 +190,40 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
         -------------------------------------------------------------------
 
-        if unit ~= "arena" then
-            local subZones = Widgets:CreateSubHeader(panel, L.HEADER_ZONE)
-            subZones:SetPoint("TOPRIGHT", -64, -50)
+        local subZones = Widgets:CreateSubHeader(panel, L.HEADER_ZONE)
+        subZones:SetPoint("TOPRIGHT", -64, -50)
 
-            frames.zones = {}
-            local x = -60
-            local dbZones = NS.GetDBProxy("unitFrames", unit, "zones")
+        frames.zones = {}
+        local x = -60
+        local dbZones = NS.GetDBProxy("unitFrames", unit, "zones")
 
-            for label, instance in pairs(zones) do
-                local continue = true
-                if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" then
-                    -- only show L.ZONE_DUNGEONS for focus/target panel for now
-                    continue = false
-                end
+        for label, instance in pairs(zones) do
+            local continue = true
+            if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" then
+                -- only show L.ZONE_DUNGEONS for focus/target panel for now
+                continue = false
+            end
 
-                if continue then
-                    frames.zones[label] = Widgets:CreateCheckbox(panel, label, L.ZONES_TOOLTIP, function(self)
-                        if type(instance) == "table" then
-                            for i = 1, #instance do
-                                dbZones[instance[i]] = self:GetChecked() and true or false
-                            end
-                        else
-                            dbZones[instance] = self:GetChecked() and true or false
+            -- Only show arena/bg zone for arena (BGs also uses arena frames)
+            if unit == "arena" and (label ~= L.ZONE_ARENA and label ~= L.ZONE_BATTLEGROUNDS) then
+                continue = false
+            end
+
+            if continue then
+                frames.zones[label] = Widgets:CreateCheckbox(panel, label, L.ZONES_TOOLTIP, function(self)
+                    if type(instance) == "table" then
+                        for i = 1, #instance do
+                            dbZones[instance[i]] = self:GetChecked() and true or false
                         end
+                    else
+                        dbZones[instance] = self:GetChecked() and true or false
+                    end
 
-                        DIMINISH_NS.Diminish:ToggleForZone()
-                    end)
+                    DIMINISH_NS.Diminish:ToggleForZone()
+                end)
 
-                    frames.zones[label]:SetPoint("LEFT", subZones, 10, x)
-                    x = x - 30
-                end
+                frames.zones[label]:SetPoint("LEFT", subZones, 10, x)
+                x = x - 30
             end
         end
 
@@ -229,7 +241,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             local defaults = DIMINISH_NS.DEFAULT_SETTINGS.unitFrames[unit]
             db.offsetY = defaults.offsetY
             db.offsetX = defaults.offsetX
-            db.growLeft = defaults.growLeft
+            db.growDirection = defaults.growDirection -- TODO: test
             db.offsetsY = nil
             db.offsetsX = nil
 

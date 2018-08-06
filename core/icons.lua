@@ -116,28 +116,44 @@ do
         })
     end
 
+    local function GetOffsets(cfg)
+        local ofsX, ofsY = 0, 0
+        local direction = cfg.growDirection
+        if direction == "LEFT" then
+            ofsX = -cfg.iconSize - cfg.iconPadding
+        elseif direction == "RIGHT" then
+            ofsX = cfg.iconSize + cfg.iconPadding
+        elseif direction == "TOP" then
+            ofsY = cfg.iconSize + cfg.iconPadding
+        elseif direction == "BOTTOM" then
+            ofsY = -cfg.iconSize - cfg.iconPadding
+        end
+
+        return ofsX, ofsY
+    end
+
     local function UpdatePositions(cooldownFrame)
         local anchor = cooldownFrame.parent
         local cfg = anchor.unitSettingsRef
+        local ofsX, ofsY = GetOffsets(cfg)
 
-        local spawnOfsX
-        local ofsY = cfg.offsetY
-        local ofsX = cfg.growLeft and (-cfg.iconSize - cfg.iconPadding) or (cfg.iconSize + cfg.iconPadding)
         local first = true
+        local firstOfsX = cfg.offsetX
+        local firstOfsY = cfg.offsetY
 
         if cfg.anchorUIParent then
             anchor.uid = anchor.uid or tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
-            ofsY = cfg.offsetsY[anchor.uid]
-            spawnOfsX = cfg.offsetsX[anchor.uid]
+            firstOfsY = cfg.offsetsY[anchor.uid] -- index 2 = arena2 etc
+            firstOfsX = cfg.offsetsX[anchor.uid]
         end
 
         for _, frame in pairs(frames[anchor.unit]) do
             if frame.shown then
                 if first then
-                    frame:SetPoint("CENTER", anchor:GetParent(), spawnOfsX or cfg.offsetX, ofsY)
+                    frame:SetPoint("CENTER", anchor:GetParent(), firstOfsX, firstOfsY)
                     first = false
                 else
-                    frame:SetPoint("CENTER", anchor, ofsX, 0)
+                    frame:SetPoint("CENTER", anchor, ofsX, ofsY)
                 end
 
                 anchor = frame
