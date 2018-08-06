@@ -15,5 +15,6 @@ wowi-create-changelog=no
 ignore:
     - README.md
     - .travis.yml
+    - .luacheckrc
     - Diminish_Options/libs/LibStub/LibStub.toc
     - Diminish_Options/libs/LibStub/tests
