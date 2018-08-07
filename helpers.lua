@@ -26,6 +26,26 @@ NS.CopyDefaults = function(src, dst)
     return dst
 end
 
+-- Cleanup savedvariables by removing table values in src that no longer
+-- exists in table dst (default settings)
+NS.CleanupDB = function(src, dst)
+    for key, value in pairs(src) do
+
+        if dst[key] == nil then
+            -- offsetsXY are not set in DEFAULT_SETTINGS but sat on demand instead to save memory,
+            -- which causes nil comparison to always be true here, so always ignore these for now
+            if key ~= "offsetsX" and key ~= "offsetsY" then
+                src[key] = nil
+            end
+        elseif type(value) == "table" then
+            if key ~= "disabledCategories" then -- also sat on demand
+                dst[key] = NS.CleanupDB(value, dst[key])
+            end
+        end
+    end
+    return dst
+end
+
 -- Find debuff duration by aura indices
 local UnitAura = _G.UnitAura
 NS.GetAuraDuration = function(unitID, spellID)

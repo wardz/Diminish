@@ -200,6 +200,10 @@ function Diminish:InitDB()
         [profile] = NS.DEFAULT_SETTINGS
     }, DiminishDB.profiles)
 
+    -- Remove table values no longer found in default settings
+    NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
+
+
     -- Reference to active db profile
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
@@ -212,6 +216,7 @@ function Diminish:InitDB()
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil
         NS.CopyDefaults = nil
+        NS.CleanupDB = nil
         Icons.OnFrameConfigChanged = nil
     end]]
 
@@ -283,6 +288,8 @@ end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     -- FIXME: rogues restealthing will cause this to be ran unnecessarily
+    -- TODO: test in bg
+    -- TODO: IsInBrawl won't work for bg
     if status == "seen" and not IsInBrawl() and not strfind(unitID, "pet") then
         Timers:Refresh(unitID)
     end
