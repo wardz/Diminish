@@ -193,11 +193,15 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                     frames.iconPreview:SetPoint("LEFT", 30, -4)
                     frames.iconPreview:Show()
 
-                    if DIMINISH_NS.db.categoryTextures[self.category] then
-                        frames.iconPreview.icon:SetTexture(DIMINISH_NS.db.categoryTextures[self.category])
-                    else
-                        frames.iconPreview.icon:SetTexture("Interface\\ICONS\\inv_misc_questionmark")
-                    end
+                    -- setting dialog.texture doesn't work for OnShow because its fired too fast
+                    -- so delay using dialog.texture until next script execution cycle
+                    C_Timer.After(0.1, function()
+                        if DIMINISH_NS.db.categoryTextures[self.category] then
+                            frames.iconPreview.icon:SetTexture(DIMINISH_NS.db.categoryTextures[self.category])
+                        else
+                            frames.iconPreview.icon:SetTexture("Interface\\ICONS\\inv_misc_questionmark")
+                        end
+                    end)
                 end,
                 OnHide = function()
                     frames.iconPreview:Hide()
