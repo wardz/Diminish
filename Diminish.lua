@@ -287,6 +287,7 @@ end
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     -- FIXME: rogues restealthing will cause this to be ran unnecessarily
     if status == "seen" and not strfind(unitID, "pet") then
+        if IsInBrawl() and not NS.db.unitFrames.arena.zones.pvp then return end
         Timers:Refresh(unitID)
     end
 end
