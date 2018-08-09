@@ -243,7 +243,8 @@ function Panel:refresh()
     Widgets:ToggleState(self.frames.timerTextSize, self.frames.timerText:GetChecked())
 end
 
-function Diminish_OpenOptionsPanel()
+SLASH_DIMINISH1 = "/diminish"
+SlashCmdList.DIMINISH = function()
     InterfaceOptionsFrame_OpenToCategory(Panel)
     InterfaceOptionsFrame_OpenToCategory(Panel) -- double to fix blizz bug
 end

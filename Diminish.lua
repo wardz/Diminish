@@ -210,15 +210,13 @@ function Diminish:InitDB()
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
 
-    --[[
-    -- TODO: this wont work if the addon is loaded through blizz AddOn List ingame
-    if select(5, GetAddOnInfo("Diminish_Options")) ~= "DEMAND_LOADED" then
+    if not IsAddOnLoaded("Diminish_Options")then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil
         NS.CopyDefaults = nil
         NS.CleanupDB = nil
         Icons.OnFrameConfigChanged = nil
-    end]]
+    end
 
     self.InitDB = nil
 end
@@ -288,9 +286,7 @@ end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     -- FIXME: rogues restealthing will cause this to be ran unnecessarily
-    -- TODO: test in bg
-    -- TODO: IsInBrawl won't work for bg
-    if status == "seen" and not IsInBrawl() and not strfind(unitID, "pet") then
+    if status == "seen" and not strfind(unitID, "pet") then
         Timers:Refresh(unitID)
     end
 end
@@ -415,31 +411,5 @@ do
             -- Delete all timers for unit that died
             Timers:Remove(destGUID, false)
         end
-    end
-end
-
-local function LoadOptions()
-    local name, title, notes, loadable, reason, security = GetAddOnInfo("Diminish_Options")
-    if reason ~= "DEMAND_LOADED" and reason ~= "INTERFACE_VERSION" then return end
-
-    if not IsAddOnLoaded("Diminish_Options") then
-        LoadAddOn("Diminish_Options")
-    end
-
-    return IsAddOnLoaded("Diminish_Options")
-end
-
-InterfaceOptionsFrame:HookScript("OnShow", function()
-    if LoadOptions() then
-        InterfaceAddOnsList_Update()
-    end
-end)
-
-SLASH_DIMINISH1 = "/diminish"
-SlashCmdList.DIMINISH = function()
-    if LoadOptions() then
-        Diminish_OpenOptionsPanel()
-    else
-        print(NS.L.ERROR_LOADOPTIONS)
     end
 end

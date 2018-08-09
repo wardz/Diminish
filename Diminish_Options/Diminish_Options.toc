@@ -2,9 +2,6 @@
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
 ## Notes-deDE: Konfiguration für Diminish.
-## LoadOnDemand: 1
-## LoadWith: Diminish
-## DefaultState: enabled
 ## Dependencies: Diminish
 
 libs\LibStub\LibStub.lua
