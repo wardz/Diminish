@@ -123,7 +123,7 @@ function Timers:Remove(unitGUID, category, noStop)
         local hunterCheckRan = false
 
         for cat, t in pairs(timers) do
-            if not hunterCheckRan then -- TODO: test
+            if not hunterCheckRan then
                 -- UNIT_DIED is fired for Feign Death so ignore hunters here
                 if t.unitClass == "HUNTER" then return end
                 if Diminish:UnitIsHunter(t.destName) then return end
