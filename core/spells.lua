@@ -30,7 +30,8 @@ NS.spellList = {
     [236748]  = C.DISORIENT,       -- Intimidating Roar
     [226943]  = C.DISORIENT,       -- Mind Bomb
     [2637]    = C.DISORIENT,       -- Hibernate
---  [xxxx]    = C.DISORIENT,       -- Holographic Horror Projector
+    [35474]   = C.DISORIENT,       -- Drums of Panic
+    [269186]  = C.DISORIENT,       -- Holographic Horror Projector
 
     [99]      = C.INCAPACITATE,    -- Incapacitating Roar
     [203126]  = C.INCAPACITATE,    -- Maim (Blood trauma)
@@ -76,7 +77,9 @@ NS.spellList = {
     [217832]  = C.INCAPACITATE,    -- Imprison
     [221527]  = C.INCAPACITATE,    -- Imprison (Honor Talent)
     [197214]  = C.INCAPACITATE,    -- Sundering
---  [274930]  = C.INCAPACITATE,    -- Organic Discombobulation Grenade
+    [255228]  = C.INCAPACITATE,    -- Organic Discombobulation Grenade
+    [89637]   = C.INCAPACITATE,    -- Big Daddy
+    [67769]   = C.INCAPACITATE,    -- Cobalt Frag Bomb
 
     [47476]   = C.SILENCE,         -- Strangulate
     [204490]  = C.SILENCE,         -- Sigil of Silence
@@ -156,6 +159,10 @@ NS.spellList = {
     [233582]  = C.ROOT,            -- Entrenched in Flame
     [117526]  = C.ROOT,            -- Binding Shot
     [207171]  = C.ROOT,            -- Winter is Coming
+    [39965]   = C.ROOT,            -- Frost Grenade
+    [75148]   = C.ROOT,            -- Embersilk Net
+    [55536]   = C.ROOT,            -- Frostweave Net
+
 
     [207777]  = C.DISARM,          -- Dismantle
     [233759]  = C.DISARM,          -- Grapple Weapon
