@@ -19,7 +19,7 @@ Grows: %s]=]
 L["ANCHORUIPARENT"] = "Anchor to UIParent"
 L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and anchors them to the screen (UIParent) instead. Requires re-positioning."
 L["ARENA"] = "Arena"
-L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking."
+L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking. Right click to manually set icon used for category."
 L["COLORBLIND"] = "Show Indicators Using Text"
 L["COLORBLIND_TOOLTIP"] = [=[Show indicators using text instead of border colors. Works best when using larger icons. May not work with some Masque skins.
 
@@ -54,6 +54,7 @@ L["ICONPADDING"] = "Frame Padding"
 L["ICONPADDING_TOOLTIP"] = "Set padding between all active icons."
 L["ICONSIZE"] = "Frame Size"
 L["ICONSIZE_TOOLTIP"] = "Set size of the icons."
+L["INVALID_SPELLID"] = "Invalid spell ID."
 L["NAMEPLATES"] = "Nameplates"
 L["NEWPROFILE"] = "Create New Profile"
 L["NEWPROFILE_TOOLTIP"] = "Create a new profile with current active settings as a starting point."
@@ -62,6 +63,7 @@ L["PLAYER"] = "Player"
 L["PROFILEACTIVE"] = "That profile is already active."
 L["PROFILEEXISTS"] = "Profile with that name already exists."
 L["PROFILES"] = "Profiles"
+L["RESET"] = "Reset."
 L["RESETPOS"] = "Reset Position"
 L["RESETPOS_TOOLTIP"] = "Reset icon positions for this unitframe back to default values."
 L["RESETPROFILE"] = "Reset Profile"
@@ -84,6 +86,8 @@ L["TEST_TOOLTIP"] = "Test all enabled frames."
 L["TEXTURE_BRIGHT"] = "Bright"
 L["TEXTURE_GLOW"] = "Default, with glow"
 L["TEXTURE_NONE"] = "None"
+L["TEXTURECHANGE"] = "Manually set icon texture used for %s. This will affect all unit frames. Enter spell ID for ability, or leave blank to reset:"
+L["TEXTURECHANGE_NOTE"] = "Right-click checkbox to manually select texture."
 L["TIMERCOLORS"] = "Show Countdown Indicator"
 L["TIMERCOLORS_TOOLTIP"] = "Toggles diminishing returns indicator coloring of the countdown text."
 L["TIMERSWIPE"] = "Show Swipe for Cooldowns"
@@ -95,7 +99,9 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
-L["TRACKNPCS_TOOLTIP"] = "Enable diminishing returns tracking for mobs and player pets. (Target/focus)"
+L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus)"
+
+Enabling this may drastically increase memory usage in large Battlegrounds.]=]
 L["UNLOCK"] = "Unlock/Move Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle enabled frames for moving. Drag the red boxes to move icon spawn points."
 L["USEPROFILE"] = "Use"
@@ -169,7 +175,6 @@ if locale == "deDE" then
     L["TIMERTEXTSIZE"] = "Countdowngröße"
     L["TIMERTEXTSIZE_TOOLTIP"] = "Legt die Schriftgröße für den Countdown-Text fest."
     L["UNLOCK"] = "Fenster entsperren"
-    L["USEPROFILE"] = "Anwenden"
     L["USEPROFILE_TOOLTIP"] = [=[Weist ein existierendes Profil diesem Charakter zu.
 
     Jegliche Änderungen an diesem Profil wirken sich auf alle Charaktere, die diese Profil nutzen, aus.]=]

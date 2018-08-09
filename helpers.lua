@@ -38,7 +38,7 @@ NS.CleanupDB = function(src, dst)
                 src[key] = nil
             end
         elseif type(value) == "table" then
-            if key ~= "disabledCategories" then -- also sat on demand
+            if key ~= "disabledCategories" and key ~= "categoryTextures" then -- also sat on demand
                 dst[key] = NS.CleanupDB(value, dst[key])
             end
         end

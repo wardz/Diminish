@@ -431,6 +431,11 @@ do
     end
 
     local function SetSpellTexture(frame, timer)
+        if NS.db.categoryTextures[timer.category] then
+            -- Icon has been sat manually in Diminish_Options, frames.lua
+            return frame.icon:SetTexture(NS.db.categoryTextures[timer.category])
+        end
+
         if NS.db.spellBookTextures then
             if not textureCachePlayer[timer.category] then
                 if timer.srcGUID == NS.Diminish.PLAYER_GUID or timer.srcGUID == UnitGUID("pet") then

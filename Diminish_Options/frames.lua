@@ -46,7 +46,6 @@ local function Refresh(self)
         for label, instance in pairs(zones) do
             if frames.zones[label] then
                 if type(instance) == "table" then
-                    -- TODO: test
                     -- all values here are always the same so just set to index 1
                     frames.zones[label]:SetChecked(unitFrameSettings.zones[instance[1]])
                 else
@@ -157,10 +156,83 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             local subCategories = Widgets:CreateSubHeader(panel, L.HEADER_CATEGORIES)
             subCategories:SetPoint("RIGHT", -64, 10)
 
+            local tip = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+            tip:SetJustifyH("LEFT")
+            tip:SetFont(STANDARD_TEXT_FONT, 9)
+            tip:SetText(L.TEXTURECHANGE_NOTE)
+            tip:SetPoint("CENTER", subCategories, 17, -45)
+
+            -- Popup for changing icon texture manually
+            StaticPopupDialogs["DIMINISH_TEXTURES"] = StaticPopupDialogs["DIMINISH_TEXTURES"] or {
+                text = L.TEXTURECHANGE,
+                button1 = _G.ACCEPT,
+                button2 = _G.CANCEL,
+                OnAccept = function(self)
+                    local text = self.editBox:GetText()
+                    if text == nil or text == "" then
+                        DIMINISH_NS.db.categoryTextures[self.category] = nil
+                        Widgets:ShowError(L.RESET)
+                        return
+                    end
+
+                    local texture = GetSpellTexture(text)
+                    if texture then
+                        DIMINISH_NS.db.categoryTextures[self.category] = texture
+                    else
+                        Widgets:ShowError(L.INVALID_SPELLID)
+                    end
+                end,
+                OnShow = function(self)
+                    if not frames.iconPreview then
+                        frames.iconPreview = CreateFrame("Frame")
+                        frames.iconPreview.icon = frames.iconPreview:CreateTexture(nil, "OVERLAY")
+                        frames.iconPreview.icon:SetAllPoints(frames.iconPreview)
+                        frames.iconPreview:SetSize(32, 32)
+                    end
+                    frames.iconPreview:SetParent(self)
+                    frames.iconPreview:SetPoint("LEFT", 30, -4)
+                    frames.iconPreview:Show()
+
+                    if DIMINISH_NS.db.categoryTextures[self.category] then
+                        frames.iconPreview.icon:SetTexture(DIMINISH_NS.db.categoryTextures[self.category])
+                    else
+                        frames.iconPreview.icon:SetTexture("Interface\\ICONS\\inv_misc_questionmark")
+                    end
+                end,
+                OnHide = function()
+                    frames.iconPreview:Hide()
+                    frames.iconPreview:ClearAllPoints()
+                    frames.iconPreview:SetParent(nil)
+                end,
+                EditBoxOnTextChanged = function(editbox)
+                    local texture = GetSpellTexture(editbox:GetText())
+                    if texture then
+                        frames.iconPreview.icon:SetTexture(texture)
+                        editbox:GetParent().button1:Enable()
+                    else
+                        frames.iconPreview.icon:SetTexture("Interface\\ICONS\\inv_misc_questionmark")
+
+                        -- when text is blank we enable the button to allow reset of icon
+                        -- else only enable it when valid texture is found
+                        if editbox:GetText() == "" then
+                            editbox:GetParent().button1:Enable()
+                        else
+                            editbox:GetParent().button1:Disable()
+                        end
+                    end
+                end,
+                hasEditBox = true,
+                timeout = 0,
+                whileDead = true,
+                hideOnEscape = true,
+                preferredIndex = 4,
+            }
+
             frames.categories = {}
-            local x, y = -60, 10
+            local x, y = -70, 10
             local dbCategories = NS.GetDBProxy("unitFrames", unit, "disabledCategories")
 
+            -- Generate checkbox toggle for every category
             local i = 1
             for k, category in pairs(DIMINISH_NS.CATEGORIES) do
                 local continue = true
@@ -176,12 +248,18 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
                     frames.categories[k]:SetPoint("LEFT", subCategories, y, x)
                     frames.categories[k]:SetChecked(true)
+                    frames.categories[k]:HookScript("OnMouseDown", function(self, button)
+                        if button == "RightButton" then
+                            local dialog = StaticPopup_Show("DIMINISH_TEXTURES", category)
+                            dialog.category = category
+                        end
+                    end)
                     x = x - 30
                     i = i + 1
 
                     if i > (unit == "arena" and 3 or 4) then
                         i = 1
-                        x = -60
+                        x = -70
                         y = y + 120
                     end
                 end
@@ -197,6 +275,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         local x = -60
         local dbZones = NS.GetDBProxy("unitFrames", unit, "zones")
 
+        -- Generate checkbox toggle for every zone option
         for label, instance in pairs(zones) do
             local continue = true
             if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" then

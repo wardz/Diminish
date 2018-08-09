@@ -60,6 +60,7 @@ do
         showCategoryText = false,
         colorBlind = false,
         trackNPCs = false,
+        categoryTextures = {},
         border = {
             edgeSize = 2.5,
             edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",

@@ -34,7 +34,7 @@ function Widgets:ShowError(text)
             timeout = 0,
             whileDead = true,
             hideOnEscape = true,
-            preferredIndex = 3,
+            preferredIndex = 4,
         }
     end
 
