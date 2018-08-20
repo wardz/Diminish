@@ -175,8 +175,9 @@ function Timers:Refresh(unitID)
     if activeTimers[unitGUID] then
         local _, englishClass = UnitClass(unitID)
         local currTime = GetTime()
+
         for category, timer in pairs(activeTimers[unitGUID]) do
-            if not timer.unitClass and englishClass == "HUNTER" then
+            if not timer.unitClass then
                 -- Used to detect hunters, we need to ignore Feign Death for UNIT_DIED later on
                 timer.unitClass = englishClass
             end
