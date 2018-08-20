@@ -162,7 +162,7 @@ NS.spellList = {
     [39965]   = C.ROOT,            -- Frost Grenade
     [75148]   = C.ROOT,            -- Embersilk Net
     [55536]   = C.ROOT,            -- Frostweave Net
-
+    [268966]  = C.ROOT,            -- Hooked Deep Sea Net
 
     [207777]  = C.DISARM,          -- Dismantle
     [233759]  = C.DISARM,          -- Grapple Weapon
