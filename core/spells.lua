@@ -135,6 +135,7 @@ NS.spellList = {
     [255723]  = C.STUN,            -- Bull Rush
     [202244]  = C.STUN,            -- Overrun (Also a knockback)
 --  [213688]  = C.STUN,            -- Fel Cleave (doesn't seem to DR)
+    [202346]  = C.STUN,            -- Double Barrel
 
     [204085]  = C.ROOT,            -- Deathchill
     [339]     = C.ROOT,            -- Entangling Roots
