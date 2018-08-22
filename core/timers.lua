@@ -150,6 +150,11 @@ function Timers:Refresh(unitID)
     local unitGUID = UnitGUID(unitID)
     local prevGUID = activeGUIDs[unitID]
     activeGUIDs[unitID] = unitGUID
+
+    if unitID == "nameplate" then -- testmode
+        unitGUID = UnitGUID("player")
+    end
+
     if not unitGUID then return end
 
     -- Hide active timers belonging to previous guid
@@ -207,6 +212,10 @@ C_Timer.NewTicker(55, function()
     end
 end)
 
+function Timers:RemoveActiveGUID(unitID)
+    activeGUIDs[unitID] = nil
+end
+
 function Timers:ResetAll(clearGUIDs)
     for guid, categories in pairs(activeTimers) do
         for cat, t in pairs(categories) do
@@ -223,7 +232,7 @@ function Timers:ResetAll(clearGUIDs)
 
     if clearGUIDs then
         for unitID, guid in pairs(activeGUIDs) do
-            if not UnitExists(unitID) then
+            if not UnitExists(unitID) or UnitGUID(unitID) ~= guid then -- compare guids for nameplates
                 activeGUIDs[unitID] = nil
             end
         end
@@ -244,9 +253,10 @@ do
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
 
     local testModeUnits = {
-        "player", "player-party", "target", "focus",
+        "player", "target", "focus",
         "arena1", "arena2", "arena3",
         "party1", "party2", "party3",
+        "player-party", "nameplate",
     }
 
     local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)

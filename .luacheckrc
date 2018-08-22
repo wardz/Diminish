@@ -30,10 +30,13 @@ globals = {
 
 	-- Misc wow globals in random order
 	"_G",
+	"gmatch",
 	"bit",
 	"CreateFrame",
 	"IsInInstance",
 	"wipe",
+	"strlower",
+	"C_NamePlate",
 	"UnitName",
 	"GetCVarBool",
 	"UnitGUID",

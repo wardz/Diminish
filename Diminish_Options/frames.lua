@@ -104,27 +104,25 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
 
-        frames.anchorUIParent = Widgets:CreateCheckbox(panel, L.ANCHORUIPARENT, L.ANCHORUIPARENT_TOOLTIP, function()
-            db.anchorUIParent = not db.anchorUIParent
+        if unit ~= "nameplate" then
+            frames.anchorUIParent = Widgets:CreateCheckbox(panel, L.ANCHORUIPARENT, L.ANCHORUIPARENT_TOOLTIP, function()
+                db.anchorUIParent = not db.anchorUIParent
 
-            DIMINISH_NS.Icons:CreateUIParentOffsets(db, unit)
-            DIMINISH_NS.Icons:OnFrameConfigChanged() -- reanchors from UIParent to UnitFrame or vice versa
-            DIMINISH_NS.Diminish:GROUP_ROSTER_UPDATE()
-            if NS.TestMode:IsTestingOrAnchoring() then
-                NS.TestMode:HideAnchors()
-            end
-        end)
+                DIMINISH_NS.Icons:CreateUIParentOffsets(db, unit)
+                DIMINISH_NS.Icons:OnFrameConfigChanged() -- reanchors from UIParent to UnitFrame or vice versa
+                DIMINISH_NS.Diminish:GROUP_ROSTER_UPDATE()
+                if NS.TestMode:IsTestingOrAnchoring() then
+                    NS.TestMode:HideAnchors()
+                end
+            end)
 
-        if frames.watchFriendly then
-            frames.anchorUIParent:SetPoint("LEFT", frames.watchFriendly, 0, -40)
-        else
-            frames.anchorUIParent:SetPoint("LEFT", frames.enabled, 0, -40)
+            frames.anchorUIParent:SetPoint("LEFT", frames.watchFriendly or frames.enabled, 0, -40)
         end
 
 
         frames.growDirection = Dropdown.CreateDropdown(panel, L.GROWDIRECTION, L.GROWDIRECTION_TOOLTIP, growDirections)
         frames.growDirection:SetSize(150, 45)
-        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent, 0, -45)
+        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent or frames.enabled, 0, -45)
         frames.growDirection.OnValueChanged = function(self, value)
             if not value or value == EMPTY then return end
             db.growDirection = value
@@ -240,7 +238,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             local i = 1
             for k, category in pairs(DIMINISH_NS.CATEGORIES) do
                 local continue = true
-                if category == DIMINISH_NS.CATEGORIES.TAUNT and unit ~= "focus" and unit ~= "target" then
+                if category == DIMINISH_NS.CATEGORIES.TAUNT and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
                     -- only show Taunt for focus/target panel
                     continue = false
                 end
@@ -282,8 +280,8 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         -- Generate checkbox toggle for every zone option
         for label, instance in pairs(zones) do
             local continue = true
-            if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" then
-                -- only show L.ZONE_DUNGEONS for focus/target panel for now
+            if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
+                -- only show L.ZONE_DUNGEONS for focus/target/nameplate panel
                 continue = false
             end
 
@@ -324,7 +322,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             local defaults = DIMINISH_NS.DEFAULT_SETTINGS.unitFrames[unit]
             db.offsetY = defaults.offsetY
             db.offsetX = defaults.offsetX
-            db.growDirection = defaults.growDirection -- TODO: test
+            db.growDirection = defaults.growDirection
             db.offsetsY = nil
             db.offsetsX = nil
 

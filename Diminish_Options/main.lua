@@ -5,6 +5,7 @@ local L = NS.L
 
 -- TODO: show friendly timers AND show enemy timers toggles (target/focus, nameplates?)
 -- TODO: option indicator text size & position?
+-- TODO: seperate player pet and mob tracking option?
 
 NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 
@@ -14,6 +15,7 @@ NS.unitFrames = {
     [L.FOCUS] = "focus",
     [L.PARTY] = "party",
     [L.ARENA] = "arena",
+    [L.NAMEPLATE] = "nameplate",
 }
 
 -- Proxy table for diminish savedvariables
@@ -117,7 +119,7 @@ function Panel:Setup()
     frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
         db.trackNPCs = not db.trackNPCs
 
-        for _, unit in pairs({ "target", "focus" }) do
+        for _, unit in pairs({ "target", "focus", "nameplate" }) do
             local cfg = db.unitFrames[unit]
             cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = not db.trackNPCs
             cfg.zones.party = db.trackNPCs

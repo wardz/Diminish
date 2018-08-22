@@ -21,15 +21,36 @@ local unitEvents = {
     party = "GROUP_ROSTER_UPDATE",
     arena = "ARENA_OPPONENT_UPDATE",
     player = "COMBAT_LOG_EVENT_UNFILTERED",
+    nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED", -- csv
 }
 
+function Diminish:ToggleUnitEvent(events, enable)
+    for event in gmatch(events or "", "([^,%s]+)") do -- csv loop
+        if enable then
+            if not self:IsEventRegistered(event) then
+                self:RegisterEvent(event)
+                --@debug@
+                NS.Debug("Registered %s for instance %s.", event, self.currInstanceType)
+                --@end-debug@
+            end
+        else
+            if self:IsEventRegistered(event) then
+                self:UnregisterEvent(event)
+                --@debug@
+                NS.Debug("Unregistered %s for instance %s.", event, self.currInstanceType)
+                --@end-debug@
+            end
+        end
+    end
+end
+
 function Diminish:ToggleForZone(dontRunEnable)
-    local _, instanceType = IsInInstance()
+    self.currInstanceType = select(2, IsInInstance())
     local registeredOnce = false
 
-    if instanceType == "arena" then
+    if self.currInstanceType == "arena" then
         -- check if inside arena brawl, C_PvP.IsInBrawl() doesn't
-        -- work on PLAYER_ENTERING_WORLD so delay it with this event.
+        -- always work on PLAYER_ENTERING_WORLD so delay it with this event.
         -- Once event is fired it'll call ToggleForZone again
        self:RegisterEvent("PVP_BRAWL_INFO_UPDATED")
     else
@@ -37,48 +58,31 @@ function Diminish:ToggleForZone(dontRunEnable)
     end
 
      -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone
-    if instanceType == "arena" and IsInBrawl() then
-        instanceType = "pvp" -- treat arena brawl as a battleground
+    if self.currInstanceType == "arena" and IsInBrawl() then
+        self.currInstanceType = "pvp" -- treat arena brawl as a battleground
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
     end
 
     -- (Un)register unit events for current zone depending on user settings
     for unit, settings in pairs(NS.db.unitFrames) do -- DR tracking for focus/target etc each have their own seperate settings
-        local event = unitEvents[unit]
+        local events = unitEvents[unit]
 
         if settings.enabled then
             -- Loop through every zone/instance enabled and see if we're currently in that instance
             for zone, state in pairs(settings.zones) do
-                if state and zone == instanceType then
+                if state and zone == self.currInstanceType then
                     registeredOnce = true
                     settings.isEnabledForZone = true
-
-                    if not self:IsEventRegistered(event) then
-                        self:RegisterEvent(event)
-                        --@debug@
-                        NS.Debug("Registered %s for instance %s.", event, instanceType)
-                        --@end-debug@
-                    end
-
+                    self:ToggleUnitEvent(events, true)
                     break
                 else
                     settings.isEnabledForZone = false
-                    if self:IsEventRegistered(event) then
-                        self:UnregisterEvent(event)
-                        --@debug@
-                        NS.Debug("Unregistered %s for instance %s.", event, instanceType)
-                        --@end-debug@
-                    end
+                    self:ToggleUnitEvent(events, false)
                 end
             end
         else -- unitframe is not enabled for tracking at all
             settings.isEnabledForZone = false
-            if event and self:IsEventRegistered(event) then
-                self:UnregisterEvent(event)
-                --@debug@
-                NS.Debug("Unregistered %s for instance %s.", event, instanceType)
-                --@end-debug@
-            end
+            self:ToggleUnitEvent(events, false)
         end
     end
 
@@ -88,7 +92,7 @@ function Diminish:ToggleForZone(dontRunEnable)
         return self:SetCLEUWatchVariables()
     end
 
-    if registeredOnce then
+    if registeredOnce then -- atleast 1 event has been registered for zone
         self:Enable()
     else
         self:Disable()
@@ -147,7 +151,6 @@ function Diminish:Disable()
     Timers:ResetAll(true)
     wipe(hunterList)
 
-    self.currInstanceType = select(2, IsInInstance())
     --@debug@
     Info("Disabled addon for zone %s.", self.currInstanceType)
     --@end-debug@
@@ -157,7 +160,6 @@ function Diminish:Enable()
     Timers:ResetAll(true)
     wipe(hunterList)
 
-    self.currInstanceType = select(2, IsInInstance())
     if self.currInstanceType == "pvp" then
         self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
         self:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -284,6 +286,18 @@ function Diminish:PLAYER_FOCUS_CHANGED()
     Timers:Refresh("focus")
 end
 
+function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
+    Timers:Refresh(namePlateUnitToken)
+
+    if true then
+        Timers:Refresh("nameplate")
+    end
+end
+
+function Diminish:NAME_PLATE_UNIT_REMOVED(namePlateUnitToken)
+    Icons:ReleaseForUnit(namePlateUnitToken)
+end
+
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     -- FIXME: rogues restealthing will cause this to be ran unnecessarily
     if status == "seen" and not strfind(unitID, "pet") then
@@ -348,6 +362,7 @@ do
 
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
+            if not destGUID then return end
 
             local category = spellList[spellID] -- DR category
             if not category then return end

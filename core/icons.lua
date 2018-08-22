@@ -4,6 +4,8 @@ local frames = {}
 NS.Icons = Icons
 NS.iconFrames = frames
 
+local pool = CreateFramePool("CheckButton") -- CheckButton to support Masque
+
 local _G = _G
 local UnitGUID = _G.UnitGUID
 local GetTime = _G.GetTime
@@ -12,6 +14,7 @@ local format = _G.string.format
 local strmatch = _G.string.match
 local math_max = _G.math.max
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
+local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local anchorCache = {}
 
@@ -21,6 +24,13 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
     end
 
     local unit, count = gsub(unitID, "%d", "") -- party1 -> party
+    if unit == "nameplate" then
+        if unitID == "nameplate" then
+            unitID = "target" -- testmode
+        end
+        return GetNamePlateForUnit(unitID)
+    end
+
     local anchors = NS.anchors[unit]
     if not anchors then return end
 
@@ -88,7 +98,7 @@ do
 
                 if frames[unit] then
                     -- Anchor existing DR icons to new parent
-                    if parent:IsForbidden() then return end -- TODO: required?
+                    -- if parent:IsForbidden() then return end
                     for category, frame in pairs(frames[unit]) do
                         frame:ClearAllPoints()
                         frame:SetParent(parent)
@@ -134,6 +144,8 @@ do
 
     local function UpdatePositions(cooldownFrame)
         local anchor = cooldownFrame.parent
+        if not frames[anchor.unit] then return end
+
         local cfg = anchor.unitSettingsRef
         local ofsX, ofsY = GetOffsets(cfg)
 
@@ -203,7 +215,6 @@ do
 
             if unit == "arena" or unit == "party" then
                 -- Array index 2 here will be for arena2 and so on
-                -- Kinda ugly but saves a lot of memory, especially when using profiles
                 db.offsetsY[2] = db.offsetY - db.iconSize
                 db.offsetsY[3] = db.offsetY - (db.iconSize * 1.5) -- move next frame down so they dont default spawn inside each other
                 db.offsetsY[4] = db.offsetY - (db.iconSize * 2)
@@ -226,9 +237,8 @@ do
 
         local db = NS.db
 
-        -- Note to self: Do not inherit from any actionbutton template here or taint will occur
-        local frame = CreateFrame("CheckButton", nil, anchor) -- CheckButton to support Masque
-        frame:Hide()
+        local frame, isNew = pool:Acquire()
+        frame:SetParent(anchor)
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
@@ -239,51 +249,62 @@ do
 
         local size = frame.unitSettingsRef.iconSize
         frame:SetSize(size, size)
-        frame:SetFrameStrata("HIGH")
-        frame:EnableMouse(false)
 
-        frame.icon = frame:CreateTexture(nil, "ARTWORK")
-        frame.icon:SetAllPoints(frame)
-        frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+        if isNew then
+            --@debug@
+            NS.Debug("Created new frame for %s:%s", unitID, category)
+            --@end-debug@
 
-        local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
-        cooldown:SetAllPoints(frame)
-        cooldown:SetHideCountdownNumbers(not db.timerText)
-        cooldown:SetDrawSwipe(db.timerSwipe)
-        cooldown:SetDrawEdge(false)
-        cooldown:SetSwipeColor(0, 0, 0, 0.65)
-        cooldown:SetScript("OnShow", CooldownOnShow)
-        cooldown:SetScript("OnHide", CooldownOnHide)
-        cooldown.parent = frame -- avoids calling :GetParent() later on
-        frame.cooldown = cooldown
+            frame:SetFrameStrata("HIGH")
+            frame:EnableMouse(false)
+            frame:Hide()
 
-        frame.countdown = cooldown:GetRegions()
-        frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
+            frame.icon = frame:CreateTexture(nil, "ARTWORK")
+            frame.icon:SetAllPoints(frame)
+            frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
-        local borderWidth = db.border.edgeSize
-        local border = frame:CreateTexture(nil, db.border.layer or "BORDER")
-        border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
-        border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
-        border:SetTexture(db.border.edgeFile)
-        frame.border = border
+            local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
+            cooldown:SetAllPoints(frame)
+            cooldown:SetHideCountdownNumbers(not db.timerText)
+            cooldown:SetDrawSwipe(db.timerSwipe)
+            cooldown:SetDrawEdge(false)
+            cooldown:SetSwipeColor(0, 0, 0, 0.65)
+            cooldown:SetScript("OnShow", CooldownOnShow)
+            cooldown:SetScript("OnHide", CooldownOnHide)
+            cooldown.parent = frame -- avoids calling :GetParent() later on
+            frame.cooldown = cooldown
 
-        -- label above an icon that displays category text
-        local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        ctext:SetFont(ctext:GetFont(), 9)
-        ctext:SetPoint("TOP", 0, 12)
-        ctext:SetShown(db.showCategoryText)
-        if strlen(category) >= 10 then
-            -- truncate text. Could set max width instead but it adds "..." at the end
-            -- and changes text position
-            ctext:SetText(strsub(category, 1, 5))
-        else
-            ctext:SetText(category)
+            frame.countdown = cooldown:GetRegions()
+            frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
+
+            local borderWidth = db.border.edgeSize
+            local border = frame:CreateTexture(nil, db.border.layer or "BORDER")
+            border:SetPoint("TOPLEFT", -borderWidth, borderWidth)
+            border:SetPoint("BOTTOMRIGHT", borderWidth, -borderWidth)
+            border:SetTexture(db.border.edgeFile)
+            frame.border = border
+
+            -- label above an icon that displays category text
+            local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            ctext:SetFont(ctext:GetFont(), 9)
+            ctext:SetPoint("TOP", 0, 12)
+            ctext:SetShown(db.showCategoryText)
+            frame.categoryText = ctext
+
+            if NS.MasqueGroup then
+                MasqueAddFrame(frame)
+            end
         end
-        frame.categoryText = ctext
 
-        if NS.MasqueGroup then
-            MasqueAddFrame(frame)
-        end
+        --if db.showCategoryText then
+            if strlen(category) >= 10 then
+                -- truncate text. Could set max width instead but it adds "..." at the end
+                -- and changes text position
+                frame.categoryText:SetText(strsub(category, 1, 5))
+            else
+                frame.categoryText:SetText(category)
+            end
+        --end
 
         return frame
     end
@@ -367,6 +388,22 @@ do
         if NS.MasqueGroup then
             NS.MasqueGroup:ReSkin()
         end
+    end
+end
+
+function Icons:ReleaseForUnit(unitID)
+    NS.Timers:RemoveActiveGUID(unitID)
+     if frames[unitID] then
+        for category, frame in pairs(frames[unitID]) do
+            frame.shown = false
+            frame:Hide()
+            pool:Release(frame)
+            frames[unitID][category] = nil
+        end
+        frames[unitID] = nil
+        --@debug@
+        NS.Debug("Released nameplate %s", unitID)
+        --@end-debug@
     end
 end
 
@@ -456,6 +493,15 @@ do
         local frame = self:GetFrame(unitID, timer.category)
         if not frame then return end
 
+        if unitID == "nameplate" then
+            -- HACK: reanchor test nameplate frames to new target's nameplate
+            local parent = GetNamePlateForUnit("target")
+            if parent then
+                frame:ClearAllPoints()
+                frame:SetParent(parent)
+            end
+        end
+
         local now = GetTime()
         local expiration = timer.expiration - now
         frame.timerRef = timer
@@ -492,6 +538,14 @@ do
 
         if isFinished and frame.timerRef then
             frame.timerRef = nil
+        end
+
+        if frame.unitFormatted == "nameplate" then -- or party?
+            pool:Release(frame)
+            frames[unitID][timer.category] = nil
+            if not next(frames[unitID]) then
+                frames[unitID] = nil
+            end
         end
 
         frame.shown = false

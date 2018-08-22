@@ -55,6 +55,7 @@ L["ICONPADDING_TOOLTIP"] = "Set padding between all active icons."
 L["ICONSIZE"] = "Frame Size"
 L["ICONSIZE_TOOLTIP"] = "Set size of the icons."
 L["INVALID_SPELLID"] = "Invalid spell ID."
+L["NAMEPLATE"] = "Nameplates"
 L["NAMEPLATES"] = "Nameplates"
 L["NEWPROFILE"] = "Create New Profile"
 L["NEWPROFILE_TOOLTIP"] = "Create a new profile with current active settings as a starting point."
@@ -99,7 +100,7 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
-L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus)"
+L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus)
 
 Enabling this may drastically increase memory usage in large Battlegrounds.]=]
 L["UNLOCK"] = "Unlock/Move Frames"
