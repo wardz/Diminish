@@ -81,11 +81,11 @@ do
                 disabledCategories = defaultsDisabledCategories,
                 anchorUIParent = false,
                 watchFriendly = true,
-                iconSize = 18,
+                iconSize = 22,
                 iconPadding = 6,
-                growDirection = "RIGHT",
-                offsetY = 21,
-                offsetX = 3,
+                growDirection = "BOTTOM",
+                offsetY = -43,
+                offsetX = -47,
             },
 
             party = {
