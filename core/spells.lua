@@ -32,6 +32,9 @@ NS.spellList = {
     [2637]    = C.DISORIENT,       -- Hibernate
     [35474]   = C.DISORIENT,       -- Drums of Panic
     [269186]  = C.DISORIENT,       -- Holographic Horror Projector
+    [280062]  = C.DISORIENT,       -- Unluckydo
+    [267026]  = C.DISORIENT,       -- Giant Flower
+    [243576]  = C.DISORIENT,       -- Sticky Starfish
 
     [99]      = C.INCAPACITATE,    -- Incapacitating Roar
     [203126]  = C.INCAPACITATE,    -- Maim (Blood trauma)
@@ -136,6 +139,8 @@ NS.spellList = {
     [202244]  = C.STUN,            -- Overrun (Also a knockback)
 --  [213688]  = C.STUN,            -- Fel Cleave (doesn't seem to DR)
     [202346]  = C.STUN,            -- Double Barrel
+    [280061]  = C.STUN,            -- Brainsmasher Brew
+    [245638]  = C.STUN,            -- Thick Shell
 
     [204085]  = C.ROOT,            -- Deathchill
     [339]     = C.ROOT,            -- Entangling Roots
@@ -164,6 +169,9 @@ NS.spellList = {
     [75148]   = C.ROOT,            -- Embersilk Net
     [55536]   = C.ROOT,            -- Frostweave Net
     [268966]  = C.ROOT,            -- Hooked Deep Sea Net
+    [270399]  = C.ROOT,            -- Unleashed Roots
+    [270196]  = C.ROOT,            -- Chains of Light
+    [267024]  = C.ROOT,            -- Stranglevines
 
     [207777]  = C.DISARM,          -- Dismantle
     [233759]  = C.DISARM,          -- Grapple Weapon
