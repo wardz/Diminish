@@ -49,7 +49,7 @@ function Diminish:ToggleForZone(dontRunEnable)
     local registeredOnce = false
 
     if self.currInstanceType == "arena" then
-        -- check if inside arena brawl, C_PvP.IsInBrawl() doesn't
+        -- HACK: check if inside arena brawl, C_PvP.IsInBrawl() doesn't
         -- always work on PLAYER_ENTERING_WORLD so delay it with this event.
         -- Once event is fired it'll call ToggleForZone again
        self:RegisterEvent("PVP_BRAWL_INFO_UPDATED")
@@ -107,12 +107,14 @@ function Diminish:SetCLEUWatchVariables()
         targetOrFocusWatchFriendly = true
     elseif cfg.focus.watchFriendly and cfg.focus.isEnabledForZone then
         targetOrFocusWatchFriendly = true
+    elseif cfg.nameplate.watchFriendly and cfg.nameplate.isEnabledForZone then
+        targetOrFocusWatchFriendly = true
     end
 
     -- PvE mode
     self.isWatchingNPCs = NS.db.trackNPCs
-    if not cfg.target.isEnabledForZone and not cfg.focus.isEnabledForZone then
-        -- PvE mode only works for target/focus so disable mode if those frames are not active
+    if not cfg.target.isEnabledForZone and not cfg.focus.isEnabledForZone and not cfg.nameplate.isEnabledForZone then
+        -- PvE mode only works for target/focus/nameplate so disable mode if those frames are not active
         self.isWatchingNPCs = false
     end
 
@@ -205,7 +207,6 @@ function Diminish:InitDB()
     -- Remove table values no longer found in default settings
     NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
 
-
     -- Reference to active db profile
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
@@ -289,7 +290,7 @@ end
 function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
     Timers:Refresh(namePlateUnitToken)
 
-    if true then
+    if DIMINISH_OPTIONS and DIMINISH_OPTIONS.TestMode:IsTesting() then
         Timers:Refresh("nameplate")
     end
 end

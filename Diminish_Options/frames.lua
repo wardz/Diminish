@@ -95,7 +95,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end)
         frames.enabled:SetPoint("LEFT", subVisuals, 10, -70)
 
-        if unit == "target" or unit == "focus" then
+        if unit == "target" or unit == "focus" or unit == "nameplate" then
             frames.watchFriendly = Widgets:CreateCheckbox(panel, L.WATCHFRIENDLY, L.WATCHFRIENDLY_TOOLTIP, function()
                 db.watchFriendly = not db.watchFriendly
                 DIMINISH_NS.Diminish:ToggleForZone()
@@ -122,7 +122,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
         frames.growDirection = Dropdown.CreateDropdown(panel, L.GROWDIRECTION, L.GROWDIRECTION_TOOLTIP, growDirections)
         frames.growDirection:SetSize(150, 45)
-        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent or frames.enabled, 0, -45)
+        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent or frames.watchFriendly or frames.enabled, 0, -45)
         frames.growDirection.OnValueChanged = function(self, value)
             if not value or value == EMPTY then return end
             db.growDirection = value
@@ -326,6 +326,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             db.offsetsY = nil
             db.offsetsX = nil
 
+            frames.growDirection:SetValue(nil)
             DIMINISH_NS.Icons:OnFrameConfigChanged()
             if NS.TestMode:IsTestingOrAnchoring() then
                 NS.TestMode:HideAnchors()

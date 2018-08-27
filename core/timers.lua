@@ -151,7 +151,7 @@ function Timers:Refresh(unitID)
     local prevGUID = activeGUIDs[unitID]
     activeGUIDs[unitID] = unitGUID
 
-    if unitID == "nameplate" then -- testmode
+    if unitID == "nameplate" then -- testmode when "nameplate" and not "nameplateX"
         unitGUID = UnitGUID("player")
     end
 
@@ -171,6 +171,7 @@ function Timers:Refresh(unitID)
                 if frame.shown then
                     frame.shown = false
                     frame:Hide()
+                    Icons:ReleaseFrame(frame, unitID, frame.timerRef)
                 end
             end
         end
@@ -345,7 +346,7 @@ do
     end
 
     function StopTimers(timer, unit, preventRemove)
-        local isFinished = TimerIsFinished(timer) -- cache result for loops
+        local isFinished = TimerIsFinished(timer) -- cache result for loops below
 
         if timer.testMode then
             for i = 1, #testModeUnits do

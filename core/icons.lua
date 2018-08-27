@@ -26,7 +26,7 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
     local unit, count = gsub(unitID, "%d", "") -- party1 -> party
     if unit == "nameplate" then
         if unitID == "nameplate" then
-            unitID = "target" -- testmode
+            unitID = "target" -- testmode when no integer for unitID... return curr target nameplate
         end
         return GetNamePlateForUnit(unitID)
     end
@@ -64,7 +64,7 @@ do
         if not guid then return end
 
         for i = 1, (#CompactRaidFrameContainer.flowFrames or 5) do
-            --local frame = Icons:GetAnchor("raid"..i, true)
+            -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
             local frame = _G["CompactRaidFrame"..i]
             if not frame then return end -- no more frames
 
@@ -154,8 +154,11 @@ do
         local firstOfsY = cfg.offsetY
 
         if cfg.anchorUIParent then
+            -- get unitID index, i.e "2" for "arena2"
+            -- this unitID index will be used as array index for offsets as
+            -- every unitframe have their own unique position when anchored to UIParent
             anchor.uid = anchor.uid or tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
-            firstOfsY = cfg.offsetsY[anchor.uid] -- index 2 = arena2 etc
+            firstOfsY = cfg.offsetsY[anchor.uid] -- index 2 = arena2
             firstOfsX = cfg.offsetsX[anchor.uid]
         end
 
@@ -210,17 +213,12 @@ do
     function Icons:CreateUIParentOffsets(db, unit)
         if not db.offsetsY or not db.offsetsX then
             -- When anchoring to UIParent we need to setup new offsets for every frame belonging to this unitID
-            db.offsetsY = { db.offsetY }
-            db.offsetsX = { 0 }
-
             if unit == "arena" or unit == "party" then
-                -- Array index 2 here will be for arena2 and so on
-                db.offsetsY[2] = db.offsetY - db.iconSize
-                db.offsetsY[3] = db.offsetY - (db.iconSize * 1.5) -- move next frame down so they dont default spawn inside each other
-                db.offsetsY[4] = db.offsetY - (db.iconSize * 2)
-                db.offsetsY[5] = db.offsetY - (db.iconSize * 2.5)
-
+                db.offsetsY = { db.offsetY, db.offsetY, db.offsetY, db.offsetY, db.offsetY}
                 db.offsetsX = { 0, 0, 0, 0, 0 }
+            else
+                db.offsetsY = { db.offsetY }
+                db.offsetsX = { 0 }
             end
         end
     end
@@ -231,13 +229,14 @@ do
 
         local origUnitID
         if unitID == "player-party" then
-            unitID = "party" -- use for party db settings
+            unitID = "party" -- use for party db settings below
             origUnitID = "player-party"
         end
 
         local db = NS.db
 
         local frame, isNew = pool:Acquire()
+        frame:ClearAllPoints()
         frame:SetParent(anchor)
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
@@ -256,6 +255,7 @@ do
             --@end-debug@
 
             frame:SetFrameStrata("HIGH")
+            frame:SetFrameLevel(10)
             frame:EnableMouse(false)
             frame:Hide()
 
@@ -327,7 +327,7 @@ do
     end
 
     -- Refresh everything for icons. Called by Diminish_Options.
-    -- Function is deleted if options is not loaded.
+    -- Function is deleted if Diminish_Options is not enabled.
     function Icons:OnFrameConfigChanged()
         local db = NS.db
         for _, tbl in pairs(frames) do
@@ -373,7 +373,7 @@ do
                     frame:ClearAllPoints()
                     frame:SetParent(UIParent)
                 else
-                    anchorCache[frame.unitFormatted] = nil -- grab new cache on next anchor call
+                    anchorCache[frame.unitFormatted] = nil -- HACK: grab new cache on next anchor call
                     frame:ClearAllPoints()
                     local anchor = Icons:GetAnchor(frame.unit, true, true)
                     if anchor then
@@ -393,10 +393,12 @@ end
 
 function Icons:ReleaseForUnit(unitID)
     NS.Timers:RemoveActiveGUID(unitID)
-     if frames[unitID] then
+    if frames[unitID] then
         for category, frame in pairs(frames[unitID]) do
             frame.shown = false
-            frame:Hide()
+            frame.timerRef = nil
+            frame:ClearAllPoints()
+            frame:SetParent(nil)
             pool:Release(frame)
             frames[unitID][category] = nil
         end
@@ -412,6 +414,27 @@ function Icons:HideAll()
         for category, frame in pairs(tbl) do
             frame.shown = false
             frame:Hide()
+        end
+    end
+end
+
+function Icons:ReleaseFrame(frame, unitID, timer)
+    if frame.unitFormatted == "nameplate" or frame.unitFormatted == "party" or frame.unitFormatted == "focus" then
+        -- remove frame from pool & remove cache references
+        -- Note: we only do this for nameplate, party & focus frames to keep better performance for other frequently used unit frames
+        -- like target & player (prevents looping through inactive frames everytime we need a new one)
+        frame.shown = false
+        frame.timerRef = nil
+        frame:ClearAllPoints()
+        frame:SetParent(nil)
+        pool:Release(frame)
+
+        if timer and timer.category then
+            frames[unitID][timer.category] = nil
+        end
+
+        if not next(frames[unitID]) then
+            frames[unitID] = nil
         end
     end
 end
@@ -540,14 +563,7 @@ do
             frame.timerRef = nil
         end
 
-        if frame.unitFormatted == "nameplate" then -- or party?
-            pool:Release(frame)
-            frames[unitID][timer.category] = nil
-            if not next(frames[unitID]) then
-                frames[unitID] = nil
-            end
-        end
-
+        Icons:ReleaseFrame(frame, unitID, timer)
         frame.shown = false
         frame:Hide()
     end

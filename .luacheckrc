@@ -23,6 +23,7 @@ globals = {
 	-- Addon globals
 	"LibStub",
 	"DIMINISH_NS",
+	"DIMINISH_OPTIONS",
 	"DiminishDB",
 	"ElvUI",
 	"ElvUF_Party",

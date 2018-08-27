@@ -89,6 +89,10 @@ function TestMode:IsTestingOrAnchoring()
     return isTesting or isAnchoring
 end
 
+function TestMode:IsTesting()
+    return isTesting
+end
+
 function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     if isTesting or isAnchoring then return end
     if InCombatLockdown() then return end
@@ -192,6 +196,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
 
     local frame, isNew = self.pool:Acquire()
     frame:SetParent(parent)
+    frame:ClearAllPoints()
     frame.realUnit = unit
 
     if unit == "player" and isCompact then
@@ -242,6 +247,7 @@ local function ReanchorForNameplate()
             if frame.unit == "nameplate" then
                 -- TODO: can this cause taint?
                 local db = DIMINISH_NS.db.unitFrames["nameplate"]
+                frame:ClearAllPoints()
                 frame:SetParent(anchor)
                 frame:SetPoint("CENTER", anchor, db.offsetX, db.offsetY)
                 frame:Show()

@@ -32,7 +32,7 @@ NS.CleanupDB = function(src, dst)
     for key, value in pairs(src) do
 
         if dst[key] == nil then
-            -- offsetsXY are not set in DEFAULT_SETTINGS but sat on demand instead to save memory,
+            -- HACK: offsetsXY are not set in DEFAULT_SETTINGS but sat on demand instead to save memory,
             -- which causes nil comparison to always be true here, so always ignore these for now
             if key ~= "offsetsX" and key ~= "offsetsY" then
                 src[key] = nil
