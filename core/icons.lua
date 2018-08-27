@@ -164,6 +164,7 @@ do
 
         for _, frame in pairs(frames[anchor.unit]) do
             if frame.shown then
+                frame:ClearAllPoints()
                 if first then
                     frame:SetPoint("CENTER", anchor:GetParent(), firstOfsX, firstOfsY)
                     first = false
@@ -236,7 +237,6 @@ do
         local db = NS.db
 
         local frame, isNew = pool:Acquire()
-        frame:ClearAllPoints()
         frame:SetParent(anchor)
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
@@ -397,9 +397,8 @@ function Icons:ReleaseForUnit(unitID)
         for category, frame in pairs(frames[unitID]) do
             frame.shown = false
             frame.timerRef = nil
-            frame:ClearAllPoints()
-            frame:SetParent(nil)
             pool:Release(frame)
+            --frame:SetParent(nil)
             frames[unitID][category] = nil
         end
         frames[unitID] = nil
@@ -412,6 +411,7 @@ end
 function Icons:HideAll()
     for unitID, tbl in pairs(frames) do
         for category, frame in pairs(tbl) do
+            Icons:ReleaseFrame(frame, unitID, frame.timerRef)
             frame.shown = false
             frame:Hide()
         end
@@ -425,8 +425,6 @@ function Icons:ReleaseFrame(frame, unitID, timer)
         -- like target & player (prevents looping through inactive frames everytime we need a new one)
         frame.shown = false
         frame.timerRef = nil
-        frame:ClearAllPoints()
-        frame:SetParent(nil)
         pool:Release(frame)
 
         if timer and timer.category then
