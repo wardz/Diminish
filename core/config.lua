@@ -83,9 +83,9 @@ do
                 watchFriendly = true,
                 iconSize = 22,
                 iconPadding = 6,
-                growDirection = "BOTTOM",
-                offsetY = -43,
-                offsetX = -47,
+                growDirection = "RIGHT",
+                offsetY = 26,
+                offsetX = 8,
             },
 
             party = {
@@ -127,7 +127,7 @@ do
                 },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = false,
-                iconSize = 22,
+                iconSize = 18,
                 iconPadding = 6,
                 growDirection = "TOP",
                 offsetY = 24,
