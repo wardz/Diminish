@@ -18,7 +18,7 @@ _G.DIMINISH_NS = NS
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
     focus = "PLAYER_FOCUS_CHANGED",
-    party = "GROUP_ROSTER_UPDATE",
+    party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",
     arena = "ARENA_OPPONENT_UPDATE",
     player = "COMBAT_LOG_EVENT_UNFILTERED",
     nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED", -- csv
@@ -324,6 +324,7 @@ function Diminish:GROUP_ROSTER_UPDATE()
         Timers:Refresh("party"..i)
     end
 end
+Diminish.GROUP_JOINED = Diminish.GROUP_ROSTER_UPDATE
 
 function Diminish:PLAYER_REGEN_DISABLED()
     if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 16 then
