@@ -164,7 +164,6 @@ do
 
         for _, frame in pairs(frames[anchor.unit]) do
             if frame.shown then
-                frame:ClearAllPoints()
                 if first then
                     frame:SetPoint("CENTER", anchor:GetParent(), firstOfsX, firstOfsY)
                     first = false
@@ -419,9 +418,9 @@ function Icons:HideAll()
 end
 
 function Icons:ReleaseFrame(frame, unitID, timer)
-    if frame.unitFormatted == "nameplate" or frame.unitFormatted == "party" or frame.unitFormatted == "focus" then
+    if frame.unitFormatted == "nameplate" or frame.unitFormatted == "party" then
         -- remove frame from pool & remove cache references
-        -- Note: we only do this for nameplate, party & focus frames to keep better performance for other frequently used unit frames
+        -- Note: we only do this for nameplate & party to keep better performance for other frequently used unit frames
         -- like target & player (prevents looping through inactive frames everytime we need a new one)
         frame.shown = false
         frame.timerRef = nil
