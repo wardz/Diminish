@@ -281,6 +281,13 @@ end
 
 function Diminish:PLAYER_TARGET_CHANGED()
     Timers:Refresh("target")
+
+    -- Required when testing with "Always Show Nameplates" enabled
+    if DIMINISH_OPTIONS and DIMINISH_OPTIONS.TestMode:IsTesting() then
+        if GetCVarBool("nameplateShowAll") then
+            Timers:Refresh("nameplate")
+        end
+    end
 end
 
 function Diminish:PLAYER_FOCUS_CHANGED()
