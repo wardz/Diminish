@@ -114,6 +114,7 @@ L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle diminishing returns tracking for friendly
 
 Enabling this may drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
+L["ZONE_SCENARIO"] = "Scenario"
 L["ZONE_BATTLEGROUNDS"] = "Battlegrounds & Brawls"
 L["ZONE_DUNGEONS"] = "Dungeons & Raids"
 L["ZONE_OUTDOORS"] = "World"

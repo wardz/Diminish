@@ -213,6 +213,18 @@ function Diminish:InitDB()
     NS.db = DiminishDB.profiles[profile]
     NS.activeProfile = profile
 
+    -- Set zone scenario to true when upgrading from <2.0.5 to 2.0.6
+    -- This is so DR tracking is default enabled for *players* on Island Expeditions
+    -- without having to toggle "Enable PvE Tracking"
+    if not NS.db.version then
+        NS.db.version = "1.0"
+        for unit, v in pairs(NS.db.unitFrames) do
+            if not v.zones.scenario then
+                v.zones.scenario = true
+            end
+        end
+    end
+
     if not IsAddOnLoaded("Diminish_Options")then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil

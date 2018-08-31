@@ -125,7 +125,7 @@ function Panel:Setup()
             local cfg = db.unitFrames[unit]
             cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = not db.trackNPCs
             cfg.zones.party = db.trackNPCs
-            cfg.zones.scenario = db.trackNPCs
+            --cfg.zones.scenario = db.trackNPCs
             cfg.zones.raid = db.trackNPCs
         end
 

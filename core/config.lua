@@ -38,7 +38,7 @@ do
         enabled = true,
         zones = {
             pvp = true, arena = false, none = true,
-            party = false, raid = false, scenario = false,
+            party = false, raid = false, scenario = true,
         },
         disabledCategories = defaultsDisabledCategories,
         anchorUIParent = false,
@@ -76,7 +76,7 @@ do
                 enabled = true,
                 zones = {
                     pvp = true, arena = true, none = true,
-                    party = false, raid = false, scenario = false,
+                    party = false, raid = false, scenario = true,
                 },
                 disabledCategories = defaultsDisabledCategories,
                 anchorUIParent = false,
@@ -123,7 +123,7 @@ do
                 enabled = false,
                 zones = {
                     pvp = true, arena = true, none = true,
-                    party = false, raid = false, scenario = false,
+                    party = false, raid = false, scenario = true,
                 },
                 disabledCategories = defaultsDisabledCategories,
                 watchFriendly = false,

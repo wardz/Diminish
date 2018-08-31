@@ -9,7 +9,8 @@ local zones = {
     [L.ZONE_ARENA] = "arena", -- localized name, instanceType
     [L.ZONE_BATTLEGROUNDS] = "pvp",
     [L.ZONE_OUTDOORS] = "none",
-    [L.ZONE_DUNGEONS] = { "party", "raid", "scenario" },
+    [L.ZONE_SCENARIO] = "scenario",
+    [L.ZONE_DUNGEONS] = { "party", "raid" },
 }
 
 local growDirections = {
