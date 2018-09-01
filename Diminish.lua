@@ -315,7 +315,7 @@ function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
 end
 
 function Diminish:NAME_PLATE_UNIT_REMOVED(namePlateUnitToken)
-    Icons:ReleaseForUnit(namePlateUnitToken)
+    Icons:ReleaseNameplate(namePlateUnitToken)
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)

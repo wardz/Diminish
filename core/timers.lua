@@ -168,10 +168,11 @@ function Timers:Refresh(unitID)
         -- No prev guid available, hide ALL frames for this unitID instead
         if NS.iconFrames[unitID] then
             for category, frame in pairs(NS.iconFrames[unitID]) do
-                if frame.shown then
-                    frame.shown = false
-                    frame:Hide()
-                    Icons:ReleaseFrame(frame, unitID, frame.timerRef)
+                if not Icons:ReleaseFrame(frame, unitID, nil, category) then
+                    if frame.shown then
+                        frame.shown = false
+                        frame:Hide()
+                    end
                 end
             end
         end
@@ -218,6 +219,8 @@ function Timers:RemoveActiveGUID(unitID)
 end
 
 function Timers:ResetAll(clearGUIDs)
+    Icons:HideAll()
+
     for guid, categories in pairs(activeTimers) do
         for cat, t in pairs(categories) do
             RemoveTable(t)
@@ -229,7 +232,6 @@ function Timers:ResetAll(clearGUIDs)
     end
 
     NS.ReleaseTables()
-    Icons:HideAll()
 
     if clearGUIDs then
         for unitID, guid in pairs(activeGUIDs) do

@@ -7,6 +7,7 @@ NS.iconFrames = frames
 local pool = CreateFramePool("CheckButton") -- CheckButton to support Masque
 
 local _G = _G
+local pairs = _G.pairs
 local UnitGUID = _G.UnitGUID
 local GetTime = _G.GetTime
 local gsub = _G.string.gsub
@@ -25,8 +26,8 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
 
     local unit, count = gsub(unitID, "%d", "") -- party1 -> party
     if unit == "nameplate" then
-        if unitID == "nameplate" then
-            unitID = "target" -- testmode when no integer for unitID... return curr target nameplate
+        if unitID == "nameplate" then -- is testmode
+            unitID = "target"
         end
         return GetNamePlateForUnit(unitID)
     end
@@ -113,7 +114,6 @@ do
     local CreateFrame = _G.CreateFrame
     local strfind = _G.string.find
     local strlen = _G.string.len
-    local pairs = _G.pairs
 
     local function MasqueAddFrame(frame)
         frame:SetNormalTexture(NS.db.borderTexture)
@@ -142,7 +142,7 @@ do
         return ofsX, ofsY
     end
 
-    local function UpdatePositions(cooldownFrame)
+    function Icons:UpdatePositions(cooldownFrame)
         local anchor = cooldownFrame.parent
         if not frames[anchor.unit] then return end
 
@@ -154,24 +154,28 @@ do
         local firstOfsY = cfg.offsetY
 
         if cfg.anchorUIParent then
-            -- get unitID index, i.e "2" for "arena2"
-            -- this unitID index will be used as array index for offsets as
-            -- every unitframe have their own unique position when anchored to UIParent
             anchor.uid = anchor.uid or tonumber(strmatch(anchor.unit, "%d+")) or 1 -- 1 if not arena/party
-            firstOfsY = cfg.offsetsY[anchor.uid] -- index 2 = arena2
+            firstOfsY = cfg.offsetsY[anchor.uid] -- array index 2 = arena2/party2 pos etc
             firstOfsX = cfg.offsetsX[anchor.uid]
         end
 
         for _, frame in pairs(frames[anchor.unit]) do
-            if frame.shown then
-                if first then
-                    frame:SetPoint("CENTER", anchor:GetParent(), firstOfsX, firstOfsY)
-                    first = false
-                else
-                    frame:SetPoint("CENTER", anchor, ofsX, ofsY)
-                end
+            if anchor.unit ~= frame.unit then
+                -- Invalid cache hit due to random race condition (╯°□°）╯︵ ┻━┻
+                -- Think I managed to fix it but it takes so long to test so i'll keep this here just incase
+                --print("invalid anchor", anchor.unit, frame.unit)
+                frames[frame.unit] = nil
+            else
+                if frame.shown then
+                    if first then
+                        frame:SetPoint("CENTER", anchor:GetParent(), firstOfsX, firstOfsY)
+                        first = false
+                    else
+                        frame:SetPoint("CENTER", anchor, ofsX, ofsY)
+                    end
 
-                anchor = frame
+                    anchor = frame
+                end
             end
         end
     end
@@ -191,14 +195,14 @@ do
             frame:Show()
         end
 
-        UpdatePositions(self)
+        Icons:UpdatePositions(self)
     end
 
     local function CooldownOnHide(self)
         local frame = self.parent
         local timer = frame.timerRef
 
-        if timer and self:GetCooldownDuration() <= 0.3 then
+        if timer and self:GetCooldownDuration() <= 0.2 then
             NS.Timers:Remove(timer.unitGUID, timer.category)
         end
 
@@ -207,7 +211,7 @@ do
             frame:Hide()
         end
 
-        UpdatePositions(self)
+        Icons:UpdatePositions(self)
     end
 
     function Icons:CreateUIParentOffsets(db, unit)
@@ -236,10 +240,12 @@ do
         local db = NS.db
 
         local frame, isNew = pool:Acquire()
+        frame:ClearAllPoints()
         frame:SetParent(anchor)
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
+        frame.uid = nil
 
         if frame.unitSettingsRef.anchorUIParent then
             Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
@@ -380,7 +386,7 @@ do
                     end
                 end
 
-                UpdatePositions(frame.cooldown)
+                Icons:UpdatePositions(frame.cooldown)
             end
         end
 
@@ -390,17 +396,12 @@ do
     end
 end
 
-function Icons:ReleaseForUnit(unitID)
+function Icons:ReleaseNameplate(unitID)
     NS.Timers:RemoveActiveGUID(unitID)
     if frames[unitID] then
         for category, frame in pairs(frames[unitID]) do
-            frame.shown = false
-            frame.timerRef = nil
-            pool:Release(frame)
-            --frame:SetParent(nil)
-            frames[unitID][category] = nil
+            Icons:ReleaseFrame(frame, unitID, nil, category)
         end
-        frames[unitID] = nil
         --@debug@
         NS.Debug("Released nameplate %s", unitID)
         --@end-debug@
@@ -410,29 +411,38 @@ end
 function Icons:HideAll()
     for unitID, tbl in pairs(frames) do
         for category, frame in pairs(tbl) do
-            Icons:ReleaseFrame(frame, unitID, frame.timerRef)
-            frame.shown = false
-            frame:Hide()
+            if not Icons:ReleaseFrame(frame, unitID, nil, category) then
+                frame.shown = false
+                frame:Hide()
+            end
         end
     end
 end
 
-function Icons:ReleaseFrame(frame, unitID, timer)
-    if frame.unitFormatted == "nameplate" or frame.unitFormatted == "party" then
-        -- remove frame from pool & remove cache references
-        -- Note: we only do this for nameplate & party to keep better performance for other frequently used unit frames
-        -- like target & player (prevents looping through inactive frames everytime we need a new one)
+function Icons:ReleaseFrame(frame, unitID, timer, category)
+    if frame.unitFormatted == "nameplate" or frame.unitFormatted == "party" or (frame.unitFormatted == "arena" and NS.Diminish.currInstanceType ~= "arena") then
         frame.shown = false
         frame.timerRef = nil
-        pool:Release(frame)
+        Icons:UpdatePositions(frame.cooldown)
 
-        if timer and timer.category then
-            frames[unitID][timer.category] = nil
+        if frames[unitID] then
+            if timer and timer.category or category then
+                -- remove cache ref to frame
+                frames[unitID][category or timer.category] = nil
+            else
+                -- if we ever got here then timer was cleared before frames for some reason
+                -- so just delete everything..
+                wipe(frames[unitID])
+            end
+
+            if not next(frames[unitID]) then
+                frames[unitID] = nil
+            end
         end
 
-        if not next(frames[unitID]) then
-            frames[unitID] = nil
-        end
+        pool:Release(frame) -- will also trigger Hide + ClearAllPoints
+
+        return true
     end
 end
 
@@ -560,8 +570,9 @@ do
             frame.timerRef = nil
         end
 
-        Icons:ReleaseFrame(frame, unitID, timer)
-        frame.shown = false
-        frame:Hide()
+        if not Icons:ReleaseFrame(frame, unitID, timer) then
+            frame.shown = false
+            frame:Hide()
+        end
     end
 end
