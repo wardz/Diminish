@@ -219,7 +219,7 @@ function Diminish:InitDB()
     if not NS.db.version then
         NS.db.version = "1.0"
         for unit, v in pairs(NS.db.unitFrames) do
-            if not v.zones.scenario then
+            if not v.zones.scenario and unit ~= "arena" then
                 v.zones.scenario = true
             end
         end
