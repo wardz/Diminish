@@ -143,6 +143,7 @@ NS.spellList = {
     [245638]  = C.STUN,            -- Thick Shell
 
     [204085]  = C.ROOT,            -- Deathchill
+    [233395]  = C.ROOT,            -- Frozen Center
     [339]     = C.ROOT,            -- Entangling Roots
     [170855]  = C.ROOT,            -- Entangling Roots (Nature's Grasp)
     [201589]  = C.ROOT,            -- Entangling Roots (Tree of Life)
@@ -151,7 +152,7 @@ NS.spellList = {
     [102359]  = C.ROOT,            -- Mass Entanglement
     [53148]   = C.ROOT,            -- Charge (Hunter pet)
     [162480]  = C.ROOT,            -- Steel Trap
-    [190927]  = C.ROOT,            -- Harpoon TODO: only DRs with itself?
+--  [190927]  = C.ROOT,            -- Harpoon FIXME: only DRs with itself
     [200108]  = C.ROOT,            -- Ranger's Net
     [212638]  = C.ROOT,            -- Tracker's net
     [201158]  = C.ROOT,            -- Super Sticky Tar
