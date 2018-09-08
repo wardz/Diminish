@@ -3,6 +3,20 @@ local _, NS = ...
 -- How long a diminishing return lasts.
 NS.DR_TIME = 18.5
 
+-- Font size & position for DR indicator text
+NS.INDICATOR_FONT = {
+    size = false, -- use automatic size
+    x = 0,
+    y = 0,
+}
+
+-- Font size & position for DR category label
+NS.CATEGORY_FONT = {
+    size = 9,
+    x = 0,
+    y = 12,
+}
+
 -- Border/text indicator colors
 NS.DR_STATES_COLORS = {
     { 0, 1, 0, 1 }, -- applied 1, green

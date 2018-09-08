@@ -17,6 +17,10 @@ local math_max = _G.math.max
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
+local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
+local INDICATOR_FONT = NS.INDICATOR_FONT
+local CATEGORY_FONT = NS.CATEGORY_FONT
+
 local anchorCache = {}
 
 function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
@@ -291,8 +295,8 @@ do
 
             -- label above an icon that displays category text
             local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            ctext:SetFont(ctext:GetFont(), 9)
-            ctext:SetPoint("TOP", 0, 12)
+            ctext:SetFont(ctext:GetFont(), CATEGORY_FONT.size)
+            ctext:SetPoint("TOP", CATEGORY_FONT.x, CATEGORY_FONT.y)
             ctext:SetShown(db.showCategoryText)
             frame.categoryText = ctext
 
@@ -481,10 +485,12 @@ do
         else -- Show indicators using text only
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
-                frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", 0, 0)
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", INDICATOR_FONT.x, INDICATOR_FONT.y)
                 frame.countdown:SetPoint("CENTER", 0, 5)
                 frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
+            else
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
             end
 
             if category ~= CATEGORY_TAUNT then
