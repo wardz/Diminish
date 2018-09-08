@@ -249,12 +249,15 @@ do
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
         frame.uid = nil
 
+        -- Need to always update these for pooled frames
         if frame.unitSettingsRef.anchorUIParent then
             Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
             anchorCache[frame.unitFormatted] = UIParent
             frame:SetParent(UIParent)
         else
-            anchorCache[frame.unitFormatted] = nil
+            if anchorCache[frame.unitFormatted] == UIParent then
+                anchorCache[frame.unitFormatted] = nil
+            end
             frame:SetParent(anchor)
         end
 
