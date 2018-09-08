@@ -93,6 +93,10 @@ function TestMode:IsTesting()
     return isTesting
 end
 
+function TestMode:IsAnchoring()
+    return isAnchoring
+end
+
 function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     if isTesting or isAnchoring then return end
     if InCombatLockdown() then return end
@@ -313,6 +317,7 @@ function TestMode:Test(hide)
     self:RegisterEvent("PLAYER_TARGET_CHANGED")
 
     local DNS = DIMINISH_NS
+    DNS.Timers:ResetAll()
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 81429, false, true, true)
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.ROOT, 122, false, true, true)
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.INCAPACITATE, 118, false, true, true)

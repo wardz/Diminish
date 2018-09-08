@@ -82,7 +82,7 @@ L["SPELLBOOKTEXTURES_TOOLTIP"] = [=[Icons for enemy units will only use spell te
 L["STOP"] = "Stop"
 L["TARGET"] = "Target"
 L["TARGETTIP"] = "Target/focus yourself to see all frames."
-L["TEST"] = "Test Frames"
+L["TEST"] = "Toggle Test Mode"
 L["TEST_TOOLTIP"] = "Test all enabled frames."
 L["TEXTURE_BRIGHT"] = "Bright"
 L["TEXTURE_GLOW"] = "Default, with glow"
@@ -100,10 +100,10 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
-L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus)
+L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus/Nameplates)
 
 Enabling this may drastically increase memory usage in large Battlegrounds.]=]
-L["UNLOCK"] = "Unlock/Move Frames"
+L["UNLOCK"] = "Toggle Moving Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle enabled frames for moving. Drag the red boxes to move icon spawn points."
 L["USEPROFILE"] = "Use"
 L["USEPROFILE_TOOLTIP"] = [=[Set an existing profile to use for this character.

@@ -313,10 +313,24 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             if InCombatLockdown() or InActiveBattlefield() or IsActiveBattlefieldArena() then
                 return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
             end
-            btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
             NS.TestMode:Test()
         end)
         frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
+
+
+        frames.unlockBtn = Widgets:CreateButton(panel, L.UNLOCK, L.UNLOCK_TOOLTIP, function(btn)
+            if InCombatLockdown() then
+                return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
+            end
+
+            if not NS.TestMode:IsAnchoring() then
+                NS.TestMode:ShowAnchors(unit)
+            else
+                NS.TestMode:HideAnchors(unit)
+            end
+        end)
+        frames.unlockBtn:SetPoint("BOTTOMLEFT", panel, 15, 15)
+        frames.unlockBtn:SetSize(200, 25)
 
 
         frames.resetPosBtn = Widgets:CreateButton(panel, L.RESETPOS, L.RESETPOS_TOOLTIP, function(btn)
@@ -334,6 +348,6 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 NS.TestMode:Test(true)
             end
         end)
-        frames.resetPosBtn:SetPoint("BOTTOMRIGHT", frames.testBtn, -120, 0)
+        frames.resetPosBtn:SetPoint("LEFT", frames.testBtn, -120, 0)
     end)
 end

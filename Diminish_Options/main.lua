@@ -205,16 +205,14 @@ function Panel:Setup()
             return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end
 
-        if btn:GetText() == L.UNLOCK then
-            btn:SetText(L.STOP)
+        if not NS.TestMode:IsAnchoring() then
             local cfg = DIMINISH_NS.db.unitFrames
-            if cfg.target.enabled or cfg.focus.enabled then
+            if cfg.target.enabled or cfg.focus.enabled or cfg.nameplate.enabled then
                 tip:Show()
             end
             TestMode:ShowAnchors()
         else
             TestMode:HideAnchors()
-            btn:SetText(L.UNLOCK)
             tip:Hide()
         end
     end)
@@ -228,10 +226,9 @@ function Panel:Setup()
             return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end
 
-        btn:SetText(btn:GetText() == L.TEST and L.STOP or L.TEST)
         local cfg = DIMINISH_NS.db.unitFrames
-        if cfg.target.enabled or cfg.focus.enabled or tip:IsShown() then
-            tip:SetShown(btn:GetText() ~= L.TEST)
+        if cfg.target.enabled or cfg.focus.enabled or cfg.nameplate.enabled or tip:IsShown() then
+            tip:SetShown(not NS.TestMode:IsTesting())
         end
         TestMode:Test()
     end)
