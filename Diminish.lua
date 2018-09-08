@@ -135,7 +135,7 @@ function Diminish:SetCLEUWatchVariables()
 
     -- Check if we're only tracking friendly units so we can ignore enemy units in CLEU
     self.onlyFriendlyTracking = true
-    if cfg.target.isEnabledForZone or cfg.focus.isEnabledForZone or cfg.arena.isEnabledForZone then
+    if cfg.target.isEnabledForZone or cfg.focus.isEnabledForZone or cfg.arena.isEnabledForZone or cfg.nameplate.isEnabledForZone then
         self.onlyFriendlyTracking = false
     end
 
