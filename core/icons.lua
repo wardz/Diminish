@@ -14,7 +14,6 @@ local gsub = _G.string.gsub
 local format = _G.string.format
 local strmatch = _G.string.match
 local math_max = _G.math.max
-local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
@@ -245,7 +244,6 @@ do
 
         local frame, isNew = pool:Acquire()
         frame:ClearAllPoints()
-        frame:SetParent(anchor)
         frame.unit = origUnitID or unitID
         frame.unitFormatted = gsub(unitID, "%d", "")
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
@@ -253,6 +251,11 @@ do
 
         if frame.unitSettingsRef.anchorUIParent then
             Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
+            anchorCache[frame.unitFormatted] = UIParent
+            frame:SetParent(UIParent)
+        else
+            anchorCache[frame.unitFormatted] = nil
+            frame:SetParent(anchor)
         end
 
         local size = frame.unitSettingsRef.iconSize
@@ -335,46 +338,58 @@ do
         return frame
     end
 
+    local function RefreshIcon(frame, db)
+        frame.cooldown:SetHideCountdownNumbers(not db.timerText)
+        frame.cooldown:SetDrawSwipe(db.timerSwipe)
+        frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
+        frame.categoryText:SetShown(db.showCategoryText)
+
+        if not NS.MasqueGroup then
+            frame.border:SetDrawLayer(db.border.layer or "BORDER")
+            frame.border:SetTexture(db.border.edgeFile)
+            frame.border:SetPoint("TOPLEFT", -db.border.edgeSize, db.border.edgeSize)
+            frame.border:SetPoint("BOTTOMRIGHT", db.border.edgeSize, -db.border.edgeSize)
+        end
+
+        frame.cooldown.noCooldownCount = db.timerColors or not db.timerText -- toggle OmniCC
+        if db.timerText and not db.timerColors then
+            frame.countdown:SetTextColor(1, 1, 1, 1)
+        end
+
+        if db.colorBlind then
+            frame.countdown:SetPoint("CENTER", 0, 5)
+            frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
+            if frame.indicator then
+                frame.indicator:ClearAllPoints()
+                frame.indicator:SetPoint(db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, INDICATOR_FONT.x, INDICATOR_FONT.y)
+            end
+        else
+            frame.countdown:SetPoint("CENTER", 0, 0)
+        end
+        if frame.indicator then
+            frame.indicator:SetShown(db.colorBlind)
+        end
+    end
+
     -- Refresh everything for icons. Called by Diminish_Options.
     -- Function is deleted if Diminish_Options is not enabled.
     function Icons:OnFrameConfigChanged()
         local db = NS.db
+
+        -- Enumerate inactive frames
+        for _, frame in pool:EnumerateInactive() do
+            RefreshIcon(frame, db)
+        end
+
+        -- Enumerate active frames or frames that aren't pooled
         for _, tbl in pairs(frames) do
             for _, frame in pairs(tbl) do
+                RefreshIcon(frame, db)
+
+                -- Refresh settings that require unit ID
                 frame.unitSettingsRef = db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
-                frame.cooldown:SetHideCountdownNumbers(not db.timerText)
-                frame.cooldown:SetDrawSwipe(db.timerSwipe)
-                frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
-                frame.categoryText:SetShown(db.showCategoryText)
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
-
-                if not NS.MasqueGroup then
-                    frame.border:SetDrawLayer(db.border.layer or "BORDER")
-                    frame.border:SetTexture(db.border.edgeFile)
-                    frame.border:SetPoint("TOPLEFT", -db.border.edgeSize, db.border.edgeSize)
-                    frame.border:SetPoint("BOTTOMRIGHT", db.border.edgeSize, -db.border.edgeSize)
-                end
-
-                frame.cooldown.noCooldownCount = db.timerColors or not db.timerText -- toggle OmniCC
-                if db.timerText and not db.timerColors then
-                    frame.countdown:SetTextColor(1, 1, 1, 1)
-                end
-
-                if db.colorBlind then
-                    frame.countdown:SetPoint("CENTER", 0, 5)
-                    frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
-                    if frame.indicator then
-                        frame.indicator:SetFont(STANDARD_TEXT_FONT, math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
-                        frame.indicator:ClearAllPoints()
-                        frame.indicator:SetPoint(db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, 0, 0)
-                    end
-                else
-                    frame.countdown:SetPoint("CENTER", 0, 0)
-                end
-                if frame.indicator then
-                    frame.indicator:SetShown(db.colorBlind)
-                end
 
                 if frame.unitSettingsRef.anchorUIParent then
                     Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
