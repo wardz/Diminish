@@ -277,6 +277,7 @@ do
             frame.icon = frame:CreateTexture(nil, "ARTWORK")
             frame.icon:SetAllPoints(frame)
             frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+            frame.icon:SetDrawLayer("ARTWORK", 7)
 
             local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
             cooldown:SetAllPoints(frame)
@@ -567,7 +568,7 @@ do
             if timer.testMode then return end
 
             if not onAuraEnd or NS.db.timerStartAuraEnd then
-                -- frame.cooldown:SetCooldownDuration(expiration) -- doesn't work with omnicc :(
+                -- frame.cooldown:SetCooldownDuration(expiration)
                 frame.cooldown:SetCooldown(now, expiration)
             else
                 -- Refresh cooldown without resetting timer swipe (only on aura broke/end for mode timerStartAuraEnd=false)
