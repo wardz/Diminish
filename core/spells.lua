@@ -74,6 +74,7 @@ NS.spellList = {
     [196942]  = C.INCAPACITATE,    -- Hex (Voodoo Totem)
     [277784]  = C.INCAPACITATE,    -- Hex (Wicker Mongrel)
     [277778]  = C.INCAPACITATE,    -- Hex (Zandalari Tendonripper)
+    [269352]  = C.INCAPACITATE,    -- Hex (Skeletal Hatchling)
     [710]     = C.INCAPACITATE,    -- Banish
     [6789]    = C.INCAPACITATE,    -- Mortal Coil
     [107079]  = C.INCAPACITATE,    -- Quaking Palm
