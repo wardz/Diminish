@@ -219,6 +219,11 @@ function Panel:Setup()
     unlock:SetPoint("BOTTOMLEFT", self, 15, 15)
     unlock:SetSize(200, 25)
 
+    unlock.glyphIcon = unlock:CreateTexture(nil, "OVERLAY")
+    unlock.glyphIcon:SetTexture("Interface\\CURSOR\\UI-Cursor-Move")
+    unlock.glyphIcon:SetPoint("LEFT", unlock, 7, 0)
+    unlock.glyphIcon:SetSize(19, 19)
+
 
     -- Test mode for timers
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
