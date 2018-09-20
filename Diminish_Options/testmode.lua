@@ -249,7 +249,6 @@ local function ReanchorForNameplate()
     if isAnchoring then
         for frame in TestMode.pool:EnumerateActive() do
             if frame.unit == "nameplate" then
-                -- TODO: can this cause taint?
                 local db = DIMINISH_NS.db.unitFrames["nameplate"]
                 frame:ClearAllPoints()
                 frame:SetParent(anchor)
