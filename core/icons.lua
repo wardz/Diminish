@@ -276,7 +276,6 @@ do
 
             frame.icon = frame:CreateTexture(nil, "ARTWORK")
             frame.icon:SetAllPoints(frame)
-            frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
             frame.icon:SetDrawLayer("ARTWORK", 7)
 
             local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
@@ -306,6 +305,15 @@ do
             ctext:SetPoint("TOP", CATEGORY_FONT.x, CATEGORY_FONT.y)
             ctext:SetShown(db.showCategoryText)
             frame.categoryText = ctext
+
+            if db.colorBlind then
+                frame.countdown:SetPoint("CENTER", 0, 5)
+                frame.border:SetTexture(nil)
+                frame.icon:SetTexCoord(0, 1, 0, 1)
+            else
+                frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+                frame.countdown:SetPoint("CENTER", 0, 0)
+            end
 
             if NS.MasqueGroup then
                 MasqueAddFrame(frame)
@@ -362,12 +370,14 @@ do
 
         if db.colorBlind then
             frame.countdown:SetPoint("CENTER", 0, 5)
-            frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
+            frame.border:SetTexture(nil)
+            frame.icon:SetTexCoord(0, 1, 0, 1)
             if frame.indicator then
                 frame.indicator:ClearAllPoints()
                 frame.indicator:SetPoint(db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, INDICATOR_FONT.x, INDICATOR_FONT.y)
             end
         else
+            frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
             frame.countdown:SetPoint("CENTER", 0, 0)
         end
         if frame.indicator then
@@ -504,12 +514,12 @@ do
         else -- Show indicators using text only
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
                 frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", INDICATOR_FONT.x, INDICATOR_FONT.y)
                 frame.countdown:SetPoint("CENTER", 0, 5)
                 frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
             else
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(11, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
             end
 
             if category ~= CATEGORY_TAUNT then
