@@ -58,6 +58,7 @@ NS.spellList = {
     [161354]  = C.INCAPACITATE,    -- Polymorph (Monkey)
     [277792]  = C.INCAPACITATE,    -- Polymorph (Bumblebee)
     [277787]  = C.INCAPACITATE,    -- Polymorph (Baby Direhorn)
+    [61025]   = C.INCAPACITATE,    -- Polymorph (Snake)
     [82691]   = C.INCAPACITATE,    -- Ring of Frost
     [115078]  = C.INCAPACITATE,    -- Paralysis
     [20066]   = C.INCAPACITATE,    -- Repentance
