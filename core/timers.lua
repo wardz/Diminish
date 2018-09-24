@@ -23,7 +23,7 @@ local function TimerIsFinished(timer, timestamp)
     return (timestamp or GetTime()) >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate, isPlayer)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.timerStartAuraEnd and not testMode then
             -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
@@ -67,6 +67,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.unitGUID = unitGUID
     timer.srcGUID = srcGUID
     timer.destName = destName
+    timer.isPlayer = isPlayer
     timer.testMode = testMode
 
     if ranFromUpdate and not NS.db.timerStartAuraEnd then
@@ -79,12 +80,12 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     StartTimers(timer, isApplied, nil, nil, nil, not isApplied)
 end
 
-function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd)
+function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd, isPlayer)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
         if isApplied or updateApplied then
             -- SPELL_AURA_APPLIED/BROKEN didn't detect DR, but REFRESH did
-            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true)
+            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true, isPlayer)
         end
         return
     end
@@ -127,7 +128,9 @@ function Timers:Remove(unitGUID, category, noStop)
                 -- UNIT_DIED is fired for Feign Death so ignore hunters here
                 if t.unitClass == "HUNTER" then return end
                 if Diminish:UnitIsHunter(t.destName) then return end
-                if Diminish.currInstanceType ~= "pvp" and not t.unitClass then return end
+                if Diminish.currInstanceType ~= "pvp" and not t.unitClass then
+                    if t.isPlayer then return end
+                end
                 hunterCheckRan = true -- don't run next loop iterations
             end
 

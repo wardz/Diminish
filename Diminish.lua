@@ -422,11 +422,11 @@ do
             end
 
             if eventType == "SPELL_AURA_REMOVED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, nil, isPlayer)
             elseif eventType == "SPELL_AURA_APPLIED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer)
             elseif eventType == "SPELL_AURA_REFRESH" then
-                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName)
+                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer)
             end
         end
 
