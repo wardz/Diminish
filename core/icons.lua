@@ -283,6 +283,7 @@ do
             cooldown:SetHideCountdownNumbers(not db.timerText)
             cooldown:SetDrawSwipe(db.timerSwipe)
             cooldown:SetDrawEdge(false)
+            cooldown:SetDrawBling(false)
             cooldown:SetSwipeColor(0, 0, 0, 0.65)
             cooldown:SetScript("OnShow", CooldownOnShow)
             cooldown:SetScript("OnHide", CooldownOnHide)
