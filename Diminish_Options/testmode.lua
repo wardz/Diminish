@@ -103,7 +103,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     local settings = DIMINISH_NS.db.unitFrames
 
-    if settings.arena.enabled and not IsAddOnLoaded("Blizzard_ArenaUI") then
+    if not IsAddOnLoaded("Blizzard_ArenaUI") then
         LoadAddOn("Blizzard_ArenaUI")
     end
 
@@ -183,7 +183,7 @@ end
 function TestMode:HideAnchors()
     isAnchoring = false
     self.pool:ReleaseAll()
-    if not isTesting then
+    if not TestMode:IsTestingOrAnchoring() then
         self:UnregisterEvent("PLAYER_TARGET_CHANGED")
     end
     self:ToggleArenaAndPartyFrames(false)
@@ -246,27 +246,31 @@ local function ReanchorForNameplate()
     local anchor = C_NamePlate.GetNamePlateForUnit("target")
     if not anchor then return end
 
-    if isAnchoring then
-        for frame in TestMode.pool:EnumerateActive() do
-            if frame.unit == "nameplate" then
-                local db = DIMINISH_NS.db.unitFrames["nameplate"]
-                frame:ClearAllPoints()
-                frame:SetParent(anchor)
-                frame:SetPoint("CENTER", anchor, db.offsetX, db.offsetY)
-                frame:Show()
-                return
-            end
+    for frame in TestMode.pool:EnumerateActive() do
+        if frame.unit == "nameplate" then
+            local db = DIMINISH_NS.db.unitFrames["nameplate"]
+            frame:ClearAllPoints()
+            frame:SetParent(anchor)
+            frame:SetPoint("CENTER", anchor, db.offsetX, db.offsetY)
+            frame:Show()
+            return
         end
-
-         -- if we got here then dummy anchor hasn't been created yet
-        TestMode:CreateDummyAnchor(anchor, "nameplate")
     end
+
+        -- if we got here then dummy anchor hasn't been created yet
+    TestMode:CreateDummyAnchor(anchor, "nameplate")
 end
 
 local function OnTargetChanged()
     -- Delay function call because GetNamePlateForUnit() is not
     -- ready immediately after PLAYER_TARGET_CHANGED is triggered
-    C_Timer.After(0.2, ReanchorForNameplate)
+    if TestMode:IsAnchoring() then
+        C_Timer.After(0.2, ReanchorForNameplate)
+    end
+
+    if TestMode:IsTesting() and UnitExists("target") then
+        DIMINISH_NS.Timers:Refresh("nameplate")
+    end
 end
 TestMode:SetScript("OnEvent", OnTargetChanged)
 
@@ -287,6 +291,7 @@ function TestMode:ShowAnchors()
             end
         elseif unitID == "nameplate" then
             local anchor = C_NamePlate.GetNamePlateForUnit("target")
+            isAnchoring = true
             TestMode:CreateDummyAnchor(anchor, unitID)
             self:RegisterEvent("PLAYER_TARGET_CHANGED")
         else
@@ -305,7 +310,7 @@ function TestMode:Test(hide)
         isTesting = false
         TestMode:ToggleArenaAndPartyFrames(false, hide)
         DIMINISH_NS.Timers:ResetAll()
-        if not isAnchoring then
+        if not TestMode:IsTestingOrAnchoring() then
             self:UnregisterEvent("PLAYER_TARGET_CHANGED")
         end
         return
