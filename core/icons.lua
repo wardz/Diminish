@@ -287,7 +287,6 @@ do
             frame:SetFrameLevel(10)
             frame:EnableMouse(false)
             frame:Hide()
-            frame:SetScript("OnSizeChanged", OnSizeChanged)
 
             frame.icon = frame:CreateTexture(nil, "ARTWORK")
             frame.icon:SetAllPoints(frame)
