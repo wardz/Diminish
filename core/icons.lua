@@ -96,6 +96,17 @@ do
                 parent = FindCompactRaidFrameByUnit(unit)
             else
                 parent = Icons:GetAnchor(unit, true)
+
+                -- Some partyframes addon have a different setup where party1 frame = player, party2 frame = party1 id etc
+                if i == 1 and parent and parent.unit == "player" then
+                    parent = Icons:GetAnchor("party1", true)
+                    unit = "player-party"
+                    displaysPlayer = true
+                end
+
+                if i > 1 and displaysPlayer then
+                    unit = parent.unit
+                end
             end
 
             if parent then
