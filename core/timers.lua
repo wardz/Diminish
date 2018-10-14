@@ -262,7 +262,7 @@ do
         "player", "target", "focus",
         "arena1", "arena2", "arena3",
         "party1", "party2", "party3",
-        "player-party", "nameplate",
+        "nameplate",
     }
 
     local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)
