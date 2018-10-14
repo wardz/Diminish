@@ -34,7 +34,7 @@ NS.CleanupDB = function(src, dst)
         if dst[key] == nil then
             -- HACK: offsetsXY are not set in DEFAULT_SETTINGS but sat on demand instead to save memory,
             -- which causes nil comparison to always be true here, so always ignore these for now
-            if key ~= "offsetsX" and key ~= "offsetsY" then
+            if key ~= "offsetsX" and key ~= "offsetsY" and key ~= "version" then
                 src[key] = nil
             end
         elseif type(value) == "table" then

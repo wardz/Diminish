@@ -83,7 +83,6 @@ function Panel:Setup()
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
         Widgets:ToggleState(frames.timerColors, frames.timerText:GetChecked())
-        Widgets:ToggleState(frames.timerTextSize, frames.timerText:GetChecked())
 
         db.timerText = not db.timerText
         Icons:OnFrameConfigChanged()
@@ -99,11 +98,25 @@ function Panel:Setup()
     frames.timerColors:SetPoint("LEFT", frames.timerText, 15, -40)
 
 
-    frames.timerTextSize = Widgets:CreateSlider(self, L.TIMERTEXTSIZE, L.TIMERTEXTSIZE_TOOLTIP, 7, 35, 1, function(_, value)
-        db.timerTextSize = value
-        Icons:OnFrameConfigChanged()
-    end)
-    frames.timerTextSize:SetPoint("LEFT", frames.timerColors, 10, -50)
+    do
+        local fontOutlines = {
+            { value = "NONE", text = L.TEXTURE_NONE },
+            { value = "OUTLINE", text = "Outline"},
+            { value = "MONOCHROME", text = "Monochrome" },
+            { value = "MONOCHROMEOUTLINE", text = "Monochrome Outline" },
+            { value = "THICKOUTLINE", text = "Thick Outline" },
+        }
+
+        frames.timerTextOutline = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.TIMEROUTLINE, L.TIMEROUTLINE_TOOLTIP, fontOutlines)
+        frames.timerTextOutline:SetSize(90, 45)
+        frames.timerTextOutline:SetPoint("LEFT", frames.timerColors, 0, -45)
+        frames.timerTextOutline.OnValueChanged = function(_, value)
+            if not value or value == EMPTY then return end
+            db.timerTextOutline = value
+
+            DIMINISH_NS.Icons:OnFrameConfigChanged()
+        end
+    end
 
     -------------------------------------------------------------------
 
@@ -246,7 +259,6 @@ function Panel:refresh()
 
     -- Disable rest of timer options if timer countdown is not checked
     Widgets:ToggleState(self.frames.timerColors, self.frames.timerText:GetChecked())
-    Widgets:ToggleState(self.frames.timerTextSize, self.frames.timerText:GetChecked())
 end
 
 SLASH_DIMINISH1 = "/diminish"

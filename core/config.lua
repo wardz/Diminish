@@ -5,16 +5,20 @@ NS.DR_TIME = 18.5
 
 -- Font size & position for DR indicator text
 NS.INDICATOR_FONT = {
+    font = STANDARD_TEXT_FONT,
     size = false, -- use automatic size
     x = 0,
     y = 0,
+    flags = "OUTLINE",
 }
 
 -- Font size & position for DR category label
 NS.CATEGORY_FONT = {
+    font = nil, -- uses font from template instead
     size = 9,
     x = 0,
     y = 12,
+    flags = "OUTLINE",
 }
 
 -- Border/text indicator colors
@@ -62,10 +66,11 @@ do
         growDirection = "RIGHT",
         offsetY = 23,
         offsetX = 104,
+        timerTextSize = 12,
     }
 
     NS.DEFAULT_SETTINGS = {
-        timerTextSize = 12,
+        timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
         timerColors = false,
@@ -100,6 +105,7 @@ do
                 growDirection = "RIGHT",
                 offsetY = 40,
                 offsetX = -6,
+                timerTextSize = 12,
             },
 
             party = {
@@ -116,6 +122,7 @@ do
                 growDirection = "RIGHT",
                 offsetY = 7,
                 offsetX = 76,
+                timerTextSize = 12,
             },
 
             arena = {
@@ -131,6 +138,7 @@ do
                 growDirection = "LEFT",
                 offsetY = 20,
                 offsetX = -66,
+                timerTextSize = 12,
             },
 
             nameplate = {
@@ -146,6 +154,7 @@ do
                 growDirection = "RIGHT",
                 offsetY = 71,
                 offsetX = -33,
+                timerTextSize = 12,
             },
         },
     }

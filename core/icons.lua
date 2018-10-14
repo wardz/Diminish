@@ -94,7 +94,7 @@ do
                 if i == 1 and parent and parent.unit == "player" then
                     parent = Icons:GetAnchor("party2", true)
                     -- next loop will be skipped when this is ran
-            end
+                end
             end
 
             if parent and parent.unit == unit then
@@ -254,9 +254,11 @@ do
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
         frame.uid = nil
 
+        local unitDB = frame.unitSettingsRef
+
         -- Need to always update these for pooled frames
-        if frame.unitSettingsRef.anchorUIParent then
-            Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
+        if unitDB.anchorUIParent then
+            Icons:CreateUIParentOffsets(unitDB, frame.unitFormatted)
             anchorCache[frame.unitFormatted] = UIParent
             frame:SetParent(UIParent)
         else
@@ -266,8 +268,15 @@ do
             frame:SetParent(anchor)
         end
 
-        local size = frame.unitSettingsRef.iconSize
+        local size = unitDB.iconSize
         frame:SetSize(size, size)
+
+        if frame.countdown then
+            local name, height, flags = frame.countdown:GetFont()
+            if flags ~= db.timerTextOutline or height ~= unitDB.timerTextSize then
+                frame.countdown:SetFont(name, unitDB.timerTextSize, db.timerTextOutline)
+            end
+        end
 
         if isNew then
             --@debug@
@@ -278,6 +287,7 @@ do
             frame:SetFrameLevel(10)
             frame:EnableMouse(false)
             frame:Hide()
+            frame:SetScript("OnSizeChanged", OnSizeChanged)
 
             frame.icon = frame:CreateTexture(nil, "ARTWORK")
             frame.icon:SetAllPoints(frame)
@@ -296,7 +306,7 @@ do
             frame.cooldown = cooldown
 
             frame.countdown = cooldown:GetRegions()
-            frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
+            frame.countdown:SetFont(frame.countdown:GetFont(), unitDB.timerTextSize, db.timerTextOutline)
 
             local borderWidth = db.border.edgeSize
             local border = frame:CreateTexture(nil, db.border.layer or "BORDER")
@@ -307,7 +317,7 @@ do
 
             -- label above an icon that displays category text
             local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            ctext:SetFont(ctext:GetFont(), CATEGORY_FONT.size)
+            ctext:SetFont(CATEGORY_FONT.font or ctext:GetFont(), CATEGORY_FONT.size, CATEGORY_FONT.flags)
             ctext:SetPoint("TOP", CATEGORY_FONT.x, CATEGORY_FONT.y)
             ctext:SetShown(db.showCategoryText)
             frame.categoryText = ctext
@@ -359,7 +369,6 @@ do
     local function RefreshIcon(frame, db)
         frame.cooldown:SetHideCountdownNumbers(not db.timerText)
         frame.cooldown:SetDrawSwipe(db.timerSwipe)
-        frame.countdown:SetFont(frame.countdown:GetFont(), db.timerTextSize)
         frame.categoryText:SetShown(db.showCategoryText)
 
         if not NS.MasqueGroup then
@@ -410,6 +419,11 @@ do
                 frame.unitSettingsRef = db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
+
+                local name, height, flags = frame.countdown:GetFont()
+                if flags ~= db.timerTextOutline or height ~= frame.unitSettingsRef.timerTextSize then
+                    frame.countdown:SetFont(name, frame.unitSettingsRef.timerTextSize, db.timerTextOutline)
+                end
 
                 if frame.unitSettingsRef.anchorUIParent then
                     Icons:CreateUIParentOffsets(frame.unitSettingsRef, frame.unitFormatted)
@@ -520,12 +534,12 @@ do
         else -- Show indicators using text only
             if not frame.indicator then
                 frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetFont(INDICATOR_FONT.font, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), INDICATOR_FONT.flags)
                 frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", INDICATOR_FONT.x, INDICATOR_FONT.y)
                 frame.countdown:SetPoint("CENTER", 0, 5)
                 frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
             else
-                frame.indicator:SetFont(STANDARD_TEXT_FONT, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), "OUTLINE")
+                frame.indicator:SetFont(INDICATOR_FONT.font, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), INDICATOR_FONT.flags)
             end
 
             if category ~= CATEGORY_TAUNT then

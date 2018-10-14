@@ -204,9 +204,6 @@ function Diminish:InitDB()
         [profile] = NS.DEFAULT_SETTINGS
     }, DiminishDB.profiles)
 
-    -- Remove table values no longer found in default settings
-    NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
-
     -- Reference to active db profile
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
@@ -224,6 +221,19 @@ function Diminish:InitDB()
             end
         end
     end
+
+    if NS.db.version == "1.0" then
+        NS.db.version = "1.1"
+        if NS.db.timerTextSize then
+            -- timerTextSize is no longer global
+            for unit, v in pairs(NS.db.unitFrames) do
+                v.timerTextSize = NS.db.timerTextSize
+            end
+        end
+    end
+
+    -- Remove table values no longer found in default settings
+    NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
 
     if not IsAddOnLoaded("Diminish_Options")then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
@@ -293,13 +303,6 @@ end
 
 function Diminish:PLAYER_TARGET_CHANGED()
     Timers:Refresh("target")
-
-    -- Required when testing with "Always Show Nameplates" enabled
-    if DIMINISH_OPTIONS and DIMINISH_OPTIONS.TestMode:IsTesting() then
-        if GetCVarBool("nameplateShowAll") then
-            Timers:Refresh("nameplate")
-        end
-    end
 end
 
 function Diminish:PLAYER_FOCUS_CHANGED()

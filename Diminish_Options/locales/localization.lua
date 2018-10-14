@@ -99,6 +99,8 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all
 (Esc -> Interface -> ActionBars -> Show Numbers for Cooldowns)]=]
 L["TIMERTEXTSIZE"] = "Countdown Size"
 L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
+L.TIMEROUTLINE = "Font Outline"
+L.TIMEROUTLINE_TOOLTIP = "Set the font outline for the cooldown countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
 L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus/Nameplates)
 

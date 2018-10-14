@@ -149,6 +149,12 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         frames.iconPadding:SetPoint("LEFT", frames.iconSize, 0, -50)
 
 
+        frames.timerTextSize = Widgets:CreateSlider(panel, L.TIMERTEXTSIZE, L.TIMERTEXTSIZE_TOOLTIP, 7, 35, 1, function(_, value)
+            db.timerTextSize = value
+            DIMINISH_NS.Icons:OnFrameConfigChanged()
+        end)
+        frames.timerTextSize:SetPoint("LEFT", frames.iconPadding, 0, -50)
+
         -------------------------------------------------------------------
 
         do
