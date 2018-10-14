@@ -67,10 +67,15 @@ do
         local guid = UnitGUID(unitID)
         if not guid then return end
 
-        for i = 1, (#CompactRaidFrameContainer.flowFrames or 5) do
+        local raidCount = #CompactRaidFrameContainer.flowFrames
+        for i = 1, (raidCount > 5 and raidCount or 5) do
             -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
             local frame = _G["CompactRaidFrame"..i]
-            if not frame then return end -- no more frames
+            if not frame or not frame:IsVisible() then
+                frame = _G["CompactPartyFrameMember"..i]
+            end
+
+            if not frame then return end
 
             if frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
