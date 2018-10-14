@@ -53,7 +53,7 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
         end
 
         if frame then
-            if unit ~= "party" and not defaultAnchor then -- AnchorPartyFrames() will handle party frames cache instead
+            if unit ~= "party" and unit ~= "player-party" and not defaultAnchor then -- AnchorPartyFrames() will handle party frames cache instead
                 anchorCache[unitID] = frame
             end
 
@@ -82,7 +82,7 @@ do
         local cfg = NS.db.unitFrames.party
         if not cfg.enabled then return end
 
-        for i = (NS.useCompactPartyFrames and 0 or 1), (members or 4) do
+        for i = 0, (members or 4) do
             local unit = i == 0 and "player" or "party"..i
             local parent
 
@@ -90,9 +90,14 @@ do
                 parent = FindCompactRaidFrameByUnit(unit)
             else
                 parent = Icons:GetAnchor(unit, true)
+                -- Some partyframes addon have a different setup where party1 frame = player, party2 frame = party1 id etc
+                if i == 1 and parent and parent.unit == "player" then
+                    parent = Icons:GetAnchor("party2", true)
+                    -- next loop will be skipped when this is ran
+            end
             end
 
-            if parent then
+            if parent and parent.unit == unit then
                 if unit == "player" then
                     -- we need to difference "player" for PlayerFrame and
                     -- "player" for CompactRaidFrame
