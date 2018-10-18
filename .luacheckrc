@@ -34,6 +34,7 @@ globals = {
 	"gmatch",
 	"bit",
 	"CreateFrame",
+	"GetCVar",
 	"IsInInstance",
 	"wipe",
 	"strlower",

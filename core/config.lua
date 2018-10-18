@@ -15,10 +15,10 @@ NS.INDICATOR_FONT = {
 -- Font size & position for DR category label
 NS.CATEGORY_FONT = {
     font = nil, -- uses font from template instead
-    size = 9,
+    size = tonumber(GetCVar("UIScale")) <= 0.75 and 11 or 9,
     x = 0,
     y = 12,
-    flags = "OUTLINE",
+    flags = nil,
 }
 
 -- Border/text indicator colors
