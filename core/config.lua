@@ -6,7 +6,8 @@ NS.DR_TIME = 18.5
 -- Font size & position for DR indicator text
 NS.INDICATOR_FONT = {
     font = STANDARD_TEXT_FONT,
-    size = false, -- use automatic size
+    size = nil, -- use automatic size
+    -- size = 12,
     x = 0,
     y = 0,
     flags = "OUTLINE",
@@ -30,6 +31,9 @@ NS.DR_STATES_COLORS = {
 
 -- Indicator texts (1/2, 3/4, x)
 NS.DR_STATES_TEXT = { "\194\189", "\194\190", "x" }
+
+-------------------------------------------------------
+-------------------------------------------------------
 
 -- "enum" for categories
 NS.CATEGORIES = {
