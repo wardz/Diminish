@@ -83,6 +83,24 @@ do
         end
     end
 
+    -- For blizzard frames, party1 is always equal to PartyFrame1 and so on
+    -- but for unitframe addons party1 might be frame3 or some other random frame index
+    -- so always just scan through them all, just like with the raid frames
+    local function FindPartyFrameByUnit(unitID)
+        local guid = UnitGUID(unitID)
+        if not guid then return end
+
+        for i = 1, 5 do
+            local frame = Icons:GetAnchor("party"..i, true)
+            if not frame then return end
+
+            if frame.unit and UnitGUID(frame.unit) == guid then
+                --print(frame, frame.unit, guid)
+                return frame
+            end
+        end
+    end
+
     function Icons:AnchorPartyFrames(members)
         local cfg = NS.db.unitFrames.party
         if not cfg.enabled then return end
@@ -95,18 +113,8 @@ do
             if NS.useCompactPartyFrames and not cfg.anchorUIParent then
                 parent = FindCompactRaidFrameByUnit(unit)
             else
-                parent = Icons:GetAnchor(unit, true)
-
-                -- Some partyframes addon have a different setup where party1 frame = player, party2 frame = party1 id etc
-                if i == 1 and parent and parent.unit == "player" then
-                    parent = Icons:GetAnchor("party1", true)
-                    unit = "player-party"
-                    displaysPlayer = true
-                end
-
-                if i > 1 and displaysPlayer then
-                    unit = parent.unit
-                end
+                parent = FindPartyFrameByUnit(unit)
+                -- unit = parent.unit
             end
 
             if parent then
@@ -296,7 +304,7 @@ do
             --@end-debug@
 
             frame:SetFrameStrata("HIGH")
-            frame:SetFrameLevel(10)
+            frame:SetFrameLevel(11)
             frame:EnableMouse(false)
             frame:Hide()
 
