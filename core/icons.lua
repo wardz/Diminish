@@ -105,7 +105,6 @@ do
         local cfg = NS.db.unitFrames.party
         if not cfg.enabled then return end
 
-        local displaysPlayer = false
         for i = 0, (members or 4) do
             local unit = i == 0 and "player" or "party"..i
             local parent
@@ -255,6 +254,7 @@ do
         end
     end
 
+    local iconCount = 0
     local function CreateIcon(unitID, category)
         local anchor = Icons:GetAnchor(unitID)
         if not anchor then return end
@@ -303,6 +303,7 @@ do
             NS.Debug("Created new frame for %s:%s", unitID, category)
             --@end-debug@
 
+            iconCount = iconCount + 1
             frame:SetFrameStrata("HIGH")
             frame:SetFrameLevel(11)
             frame:EnableMouse(false)
@@ -312,7 +313,7 @@ do
             frame.icon:SetAllPoints(frame)
             frame.icon:SetDrawLayer("ARTWORK", 7)
 
-            local cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
+            local cooldown = CreateFrame("Cooldown", "DiminishIcon" .. iconCount, frame, "CooldownFrameTemplate")
             cooldown:SetAllPoints(frame)
             cooldown:SetHideCountdownNumbers(not db.timerText)
             cooldown:SetDrawSwipe(db.timerSwipe)
@@ -323,6 +324,16 @@ do
             cooldown:SetScript("OnHide", CooldownOnHide)
             cooldown.parent = frame -- avoids calling :GetParent() later on
             frame.cooldown = cooldown
+
+            --[[ local test = cooldown:CreateTexture(nil, "OVERLAY")
+            test:SetTexture("Interface\\TalentFrame\\TalentFrame-RankBorder")
+            test:SetSize(28, 28)
+            test:SetPoint("CENTER", frame, "BOTTOMRIGHT", 0, 0)
+
+            local t = cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            t:SetPoint("CENTER", test, 0, 0)
+            t:SetVertexColor(1,0,1,1)
+            t:SetText("1") ]]
 
             frame.countdown = cooldown:GetRegions()
             frame.countdown:SetFont(frame.countdown:GetFont(), unitDB.timerTextSize, db.timerTextOutline)
