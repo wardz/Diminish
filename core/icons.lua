@@ -1,4 +1,4 @@
-local _, NS = ...
+﻿local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -17,7 +17,6 @@ local math_max = _G.math.max
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
-local INDICATOR_FONT = NS.INDICATOR_FONT
 local CATEGORY_FONT = NS.CATEGORY_FONT
 
 local anchorCache = {}
@@ -325,15 +324,15 @@ do
             cooldown.parent = frame -- avoids calling :GetParent() later on
             frame.cooldown = cooldown
 
-            --[[ local test = cooldown:CreateTexture(nil, "OVERLAY")
-            test:SetTexture("Interface\\TalentFrame\\TalentFrame-RankBorder")
-            test:SetSize(28, 28)
-            test:SetPoint("CENTER", frame, "BOTTOMRIGHT", 0, 0)
+            local indicatorBorder = cooldown:CreateTexture(nil, "OVERLAY")
+            indicatorBorder:SetTexture("Interface\\TalentFrame\\TalentFrame-RankBorder")
+            indicatorBorder:SetSize(26, 26)
+            indicatorBorder:SetPoint("CENTER", frame, "BOTTOMRIGHT", 0, 0)
+            frame.indicatorBg = indicatorBorder
 
-            local t = cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            t:SetPoint("CENTER", test, 0, 0)
-            t:SetVertexColor(1,0,1,1)
-            t:SetText("1") ]]
+            frame.indicatorText = cooldown:CreateFontString(nil, "OVERLAY")
+            frame.indicatorText:SetFont(STANDARD_TEXT_FONT, 9)
+            frame.indicatorText:SetPoint("CENTER", indicatorBorder, 0, 0)
 
             frame.countdown = cooldown:GetRegions()
             frame.countdown:SetFont(frame.countdown:GetFont(), unitDB.timerTextSize, db.timerTextOutline)
@@ -352,18 +351,16 @@ do
             ctext:SetShown(db.showCategoryText)
             frame.categoryText = ctext
 
-            if db.colorBlind then
-                frame.countdown:SetPoint("CENTER", 0, 5)
-                frame.border:SetTexture(nil)
-                frame.icon:SetTexCoord(0, 1, 0, 1)
-            else
-                frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-                frame.countdown:SetPoint("CENTER", 0, 0)
-            end
+            frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
             if NS.MasqueGroup then
                 MasqueAddFrame(frame)
             end
+        end
+
+        if not db.colorBlind then
+            frame.indicatorBg:Hide()
+            frame.indicatorText:Hide()
         end
 
         --if db.showCategoryText then
@@ -413,21 +410,8 @@ do
             frame.countdown:SetTextColor(1, 1, 1, 1)
         end
 
-        if db.colorBlind then
-            frame.countdown:SetPoint("CENTER", 0, 5)
-            frame.border:SetTexture(nil)
-            frame.icon:SetTexCoord(0, 1, 0, 1)
-            if frame.indicator then
-                frame.indicator:ClearAllPoints()
-                frame.indicator:SetPoint(db.timerText and "BOTTOMRIGHT" or "CENTER", frame.cooldown, INDICATOR_FONT.x, INDICATOR_FONT.y)
-            end
-        else
-            frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-            frame.countdown:SetPoint("CENTER", 0, 0)
-        end
-        if frame.indicator then
-            frame.indicator:SetShown(db.colorBlind)
-        end
+        frame.indicatorBg:SetShown(db.colorBlind)
+        frame.indicatorText:SetShown(db.colorBlind)
     end
 
     -- Refresh everything for icons. Called by Diminish_Options.
@@ -534,7 +518,6 @@ do
     local GetSpellTexture = _G.GetSpellTexture
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local indicatorColors = NS.DR_STATES_COLORS
-    local indicatorTexts = NS.DR_STATES_TEXT
     local DR_TIME = NS.DR_TIME
 
     local function GetIndicatorColor(applied, category)
@@ -554,31 +537,16 @@ do
             frame.countdown:SetTextColor(color[1], color[2], color[3], 1)
         end
 
-        if not NS.db.colorBlind then
-            if Icons.MSQGroup then
-                frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
-                frame.border:SetVertexColor(frame.border.__MSQ_Color)
-            else
-                frame.border:SetVertexColor(color[1], color[2], color[3], 1)
-            end
-        else -- Show indicators using text only
-            if not frame.indicator then
-                frame.indicator = frame.cooldown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                frame.indicator:SetFont(INDICATOR_FONT.font, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), INDICATOR_FONT.flags)
-                frame.indicator:SetPoint(NS.db.timerText and "BOTTOMRIGHT" or "CENTER", INDICATOR_FONT.x, INDICATOR_FONT.y)
-                frame.countdown:SetPoint("CENTER", 0, 5)
-                frame.border:SetVertexColor(0.4, 0.4, 0.4, 0.8)
-            else
-                frame.indicator:SetFont(INDICATOR_FONT.font, INDICATOR_FONT.size or math_max(13, frame.unitSettingsRef.iconSize / 3), INDICATOR_FONT.flags)
-            end
+        if Icons.MSQGroup then
+            frame.__MSQ_NormalTexture:SetVertexColor(color[1], color[2], color[3], 1)
+            frame.border:SetVertexColor(frame.border.__MSQ_Color)
+        else
+            frame.border:SetVertexColor(color[1], color[2], color[3], 1)
+        end
 
-            if category ~= CATEGORY_TAUNT then
-                frame.indicator:SetTextColor(color[1], color[2], color[3], 1)
-                frame.indicator:SetText(indicatorTexts[applied])
-            else
-                frame.indicator:SetTextColor(color[1], color[2], color[3], 1)
-                frame.indicator:SetText(applied <= 4 and applied or indicatorTexts[3])
-            end
+        if NS.db.colorBlind then
+            frame.indicatorText:SetTextColor(color[1], color[2], color[3], 1)
+            frame.indicatorText:SetText(applied)
         end
     end
 

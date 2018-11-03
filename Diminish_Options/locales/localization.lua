@@ -21,9 +21,7 @@ L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and an
 L["ARENA"] = "Arena"
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking. Right click to manually set icon used for category."
 L["COLORBLIND"] = "Show Indicators Using Text"
-L["COLORBLIND_TOOLTIP"] = [=[Show indicators using text instead of border colors. Works best when using larger icons. May not work with some Masque skins.
-
-Disabling "%s" will put the indicator text in the center of the icon.]=]
+L["COLORBLIND_TOOLTIP"] = "Show indicators using text instead of border colors. May not work with some Masque skins."
 L["COMBATLOCKDOWN_ERROR"] = "Must leave combat or battleground before doing that."
 L["COMPACTFRAMES_ERROR"] = "Unable to test raid frames while not in a group."
 L["COPY"] = "Copy"
