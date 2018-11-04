@@ -40,7 +40,7 @@ L["GROW_LEFT"] = "Left"
 L["GROW_RIGHT"] = "Right"
 L["GROW_TOP"] = "Upwards"
 L["GROWDIRECTION"] = "Grow Direction"
-L["GROWDIRECTION_TOOLTIP"] = "Select which direction the icons will grow from anchor."
+L["GROWDIRECTION_TOOLTIP"] = "Select which direction the icons will grow from the anchor."
 L["HEADER_CATEGORIES"] = "Enabled Categories"
 L["HEADER_COOLDOWN"] = "Cooldown"
 L["HEADER_ICONS"] = "Icons"
@@ -92,7 +92,7 @@ L["TIMERCOLORS_TOOLTIP"] = "Toggles diminishing returns indicator coloring of th
 L["TIMERSWIPE"] = "Show Swipe for Cooldowns"
 L["TIMERSWIPE_TOOLTIP"] = "Toggles the cooldown swipe animation for all frames."
 L["TIMERTEXT"] = "Show Countdown for Cooldowns"
-L["TIMERTEXT_TOOLTIP"] = [=[Toggles the Blizzard cooldown countdown text for all timers.
+L["TIMERTEXT_TOOLTIP"] = [=[Toggles the cooldown countdown text for all timers.
 
 (Esc -> Interface -> ActionBars -> Show Numbers for Cooldowns)]=]
 L["TIMERTEXTSIZE"] = "Countdown Size"
@@ -100,9 +100,9 @@ L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
 L.TIMEROUTLINE = "Font Outline"
 L.TIMEROUTLINE_TOOLTIP = "Set the font outline for the cooldown countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
-L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/focus/Nameplates)
+L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/Focus/Nameplates)
 
-Enabling this may drastically increase memory usage in large Battlegrounds.]=]
+Enabling this may drastically increase memory usage in large battlefields.]=]
 L["UNLOCK"] = "Toggle Moving Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle enabled frames for moving. Drag the red boxes to move icon spawn points."
 L["USEPROFILE"] = "Use"
