@@ -250,6 +250,8 @@ end
 -- Events
 --------------------------------------------------------------
 
+local strfind = string.find
+
 function Diminish:PLAYER_LOGIN()
     self:InitDB()
 
@@ -391,11 +393,17 @@ do
             local category = spellList[spellID] -- DR category
             if not category then return end
 
+            local isMindControlled = false
             local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
-                if not self.isWatchingNPCs then return end
+                if strfind(destGUID, "Player-") then
+                    -- Players have same bitmask as player pets when they're mindcontrolled and MC aura breaks, so we need to distinguish these
+                    -- so we can ignore the player pets but not actual players
+                    isMindControlled = true
+                end
+                if not self.isWatchingNPCs and not isMindControlled then return end
 
-                if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet
+                if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
                     if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT then
                         -- only show taunt and stun for normal mobs
                         -- player pets will show all
@@ -408,6 +416,10 @@ do
             end
 
             local isFriendly = bit_band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0
+            if isMindControlled then
+                isFriendly = not isFriendly -- reverse values
+            end
+
             if not isFriendly and self.onlyFriendlyTracking then return end
 
             if isFriendly then
