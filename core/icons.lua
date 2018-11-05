@@ -91,10 +91,9 @@ do
 
         for i = 1, 5 do
             local frame = Icons:GetAnchor("party"..i, true)
-            if not frame then return end
+            --if not frame then return end
 
-            if frame.unit and UnitGUID(frame.unit) == guid then
-                --print(frame, frame.unit, guid)
+            if frame and frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
             end
         end
@@ -312,6 +311,7 @@ do
             frame.icon:SetAllPoints(frame)
             frame.icon:SetDrawLayer("ARTWORK", 7)
 
+            -- We don't really need a frame name here, but add it to support some addons
             local cooldown = CreateFrame("Cooldown", "DiminishIcon" .. iconCount, frame, "CooldownFrameTemplate")
             cooldown:SetAllPoints(frame)
             cooldown:SetHideCountdownNumbers(not db.timerText)

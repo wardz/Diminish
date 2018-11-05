@@ -341,7 +341,7 @@ do
                 Start(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
 
                 if unit == "player" then
-                    if NS.useCompactPartyFrames and NS.db.unitFrames.party.isEnabledForZone then
+                    if NS.db.unitFrames.party.isEnabledForZone then
                         Start(timer, isApplied, "player-party", isUpdate, isRefresh, onAuraEnd)
                     end
                 end
