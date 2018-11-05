@@ -250,7 +250,8 @@ end
 -- Events
 --------------------------------------------------------------
 
-local strfind = string.find
+local strfind = _G.string.find
+local UnitIsUnit = _G.UnitIsUnit
 
 function Diminish:PLAYER_LOGIN()
     self:InitDB()
@@ -312,6 +313,7 @@ function Diminish:PLAYER_FOCUS_CHANGED()
 end
 
 function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
+    if UnitIsUnit("player", namePlateUnitToken) then return end -- ignore personal resource display
     Timers:Refresh(namePlateUnitToken)
 
     if DIMINISH_OPTIONS and DIMINISH_OPTIONS.TestMode:IsTesting() then
