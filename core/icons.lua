@@ -69,12 +69,18 @@ do
         local raidCount = #CompactRaidFrameContainer.flowFrames
         for i = 1, (raidCount > 5 and raidCount or 5) do
             -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
-            local frame = _G["CompactRaidFrame"..i]
-            if frame and not frame.unit then
-                frame = _G["CompactPartyFrameMember"..i]
+            local frame = _G["CompactRaidFrame"..i] -- check this frame first
+
+            -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
+            if not frame or frame and not frame.unit then
+                frame = _G["CompactPartyFrameMember"..i] -- check this instead if first frame has no unit attached
             end
 
-            if not frame then return end
+            if not frame or frame and not frame.unit then
+                frame = _G["CompactRaidGroup1Member"..i]
+            end
+
+            if not frame then return end -- no more frames exists
 
             if frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
