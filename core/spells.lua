@@ -129,7 +129,6 @@ NS.spellList = {
     [132169]  = C.STUN,            -- Storm Bolt
     [64044]   = C.STUN,            -- Psychic Horror
     [200200]  = C.STUN,            -- Holy Word: Chastise Censure
---  [204399]  = C.STUN,            -- Earthfury (doesn't seem to DR)
     [179057]  = C.STUN,            -- Chaos Nova
     [205630]  = C.STUN,            -- Illidan's Grasp, primary effect
     [208618]  = C.STUN,            -- Illidan's Grasp, secondary effect
@@ -143,6 +142,7 @@ NS.spellList = {
     [202346]  = C.STUN,            -- Double Barrel
     [280061]  = C.STUN,            -- Brainsmasher Brew
     [245638]  = C.STUN,            -- Thick Shell
+    [287254]  = C.STUN,            -- Dead of Winter
 
     [204085]  = C.ROOT,            -- Deathchill
     [233395]  = C.ROOT,            -- Frozen Center
