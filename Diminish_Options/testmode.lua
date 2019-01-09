@@ -121,6 +121,8 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         if LibStub and LibStub("AceAddon-3.0", true) then
             local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
             if sArena and sArena.ArenaEnemyFrames then
+                -- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
+                -- incase anyone is using the old version)
                 -- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
                 sArena.ArenaEnemyFrames:SetShown(showFlag)
             end

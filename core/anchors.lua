@@ -77,6 +77,7 @@ NS.anchors = {
         "oUF_Arena%d",
         "oUF_Adirelle_Arena%d",
         "Stuf.units.arena%d",
+        "sArenaEnemyFrame%d",
         "ArenaEnemyFrame%d",
     },
 }

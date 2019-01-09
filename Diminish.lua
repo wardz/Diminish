@@ -286,22 +286,6 @@ end
 
 function Diminish:PLAYER_ENTERING_WORLD()
     self:ToggleForZone()
-
-    -- If both Diminish and sArena DR tracking is enabled for arena, then
-    -- disable sArena tracking since they overlap each other
-    if not self.sArenaDetectRan and NS.db.unitFrames.arena.enabled then
-        if LibStub and LibStub("AceAddon-3.0", true) then
-            local _, sArena = pcall(function() -- suppress libstub/ace errors
-                return LibStub("AceAddon-3.0"):GetAddon("sArena")
-            end)
-
-            if sArena and type(sArena) == "table" and sArena.db.profile.drtracker.enabled then
-                sArena.db.profile.drtracker.enabled = false
-                sArena:RefreshConfig()
-            end
-            self.sArenaDetectRan = true
-        end
-    end
 end
 
 function Diminish:PLAYER_TARGET_CHANGED()
