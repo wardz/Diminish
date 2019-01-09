@@ -1,3 +1,10 @@
+-- TODO: add show friendly timers AND show enemy timers toggles
+-- TODO: seperate player pet and pve tracking option
+-- TODO: check if pet triggers UNIT_DIED when casting Play Dead
+-- TODO: show pve root, cyclone & taunt DR if UnitClassification() > normal or UnitIsQuestBoss == true ?
+-- FIXME: nameplate icon scaling is off when using some third party nameplates
+-- TODO: wipe party guids on GROUP_LEFT event?
+
 local _, NS = ...
 local Timers = NS.Timers
 local Icons = NS.Icons

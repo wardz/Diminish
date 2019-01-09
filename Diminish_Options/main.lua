@@ -4,11 +4,6 @@ local TestMode = NS.TestMode
 local L = NS.L
 _G.DIMINISH_OPTIONS = NS
 
--- TODO: show friendly timers AND show enemy timers toggles (target/focus, nameplates?)
--- TODO: option indicator text size & position?
--- TODO: seperate player pet and mob tracking option?
--- TODO: only show root & taunt DR if UnitClassification() > normal or UnitIsQuestBoss == true
-
 NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 
 NS.unitFrames = {
