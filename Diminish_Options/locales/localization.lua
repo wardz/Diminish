@@ -17,11 +17,12 @@ NS.L = L
 L["ANCHORDRAG"] = [=[%s
 Grows: %s]=]
 L["ANCHORUIPARENT"] = "Anchor to UIParent"
-L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and anchors them to the screen (UIParent) instead. Requires re-positioning."
+L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and anchors them directly to the screen (UIParent) instead. Requires re-positioning after enabling."
 L["ARENA"] = "Arena"
-L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking. Right click to manually set icon used for category."
+L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking. Right-click to manually set an icon used for the category."
 L["COLORBLIND"] = "Show Indicator Numbers"
-L["COLORBLIND_TOOLTIP"] = "Show DR indicator numbers next to icons. 1 = first DR, 2 = second DR, 3 = last DR. May not work with some Masque skins.\n(Color Blind Mode)"
+L["COLORBLIND_TOOLTIP"] = [=[Show DR indicator numbers next to icons. 1 = first DR, 2 = second DR, 3 = last DR. May not work with some Masque skins.
+(Color Blind Mode)]=]
 L["COMBATLOCKDOWN_ERROR"] = "Must leave combat or battleground before doing that."
 L["COMPACTFRAMES_ERROR"] = "Unable to test raid frames while not in a group."
 L["COPY"] = "Copy"
@@ -29,16 +30,16 @@ L["COPY_TOOLTIP"] = "Copies settings from one existing profile into the currentl
 L["CURRENT_PROFILE"] = "Current Profile: |cffFFEB00%s|r"
 L["DEFAULT"] = "Default"
 L["DELETE"] = "Delete"
-L["DELETE_TOOLTIP"] = "Delete an existing profile. Deletes and resets to default if profile chosen is the current active one."
+L["DELETE_TOOLTIP"] = "Delete an existing profile. Deletes and resets to default if the profile chosen is the currently active one."
 L["DISPLAYMODE"] = "Start Cooldown on Aura Removed"
-L["DISPLAYMODE_TOOLTIP"] = "Start timers on aura removed or refresh instead of applied. Leave unchecked to see timer immediately, timers will be 18sec + aura duration."
+L["DISPLAYMODE_TOOLTIP"] = "Start timers on aura removed or refresh instead of applied. Leave unchecked to see timer immediately. (Timers will be 18sec + aura duration.)"
 L["ENABLED"] = "Enabled"
 L["ENABLED_TOOLTIP"] = "Toggle diminishing returns tracking for this specific unit frame."
 L["FOCUS"] = "Focus"
-L["GROW_BOTTOM"] = "Downwards"
+L["GROW_BOTTOM"] = "Down"
 L["GROW_LEFT"] = "Left"
 L["GROW_RIGHT"] = "Right"
-L["GROW_TOP"] = "Upwards"
+L["GROW_TOP"] = "Up"
 L["GROWDIRECTION"] = "Grow Direction"
 L["GROWDIRECTION_TOOLTIP"] = "Select which direction the icons will grow from the anchor."
 L["HEADER_CATEGORIES"] = "Enabled Categories"
@@ -49,9 +50,9 @@ L["HEADER_PROFILES"] = "Create and set configuration profiles so you can have di
 L["HEADER_UNITFRAME"] = "Configuration for %s frame tracking."
 L["HEADER_ZONE"] = "Enable in Zone"
 L["ICONPADDING"] = "Frame Padding"
-L["ICONPADDING_TOOLTIP"] = "Set padding between all active icons."
+L["ICONPADDING_TOOLTIP"] = "Set the padding between all active icons."
 L["ICONSIZE"] = "Frame Size"
-L["ICONSIZE_TOOLTIP"] = "Set size of the icons."
+L["ICONSIZE_TOOLTIP"] = "Set the size of the icons."
 L["INVALID_SPELLID"] = "Invalid spell ID."
 L["NAMEPLATE"] = "Nameplates"
 L["NAMEPLATES"] = "Nameplates"
@@ -73,10 +74,10 @@ L["SELECTPROFILE"] = "Select Profile"
 L["SELECTPROFILE_TOOLTIP"] = "Select a profile to use, copy or delete."
 L["SHOWCATEGORYTEXT"] = "Display DR Category Label"
 L["SHOWCATEGORYTEXT_TOOLTIP"] = "Show text above a timer that displays what diminishing returns category a timer belongs to."
-L["SPELLBOOKTEXTURES"] = "Show Own Textures Only"
+L["SPELLBOOKTEXTURES"] = "Show Familiar Textures Only"
 L["SPELLBOOKTEXTURES_TOOLTIP"] = [=[Icons for enemy units will only use spell textures found in your own spellbook that matches the triggered category if available.
 
-(Spellbook textures will be set & saved only after you have yourself casted a CC ability once for that category)]=]
+(This option is deprecated and will be removed in a future release. You may now change icon textures by right-clicking a checkbox under "Enabled Categories" section instead)]=]
 L["STOP"] = "Stop"
 L["TARGET"] = "Target"
 L["TARGETTIP"] = "Target/focus yourself to see all frames."
@@ -89,6 +90,8 @@ L["TEXTURECHANGE"] = "Manually set icon texture used for %s. This will affect al
 L["TEXTURECHANGE_NOTE"] = "Right-click checkbox to manually select texture."
 L["TIMERCOLORS"] = "Show Indicator Color on Countdown"
 L["TIMERCOLORS_TOOLTIP"] = "Toggles diminishing returns indicator coloring of the countdown text."
+L["TIMEROUTLINE"] = "Font Outline"
+L["TIMEROUTLINE_TOOLTIP"] = "Set the font outline for the cooldown countdown text."
 L["TIMERSWIPE"] = "Show Swipe for Cooldowns"
 L["TIMERSWIPE_TOOLTIP"] = "Toggles the cooldown swipe animation for all frames."
 L["TIMERTEXT"] = "Show Countdown for Cooldowns"
@@ -96,9 +99,7 @@ L["TIMERTEXT_TOOLTIP"] = [=[Toggles the cooldown countdown text for all timers.
 
 (Esc -> Interface -> ActionBars -> Show Numbers for Cooldowns)]=]
 L["TIMERTEXTSIZE"] = "Countdown Size"
-L["TIMERTEXTSIZE_TOOLTIP"] = "Set font size of the timer countdown text."
-L.TIMEROUTLINE = "Font Outline"
-L.TIMEROUTLINE_TOOLTIP = "Set the font outline for the cooldown countdown text."
+L["TIMERTEXTSIZE_TOOLTIP"] = "Set the font size of the timer countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
 L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/Focus/Nameplates)
 
@@ -114,15 +115,15 @@ L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle diminishing returns tracking for friendly
 
 Enabling this may drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
-L["ZONE_SCENARIO"] = "Scenario"
 L["ZONE_BATTLEGROUNDS"] = "Battlegrounds & Brawls"
 L["ZONE_DUNGEONS"] = "Dungeons & Raids"
 L["ZONE_OUTDOORS"] = "World"
+L["ZONE_SCENARIO"] = "Scenario"
 L["ZONES_TOOLTIP"] = "Enable tracking for this zone."
 
 if locale == "deDE" then
     L["ANCHORDRAG"] = [=[%s
-    Wächst: %s]=]
+Wächst: %s]=]
     L["ANCHORUIPARENT"] = "An UIParent anheften"
     L["ANCHORUIPARENT_TOOLTIP"] = "Löst die Symbole von den Einheitenfenster(n) und heftet sie stattdessen an den Bildschirm (UIParent) "
     L["ARENA"] = "Arena"
@@ -137,8 +138,12 @@ if locale == "deDE" then
     L["DISPLAYMODE"] = "Abklingzeit starten, sobald die Aura entfernt wurde"
     L["ENABLED"] = "Aktiviert"
     L["FOCUS"] = "Fokus"
+    L["GROW_BOTTOM"] = "Nach unten"
     L["GROW_LEFT"] = "Links"
     L["GROW_RIGHT"] = "Rechts"
+    L["GROW_TOP"] = "Nach oben"
+    L["GROWDIRECTION"] = "Ausbreitungsrichtung"
+    L["GROWDIRECTION_TOOLTIP"] = "Wähle, in welche Richtung die Symbole vom Anker aus wachsen sollen."
     L["HEADER_CATEGORIES"] = "Kategorien aktivieren"
     L["HEADER_COOLDOWN"] = "Abklingzeit"
     L["HEADER_ICONS"] = "Symbole"
@@ -148,6 +153,8 @@ if locale == "deDE" then
     L["ICONPADDING_TOOLTIP"] = "Legt den Abstand zwischen allen aktiven DR-Symbolen fest."
     L["ICONSIZE"] = "Symbolgröße"
     L["ICONSIZE_TOOLTIP"] = "Legt die Größe der DR-Symbole fest."
+    L["INVALID_SPELLID"] = "Ungültige Zauber-ID"
+    L["NAMEPLATE"] = "Namensplaketten"
     L["NAMEPLATES"] = "Namensplaketten"
     L["NEWPROFILE"] = "Neues Profil erstellen"
     L["NEWPROFILE_TOOLTIP"] = "Erstellt ein neues Profil mit den momentan aktiven Einstellungen als Startpunkt."
@@ -156,6 +163,7 @@ if locale == "deDE" then
     L["PROFILEACTIVE"] = "Diese Profil ist bereits aktiv."
     L["PROFILEEXISTS"] = "Ein Profil mit diesem Namen existiert bereits."
     L["PROFILES"] = "Profile"
+    L["RESET"] = "Zurücksetzen."
     L["RESETPOS"] = "Position zurücksetzen"
     L["RESETPOS_TOOLTIP"] = "Setzt die Symbolpositionen für dieses Einheitenfenster auf die Standardwerte zurück."
     L["RESETPROFILE"] = "Profil zurücksetzen"
@@ -164,6 +172,7 @@ if locale == "deDE" then
     L["SELECTPROFILE"] = "Profil auswählen"
     L["STOP"] = "Stopp"
     L["TARGET"] = "Ziel"
+    L["TARGETTIP"] = "Um alle Rahmen zu sehen, nimm dich selbst als Ziel oder Fokus."
     L["TEST"] = "Fenster testen"
     L["TEXTURE_BRIGHT"] = "Hell"
     L["TEXTURE_GLOW"] = "Standard, mit Leuchten"
@@ -172,16 +181,20 @@ if locale == "deDE" then
     L["TIMERTEXT"] = "Countdown für Abklingzeiten zeigen"
     L["TIMERTEXT_TOOLTIP"] = [=[Schaltet Blizzards Abklingzeit-Countdowntext für alle DR-Timer ein.
 
-    (Esc -> Interface -> Aktionsleisten-> Zahlen für Abklingzeiten anzeigen)
+(Esc -> Interface -> Aktionsleisten-> Zahlen für Abklingzeiten anzeigen)
     ]=]
     L["TIMERTEXTSIZE"] = "Countdowngröße"
     L["TIMERTEXTSIZE_TOOLTIP"] = "Legt die Schriftgröße für den Countdown-Text fest."
+    L["TRACKNPCS"] = "Aktiviere die DR Verfolgung für PvE"
     L["UNLOCK"] = "Fenster entsperren"
+    L["USEPROFILE"] = "Benutze"
     L["USEPROFILE_TOOLTIP"] = [=[Weist ein existierendes Profil diesem Charakter zu.
 
-    Jegliche Änderungen an diesem Profil wirken sich auf alle Charaktere, die diese Profil nutzen, aus.]=]
+Jegliche Änderungen an diesem Profil wirken sich auf alle Charaktere, die diese Profil nutzen, aus.]=]
+    L["WATCHFRIENDLY"] = "Zeige DRs von Verbündeten"
     L["ZONE_ARENA"] = "Arena"
     L["ZONE_BATTLEGROUNDS"] = "Schlachtfelder & Raufereien"
     L["ZONE_DUNGEONS"] = "Dungeons & Schlachtzüge"
     L["ZONE_OUTDOORS"] = "Welt"
+    L["ZONE_SCENARIO"] = "Szenario"
 end
