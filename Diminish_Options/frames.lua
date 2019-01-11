@@ -355,5 +355,6 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             end
         end)
         frames.resetPosBtn:SetPoint("LEFT", frames.testBtn, -120, 0)
+        frames.resetPosBtn:SetWidth(120)
     end)
 end
