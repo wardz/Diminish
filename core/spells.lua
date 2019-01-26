@@ -97,12 +97,11 @@ NS.spellList = {
     [196364]  = C.SILENCE,         -- Unstable Affliction Silence Effect 2
 
     [210141]  = C.STUN,            -- Zombie Explosion
-    [108194]  = C.STUN,            -- Asphyxiate (unholy)
-    [221562]  = C.STUN,            -- Asphyxiate (blood)
-    [91800]   = C.STUN,            -- Gnaw
-    [212332]  = C.STUN,            -- Smash
-    [91797]   = C.STUN,            -- Monstrous Blow
-    [22570]   = C.STUN,            -- Maim (invalid?)
+    [108194]  = C.STUN,            -- Asphyxiate (Unholy)
+    [221562]  = C.STUN,            -- Asphyxiate (Blood)
+    [91800]   = C.STUN,            -- Gnaw (Ghoul)
+    [212332]  = C.STUN,            -- Smash (Abomination)
+    [91797]   = C.STUN,            -- Monstrous Blow (Mutated Ghoul)
     [203123]  = C.STUN,            -- Maim
     [163505]  = C.STUN,            -- Rake (Prowl)
     [5211]    = C.STUN,            -- Mighty Bash
