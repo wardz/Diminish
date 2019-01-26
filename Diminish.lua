@@ -1,9 +1,9 @@
 -- TODO: add show friendly timers AND show enemy timers toggles
 -- TODO: seperate player pet and pve tracking option
 -- TODO: check if pet triggers UNIT_DIED when casting Play Dead
--- TODO: show pve root, cyclone & taunt DR if UnitClassification() > normal or UnitIsQuestBoss == true ?
+-- TODO: show pve root, cyclone & taunt DR if UnitClassification() > normal or UnitIsQuestBoss() == true ?
 -- FIXME: nameplate icon scaling is off when using some third party nameplates
--- TODO: wipe party guids on GROUP_LEFT event?
+-- TODO: wipe party guids immediately on GROUP_LEFT event?
 
 local _, NS = ...
 local Timers = NS.Timers
@@ -25,10 +25,10 @@ _G.DIMINISH_NS = NS
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
     focus = "PLAYER_FOCUS_CHANGED",
-    party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",
+    party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",  -- csv
     arena = "ARENA_OPPONENT_UPDATE",
     player = "COMBAT_LOG_EVENT_UNFILTERED",
-    nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED", -- csv
+    nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED",
 }
 
 function Diminish:ToggleUnitEvent(events, enable)
@@ -220,6 +220,7 @@ function Diminish:InitDB()
     -- Set zone scenario to true when upgrading from <2.0.5 to 2.0.6
     -- This is so DR tracking is default enabled for *players* on Island Expeditions
     -- without having to toggle "Enable PvE Tracking"
+    -- TODO: remove these and instead wipe db if version is too old. Most users should have upgraded by now
     if not NS.db.version then
         NS.db.version = "1.0"
         for unit, v in pairs(NS.db.unitFrames) do

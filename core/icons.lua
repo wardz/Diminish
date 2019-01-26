@@ -69,6 +69,7 @@ do
         local raidCount = #CompactRaidFrameContainer.flowFrames
         for i = 1, (raidCount > 5 and raidCount or 5) do
             -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
+            -- TODO: merge with FindPartyFrameByUnit()
             local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
             -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
@@ -192,9 +193,7 @@ do
 
         for _, frame in pairs(frames[anchor.unit]) do
             if anchor.unit ~= frame.unit then
-                -- Invalid cache hit due to random race condition (╯°□°）╯︵ ┻━┻
-                -- Think I managed to fix it but it takes so long to test so i'll keep this here just incase
-                --print("invalid anchor", anchor.unit, frame.unit)
+                -- TODO: check if still needed
                 frames[frame.unit] = nil
             else
                 if frame.shown then
