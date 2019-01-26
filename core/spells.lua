@@ -106,7 +106,6 @@ NS.spellList = {
     [203123]  = C.STUN,            -- Maim
     [163505]  = C.STUN,            -- Rake (Prowl)
     [5211]    = C.STUN,            -- Mighty Bash
-    [19577]   = C.STUN,            -- Intimidation (TODO: incorrect?)
     [24394]   = C.STUN,            -- Intimidation
     [119381]  = C.STUN,            -- Leg Sweep
     [853]     = C.STUN,            -- Hammer of Justice
