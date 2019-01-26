@@ -1,11 +1,11 @@
-# Diminish (Battle for Azeroth)
-Lightweight diminishing returns tracker for (non)hostile units in World of Warcraft.
+# Diminish
+Diminish attaches icons to unit frames or nameplates, displaying time left until a diminishing returns category expires for that unit, as well as how far the category is diminished. *(Green border = 50% duration, yellow = 25%, red = 0%)* You can filter which categories/unitframes to track for and more.
 
 ## Install
-Installing from source is not guaranteed to work. You can download a packaged version here:  
-[Curseforge Download](https://www.curseforge.com/wow/addons/diminish)  
-[WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)  
-[Github Download](https://github.com/wardz/Diminish/releases) (Choose binary)  
+Installing from source is not always guaranteed to work. You can download a packaged version here:  
+- [Curseforge Download](https://www.curseforge.com/wow/addons/diminish)  
+- [WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)  
+- [Github Download](https://github.com/wardz/Diminish/releases) (Choose binary)  
 
 ## Configuration
 Type ```/diminish``` to open the options panel.
