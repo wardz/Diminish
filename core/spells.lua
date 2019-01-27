@@ -128,6 +128,7 @@ NS.spellList = {
     [205630]  = C.STUN,            -- Illidan's Grasp, primary effect
     [208618]  = C.STUN,            -- Illidan's Grasp, secondary effect
     [211881]  = C.STUN,            -- Fel Eruption
+    [200166]  = C.STUN,            -- Metamorphosis (PvE stun effect)
     [20549]   = C.STUN,            -- War Stomp
     [199085]  = C.STUN,            -- Warpath
     [204437]  = C.STUN,            -- Lightning Lasso
