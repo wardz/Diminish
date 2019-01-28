@@ -13,7 +13,7 @@ local NewTable = NS.NewTable
 local RemoveTable = NS.RemoveTable
 
 local UnitGUID = _G.UnitGUID
-local UnitClass = _G.UnitClass
+local GetPlayerInfoByGUID = _G.GetPlayerInfoByGUID
 local GetTime = _G.GetTime
 local gsub = _G.string.gsub
 local pairs = _G.pairs
@@ -66,9 +66,12 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.spellID = spellID
     timer.unitGUID = unitGUID
     timer.srcGUID = srcGUID
-    timer.destName = destName
+    timer.destName = destName -- TODO: no longer needed
     timer.isPlayer = isPlayer
     timer.testMode = testMode
+
+    local _, classID = GetPlayerInfoByGUID(unitGUID)
+    timer.unitClass = classID == 3 and "HUNTER"
 
     if ranFromUpdate and not NS.db.timerStartAuraEnd then
         -- SPELL_AURA/APPLIED/BROKEN didn't detect DR, but REFRESH did
@@ -121,18 +124,10 @@ function Timers:Remove(unitGUID, category, noStop)
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
         local Diminish = NS.Diminish
-        local hunterCheckRan = false
 
         for cat, t in pairs(timers) do
-            if not hunterCheckRan then
-                -- UNIT_DIED is fired for Feign Death so ignore hunters here
-                if t.unitClass == "HUNTER" then return end
-                if Diminish:UnitIsHunter(t.destName) then return end
-                if Diminish.currInstanceType ~= "pvp" and not t.unitClass then
-                    if t.isPlayer then return end
-                end
-                hunterCheckRan = true -- don't run next loop iterations
-            end
+            -- UNIT_DIED is fired for Feign Death so ignore hunters here
+            if t.unitClass == "HUNTER" then return end
 
             if not noStop then
                 StopTimers(t, nil, true)
@@ -183,15 +178,9 @@ function Timers:Refresh(unitID)
 
     -- Start or delete timers belonging to current guid
     if activeTimers[unitGUID] then
-        local _, englishClass = UnitClass(unitID)
         local currTime = GetTime()
 
         for category, timer in pairs(activeTimers[unitGUID]) do
-            if not timer.unitClass then
-                -- Used to detect hunters, we need to ignore Feign Death for UNIT_DIED later on
-                timer.unitClass = englishClass
-            end
-
             if not TimerIsFinished(timer, currTime) then
                 StartTimers(timer, true, unitID, nil, true)
             else
