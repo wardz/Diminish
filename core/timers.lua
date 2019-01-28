@@ -70,8 +70,8 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.isPlayer = isPlayer
     timer.testMode = testMode
 
-    local _, classID = GetPlayerInfoByGUID(unitGUID)
-    timer.unitClass = classID == 3 and "HUNTER"
+    local _, englishClass = GetPlayerInfoByGUID(unitGUID)
+    timer.unitClass = englishClass
 
     if ranFromUpdate and not NS.db.timerStartAuraEnd then
         -- SPELL_AURA/APPLIED/BROKEN didn't detect DR, but REFRESH did
