@@ -9,7 +9,6 @@ local Timers = NS.Timers
 local Icons = NS.Icons
 local Info = NS.Info
 local IsInBrawl = _G.C_PvP.IsInBrawl
-local hunterList = {}
 
 local Diminish = CreateFrame("Frame")
 Diminish:RegisterEvent("PLAYER_LOGIN")
@@ -157,7 +156,6 @@ function Diminish:Disable()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("CVAR_UPDATE")
     Timers:ResetAll(true)
-    wipe(hunterList)
 
     --@debug@
     Info("Disabled addon for zone %s.", self.currInstanceType)
@@ -166,15 +164,6 @@ end
 
 function Diminish:Enable()
     Timers:ResetAll(true)
-    wipe(hunterList)
-
-    if self.currInstanceType == "pvp" then
-        self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
-        self:RegisterEvent("PLAYER_REGEN_DISABLED")
-    else
-        self:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
-        self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-    end
 
     self:SetCLEUWatchVariables()
     self:GROUP_ROSTER_UPDATE()
@@ -182,12 +171,6 @@ function Diminish:Enable()
     --@debug@
     Info("Enabled addon for zone %s.", self.currInstanceType)
     --@end-debug@
-end
-
--- for BGs only
--- @see :UPDATE_BATTLEFIELD_SCORE()
-function Diminish:UnitIsHunter(name)
-    return hunterList[name]
 end
 
 function Diminish:InitDB()
@@ -335,33 +318,6 @@ function Diminish:GROUP_ROSTER_UPDATE()
     end
 end
 Diminish.GROUP_JOINED = Diminish.GROUP_ROSTER_UPDATE
-
-function Diminish:PLAYER_REGEN_DISABLED()
-    if not self.prevRegenCheckRan or (GetTime() - self.prevRegenCheckRan) > 16 then
-        -- UPDATE_BATTLEFIELD_SCORE is not always ran on player joined/left BG so
-        -- trigger on player joined combat to check for any new players
-        RequestBattlefieldScoreData()
-
-        self.prevRegenCheckRan = GetTime()
-    end
-end
-
-function Diminish:UPDATE_BATTLEFIELD_SCORE()
-    local GetBattlefieldScore = _G.GetBattlefieldScore
-    for i = 1, GetNumBattlefieldScores() do
-        local name, _, _, _, _, _, _, _, classToken = GetBattlefieldScore(i)
-        if name and classToken == "HUNTER" then
-            if not hunterList[name] then
-                -- Used to detect if unit is hunter in combat log later on by checking destName
-                -- We do this so we can ignore hunters in UNIT_DIED event since Feign Death triggers UNIT_DIED
-                hunterList[name] = true
-                --@debug@
-                Info("Add %s to hunter list.", name)
-                --@end-debug@
-            end
-        end
-    end
-end
 
 -- Combat log scanning for DRs
 do
