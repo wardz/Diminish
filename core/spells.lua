@@ -100,7 +100,6 @@ NS.spellList = {
     [108194]  = C.STUN,            -- Asphyxiate (Unholy)
     [221562]  = C.STUN,            -- Asphyxiate (Blood)
     [91800]   = C.STUN,            -- Gnaw (Ghoul)
-    [212332]  = C.STUN,            -- Smash (Abomination)
     [91797]   = C.STUN,            -- Monstrous Blow (Mutated Ghoul)
     [203123]  = C.STUN,            -- Maim
     [163505]  = C.STUN,            -- Rake (Prowl)
