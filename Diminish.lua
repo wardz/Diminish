@@ -1,7 +1,6 @@
 -- TODO: add show friendly timers AND show enemy timers toggles
 -- TODO: seperate player pet and pve tracking option
 -- TODO: check if pet triggers UNIT_DIED when casting Play Dead
--- TODO: show pve root, cyclone & taunt DR if UnitClassification() > normal or UnitIsQuestBoss() == true ?
 -- FIXME: nameplate icon scaling is off when using some third party nameplates
 -- TODO: wipe party guids immediately on GROUP_LEFT event?
 
@@ -375,6 +374,7 @@ do
 
     local CATEGORY_STUN = NS.CATEGORIES.STUN
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
+    local CATEGORY_ROOT = NS.CATEGORIES.ROOT
     local spellList = NS.spellList
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
@@ -388,6 +388,7 @@ do
             if not category then return end
 
             local isMindControlled = false
+            local isNotPetOrPlayer = false
             local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
                 if strfind(destGUID, "Player-") then
@@ -398,11 +399,11 @@ do
                 if not self.isWatchingNPCs and not isMindControlled then return end
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
-                    if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT then
-                        -- only show taunt and stun for normal mobs
-                        -- player pets will show all
+                    if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT then
+                        -- only show taunt and stun for normal mobs (roots for special mobs), player pets will show all
                         return
                     end
+                    isNotPetOrPlayer = true
                 end
             else
                 -- Ignore taunts for players
@@ -431,11 +432,11 @@ do
             end
 
             if eventType == "SPELL_AURA_REMOVED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, nil, isPlayer)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, nil, isPlayer, isNotPetOrPlayer)
             elseif eventType == "SPELL_AURA_APPLIED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer, isNotPetOrPlayer)
             elseif eventType == "SPELL_AURA_REFRESH" then
-                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer)
+                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer, isNotPetOrPlayer)
             end
         end
 

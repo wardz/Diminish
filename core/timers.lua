@@ -23,7 +23,7 @@ local function TimerIsFinished(timer, timestamp)
     return (timestamp or GetTime()) >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate, isPlayer)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate, isPlayer, isNotPetOrPlayer)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.timerStartAuraEnd and not testMode then
             -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
@@ -68,6 +68,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.srcGUID = srcGUID
     timer.destName = destName
     timer.isPlayer = isPlayer
+    timer.isNotPetOrPlayer = isNotPetOrPlayer
     timer.testMode = testMode
 
     if ranFromUpdate and not NS.db.timerStartAuraEnd then
@@ -80,12 +81,12 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     StartTimers(timer, isApplied, nil, nil, nil, not isApplied)
 end
 
-function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd, isPlayer)
+function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd, isPlayer, isNotPetOrPlayer)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
         if isApplied or updateApplied then
             -- SPELL_AURA_APPLIED/BROKEN didn't detect DR, but REFRESH did
-            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true, isPlayer)
+            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true, isPlayer, isNotPetOrPlayer)
         end
         return
     end
@@ -257,6 +258,9 @@ end
 do
     local GetAuraDuration = NS.GetAuraDuration
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
+    local CATEGORY_ROOT = NS.CATEGORIES.ROOT
+    local UnitIsQuestBoss = _G.UnitIsQuestBoss
+    local UnitClassification = _G.UnitClassification
 
     local testModeUnits = {
         "player", "target", "focus",
@@ -278,6 +282,15 @@ do
         if not timer.testMode and not settings.isEnabledForZone then return end
         if not settings.watchFriendly and timer.isFriendly then return end
         if settings.disabledCategories[timer.category] then return end
+
+        -- Show root DR only for special mobs
+        if timer.isNotPetOrPlayer and timer.category == CATEGORY_ROOT then
+            local classification = UnitClassification(unitID)
+            if classification == "normal" or classification == "trivial" or classification == "minus" or not UnitIsQuestBoss(unitID) then
+                -- No need to keep tracking it, just delete timer and return
+                return Timers:Remove(timer.unitGUID, CATEGORY_ROOT, true)
+            end
+        end
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and not NS.db.timerStartAuraEnd then
