@@ -137,7 +137,8 @@ NS.spellList = {
     [287712]  = C.STUN,            -- Haymaker
 
     -- TODO: check if Shambling Rush 91807 has root DR
-    [204085]  = C.ROOT,            -- Deathchill
+    [204085]  = C.ROOT,            -- Deathchill (Chains of Ice)
+    [233395]  = C.ROOT,            -- Deathchill (Remorseless Winter)
     [339]     = C.ROOT,            -- Entangling Roots
     [170855]  = C.ROOT,            -- Entangling Roots (Nature's Grasp)
     [201589]  = C.ROOT,            -- Entangling Roots (Tree of Life)
