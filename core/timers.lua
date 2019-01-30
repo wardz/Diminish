@@ -275,10 +275,12 @@ do
         -- Show root DR only for special mobs
         if timer.isNotPetOrPlayer and timer.category == CATEGORY_ROOT then
             local classification = UnitClassification(unitID)
-            if classification == "normal" or classification == "trivial" or classification == "minus" or not UnitIsQuestBoss(unitID) then
+            if classification == "normal" or classification == "trivial" or classification == "minus" then
+                if not UnitIsQuestBoss(unitID) then
                 -- No need to keep tracking it, just delete timer and return
                 return Timers:Remove(timer.unitGUID, CATEGORY_ROOT, true)
             end
+        end
         end
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
