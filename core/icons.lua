@@ -1,4 +1,4 @@
-﻿local _, NS = ...
+local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -27,11 +27,19 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
     end
 
     local unit, count = gsub(unitID, "%d", "") -- party1 -> party
+
     if unit == "nameplate" then
         if unitID == "nameplate" then -- is testmode
             unitID = "target"
         end
-        return GetNamePlateForUnit(unitID)
+        local plate = GetNamePlateForUnit(unitID)
+        if not plate then return end
+
+        if plate.UnitFrame and plate.unitFrame then -- special case for ElvUI
+            return plate.unitFrame.HealthBar
+        else
+            return plate
+        end
     end
 
     local anchors = NS.anchors[unit]

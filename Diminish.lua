@@ -1,7 +1,6 @@
 -- TODO: add show friendly timers AND show enemy timers toggles
 -- TODO: seperate player pet and pve tracking option
 -- TODO: check if pet triggers UNIT_DIED when casting Play Dead
--- FIXME: nameplate icon scaling is off when using some third party nameplates
 -- TODO: wipe party guids immediately on GROUP_LEFT event?
 
 local _, NS = ...
