@@ -23,17 +23,17 @@ local function TimerIsFinished(timer, timestamp)
     return (timestamp or GetTime()) >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isApplied, testMode, destName, ranFromUpdate, isPlayer, isNotPetOrPlayer)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, isApplied, testMode, ranFromUpdate)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.timerStartAuraEnd and not testMode then
-            -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of APPLIED
-            -- but update timer immediately if it already exists & there's less than 5 sec left or else it's possible that a CC aura is applied
-            -- while timer is being removed or right before, and when the aura ends it will show incorrect timer
+            -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of SPELL_AURA_APPLIED.
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 local timer = activeTimers[unitGUID][category]
                 local duration = timer.expiration - GetTime()
-                if duration <= 5 and duration > 0.5 then
-                    self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied)
+                if duration <= 5 and duration > 0.3 then
+                    -- if SPELL_AURA_APPLIED is triggered in this mode and current DR timer is less than new aura duration (assuming 5s+) then
+                    -- update timer immediately to ensure timer.applied is still correct when SPELL_AURA_REMOVED is called (would reset to 1 without this)
+                    self:Update(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, nil, isApplied)
                 end
             end
 
@@ -43,7 +43,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
         if not NS.db.timerStartAuraEnd then
             if activeTimers[unitGUID] and activeTimers[unitGUID][category] then
                 -- Update timer expiration without updating indicator color for this mode
-                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, nil, isApplied, nil, true)
+                return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, nil, isApplied, true)
             end
         end
     end
@@ -51,7 +51,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     local timers = activeTimers[unitGUID]
     if timers and timers[category] then
         -- Timer already active, update everything
-        return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, true)
+        return self:Update(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, true)
     end
 
     if not timers then
@@ -66,8 +66,6 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.spellID = spellID
     timer.unitGUID = unitGUID
     timer.srcGUID = srcGUID
-    timer.destName = destName -- TODO: no longer needed
-    timer.isPlayer = isPlayer
     timer.isNotPetOrPlayer = isNotPetOrPlayer
     timer.testMode = testMode
 
@@ -75,7 +73,7 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     timer.unitClass = englishClass
 
     if ranFromUpdate and not NS.db.timerStartAuraEnd then
-        -- SPELL_AURA/APPLIED/BROKEN didn't detect DR, but REFRESH did
+        -- SPELL_AURA_APPLIED/BROKEN didn't detect new DR, but REFRESH did
         -- and also since the aura was refreshed it means we're atleast 2 on applied
         timer.applied = 2
     end
@@ -84,12 +82,12 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isAppli
     StartTimers(timer, isApplied, nil, nil, nil, not isApplied)
 end
 
-function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateApplied, isApplied, destName, onAuraEnd, isPlayer, isNotPetOrPlayer)
+function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, updateApplied, isApplied, onAuraEnd)
     local timer = activeTimers[unitGUID] and activeTimers[unitGUID][category]
     if not timer then
         if isApplied or updateApplied then
             -- SPELL_AURA_APPLIED/BROKEN didn't detect DR, but REFRESH did
-            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, true, isPlayer, isNotPetOrPlayer)
+            Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, false, nil, true)
         end
         return
     end
@@ -100,7 +98,7 @@ function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, updateA
 
     timer.spellID = spellID
     timer.isFriendly = isFriendly
-    timer.expiration = GetTime() + (not timer.testMode and DR_TIME - 0.1 or random(6, DR_TIME))
+    timer.expiration = GetTime() + (not timer.testMode and DR_TIME or random(6, DR_TIME))
 
     StartTimers(timer, true, nil, true, nil, onAuraEnd)
 end
@@ -277,10 +275,10 @@ do
             local classification = UnitClassification(unitID)
             if classification == "normal" or classification == "trivial" or classification == "minus" then
                 if not UnitIsQuestBoss(unitID) then
-                -- No need to keep tracking it, just delete timer and return
-                return Timers:Remove(timer.unitGUID, CATEGORY_ROOT, true)
+                    -- No need to keep tracking it, just delete timer and return
+                    return Timers:Remove(timer.unitGUID, CATEGORY_ROOT, true)
+                end
             end
-        end
         end
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start

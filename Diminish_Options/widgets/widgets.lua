@@ -12,7 +12,6 @@ function Widgets:ToggleState(widget, state)
     end
 end
 
--- TODO: remove, blizz already has function for this
 function Widgets:CopyTable(src, dest)
     if type(dest) ~= "table" then dest = {} end
     if type(src) == "table" then

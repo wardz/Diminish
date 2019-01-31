@@ -2,6 +2,7 @@
 -- TODO: seperate player pet and pve tracking option
 -- TODO: check if pet triggers UNIT_DIED when casting Play Dead
 -- TODO: wipe party guids immediately on GROUP_LEFT event?
+-- TODO: option to anchor to personal resource display instead of PlayerFrame
 
 local _, NS = ...
 local Timers = NS.Timers
@@ -187,6 +188,11 @@ function Diminish:InitDB()
         profile = "Default"
     end
 
+    -- Reset config if the config version is too old
+    if DiminishDB.profiles[profile] and DiminishDB.profiles[profile].version == "1.0" or not DiminishDB.profiles[profile].version then
+        wipe(DiminishDB.profiles[profile])
+    end
+
     -- Copy any settings from default if they don't exist in current profile
     NS.CopyDefaults({
         [profile] = NS.DEFAULT_SETTINGS
@@ -196,30 +202,8 @@ function Diminish:InitDB()
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
+    NS.db.version = "1.2"
     NS.activeProfile = profile
-
-    -- Set zone scenario to true when upgrading from <2.0.5 to 2.0.6
-    -- This is so DR tracking is default enabled for *players* on Island Expeditions
-    -- without having to toggle "Enable PvE Tracking"
-    -- TODO: remove these and instead wipe db if version is too old. Most users should have upgraded by now
-    if not NS.db.version then
-        NS.db.version = "1.0"
-        for unit, v in pairs(NS.db.unitFrames) do
-            if not v.zones.scenario and unit ~= "arena" then
-                v.zones.scenario = true
-            end
-        end
-    end
-
-    if NS.db.version == "1.0" then
-        NS.db.version = "1.1"
-        if NS.db.timerTextSize then
-            -- timerTextSize is no longer global
-            for unit, v in pairs(NS.db.unitFrames) do
-                v.timerTextSize = NS.db.timerTextSize
-            end
-        end
-    end
 
     -- Remove table values no longer found in default settings
     NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
@@ -299,7 +283,6 @@ function Diminish:NAME_PLATE_UNIT_REMOVED(namePlateUnitToken)
 end
 
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
-    -- FIXME: rogues restealthing will cause this to be ran unnecessarily
     if status == "seen" and not strfind(unitID, "pet") then
         if IsInBrawl() and not NS.db.unitFrames.arena.zones.pvp then return end
         Timers:Refresh(unitID)
@@ -387,11 +370,11 @@ do
             end
 
             if eventType == "SPELL_AURA_REMOVED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, false, nil, destName, nil, isPlayer, isNotPetOrPlayer)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, false)
             elseif eventType == "SPELL_AURA_APPLIED" then
-                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer, isNotPetOrPlayer)
+                Timers:Insert(destGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, true)
             elseif eventType == "SPELL_AURA_REFRESH" then
-                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, true, nil, destName, nil, isPlayer, isNotPetOrPlayer)
+                Timers:Update(destGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, true)
             end
         end
 

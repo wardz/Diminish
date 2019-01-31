@@ -30,6 +30,10 @@ local function CalcPoint(frame)
     return frameX/scale, frameY/scale
 end
 
+local function GetUnitIndex(str)
+    return tonumber(strmatch(str, "%d+")) or 1 -- 1 if target/focus
+end
+
 local function OnDragStop(self)
     self:StopMovingOrSizing()
 
@@ -40,7 +44,7 @@ local function OnDragStop(self)
 
     if db.anchorUIParent then
         -- when anchoring to UIParent for partyX/arenaX each frame has their own position values
-        local id = tonumber(strmatch(self.unitID or self.unit, "%d+")) or 1 -- 1 if target/focus
+        local id = GetUnitIndex(self.unitID or self.unit)
         db.offsetsY[id] = yOfs
         db.offsetsX[id] = xOfs
         return
@@ -236,7 +240,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
     if not db.anchorUIParent then
         frame:SetPoint("CENTER", parent, db.offsetX, db.offsetY)
     else
-        local id = tonumber(strmatch(unitID or unit, "%d+")) or 1 -- TODO: add helper func for these
+        local id = GetUnitIndex(unitID or unit)
         frame:SetPoint("CENTER", parent, db.offsetsX[id], db.offsetsY[id])
     end
     frame:Show()
@@ -324,7 +328,7 @@ function TestMode:Test(hide)
 
     local DNS = DIMINISH_NS
     DNS.Timers:ResetAll()
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 81429, false, true, true)
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.ROOT, 122, false, true, true)
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.INCAPACITATE, 118, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 81429, false, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.ROOT, 122, false, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.INCAPACITATE, 118, false, true, true, true)
 end
