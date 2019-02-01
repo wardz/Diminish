@@ -202,6 +202,7 @@ function Diminish:InitDB()
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
+    NS.db.version = "1.2"
     NS.activeProfile = profile
 
     -- Remove table values no longer found in default settings
