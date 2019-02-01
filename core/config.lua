@@ -61,6 +61,7 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
+        version = "1.2",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
