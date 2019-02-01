@@ -208,7 +208,7 @@ function Diminish:InitDB()
     -- Remove table values no longer found in default settings
     NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
 
-    if not IsAddOnLoaded("Diminish_Options")then
+    if not IsAddOnLoaded("Diminish_Options") then
         -- Cleanup functions/tables only used for Diminish_Options when it's not loaded
         NS.DEFAULT_SETTINGS = nil
         NS.CopyDefaults = nil

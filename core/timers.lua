@@ -337,11 +337,11 @@ do
 
         -- Start timer for EVERY unitID that matches timer unit guid.
         local unitGUID = timer.unitGUID
-        for unit, guid in pairs(activeGUIDs) do
+        for _unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
-                Start(timer, isApplied, unit, isUpdate, isRefresh, onAuraEnd)
+                Start(timer, isApplied, _unit, isUpdate, isRefresh, onAuraEnd)
 
-                if unit == "player" then
+                if _unit == "player" then
                     if NS.db.unitFrames.party.isEnabledForZone then
                         Start(timer, isApplied, "player-party", isUpdate, isRefresh, onAuraEnd)
                     end
@@ -365,11 +365,11 @@ do
         end
 
         local unitGUID = timer.unitGUID
-        for unit, guid in pairs(activeGUIDs) do
+        for _unit, guid in pairs(activeGUIDs) do
             if guid == unitGUID then
-                Stop(timer, unit, preventRemove, isFinished)
+                Stop(timer, _unit, preventRemove, isFinished)
 
-                if unit == "player" then
+                if _unit == "player" then
                     Stop(timer, "player-party", true, isFinished)
                 end
             end
