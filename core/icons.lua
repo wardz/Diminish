@@ -1,4 +1,4 @@
-local _, NS = ...
+﻿local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -13,7 +13,6 @@ local GetTime = _G.GetTime
 local gsub = _G.string.gsub
 local format = _G.string.format
 local strmatch = _G.string.match
-local math_max = _G.math.max
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
@@ -152,7 +151,6 @@ end
 
 do
     local CreateFrame = _G.CreateFrame
-    local strfind = _G.string.find
     local strlen = _G.string.len
 
     local function MasqueAddFrame(frame)

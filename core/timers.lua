@@ -122,7 +122,6 @@ function Timers:Remove(unitGUID, category, noStop)
     elseif category == false then
         -- Stop all active timers for guid (UNIT_DIED, PARTY_KILL)
         -- Only ran outside arena.
-        local Diminish = NS.Diminish
 
         for cat, t in pairs(timers) do
             -- UNIT_DIED is fired for Feign Death so ignore hunters here
