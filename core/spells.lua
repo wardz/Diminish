@@ -38,7 +38,6 @@ NS.spellList = {
     [99]      = C.INCAPACITATE,    -- Incapacitating Roar
     [3355]    = C.INCAPACITATE,    -- Freezing Trap
     [203337]  = C.INCAPACITATE,    -- Freezing Trap (Honor talent)
-    [212365]  = C.INCAPACITATE,    -- Freezing Trap (TODO: incorrect?)
     [213691]  = C.INCAPACITATE,    -- Scatter Shot
     [118]     = C.INCAPACITATE,    -- Polymorph
     [28271]   = C.INCAPACITATE,    -- Polymorph (Turtle)
@@ -79,7 +78,7 @@ NS.spellList = {
 
     [47476]   = C.SILENCE,         -- Strangulate
     [204490]  = C.SILENCE,         -- Sigil of Silence
-    [78675]   = C.SILENCE,         -- Solar Beam
+--  [78675]   = C.SILENCE,         -- Solar Beam (doesn't seem to DR anymore)
     [202933]  = C.SILENCE,         -- Spider Sting
     [233022]  = C.SILENCE,         -- Spider Sting 2 (TODO: incorrect?)
     [217824]  = C.SILENCE,         -- Shield of Virtue
