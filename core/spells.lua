@@ -23,6 +23,7 @@ NS.spellList = {
     [226943]  = C.DISORIENT,       -- Mind Bomb
     [2094]    = C.DISORIENT,       -- Blind
     [118699]  = C.DISORIENT,       -- Fear
+    [261589]  = C.DISORIENT,       -- Seduction (Grimoire of Sacrifice)
     [6358]    = C.DISORIENT,       -- Seduction (Succubus)
     [5246]    = C.DISORIENT,       -- Intimidating Shout
     [35474]   = C.DISORIENT,       -- Drums of Panic (Item)
