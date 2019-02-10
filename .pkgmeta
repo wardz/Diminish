@@ -7,15 +7,14 @@ externals:
     url: git://github.com/phanx-wow/PhanxConfig-Dropdown
 
 move-folders:
-    Diminish/Diminish_Options: Diminish_Options
+  Diminish/Diminish_Options: Diminish_Options
 
 manual-changelog: CHANGELOG.txt
 wowi-create-changelog=no
-wowi_gen_changelog=false
 
 ignore:
-    - README.md
-    - .travis.yml
-    - .luacheckrc
-    - Diminish_Options/libs/LibStub/LibStub.toc
-    - Diminish_Options/libs/LibStub/tests
+  - README.md
+  - .travis.yml
+  - .luacheckrc
+  - Diminish_Options/libs/LibStub/LibStub.toc
+  - Diminish_Options/libs/LibStub/tests
