@@ -189,8 +189,10 @@ function Diminish:InitDB()
     end
 
     -- Reset config if the config version is too old
-    if DiminishDB.profiles[profile] and DiminishDB.profiles[profile].version == "1.0" or not DiminishDB.profiles[profile].version then
-        wipe(DiminishDB.profiles[profile])
+    if DiminishDB.profiles[profile] then
+        if DiminishDB.profiles[profile].version == "1.0" or not DiminishDB.profiles[profile].version then
+            wipe(DiminishDB.profiles[profile])
+        end
     end
 
     -- Copy any settings from default if they don't exist in current profile
