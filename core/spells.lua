@@ -174,6 +174,7 @@ NS.spellList = {
     [116189]  = C.TAUNT,           -- Provoke
     [118635]  = C.TAUNT,           -- Provoke 2
     [196727]  = C.TAUNT,           -- Provoke (Niuzao)
+    [204079]  = C.TAUNT,           -- Final Stand
     [62124]   = C.TAUNT,           -- Hand of Reckoning
     [17735]   = C.TAUNT,           -- Suffering (Voidwalker)
     [355]     = C.TAUNT,           -- Taunt
