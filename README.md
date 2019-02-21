@@ -2,10 +2,10 @@
 Diminish attaches icons to unit frames or nameplates, displaying time left until a diminishing returns category expires for that unit, as well as how far the category is diminished. *(Green border = 50% duration, yellow = 25%, red = 0%)* You can filter which categories/unitframes to track for and more.
 
 ## Install
-Installing from source is not always guaranteed to work. You can download a packaged version here:  
+Installing from source is not always guaranteed to work. You can download a packaged version here instead:  
 - [Curseforge Download](https://www.curseforge.com/wow/addons/diminish)  
 - [WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)  
-- [Github Download](https://github.com/wardz/Diminish/releases) (Choose binary)  
+- [Github Download](https://github.com/wardz/diminish/releases/latest) (Choose binary)  
 
 ## Configuration
 Type ```/diminish``` to open the options panel.
@@ -18,6 +18,6 @@ Copyright 2018 Wardz | [MIT License](https://opensource.org/licenses/mit-license
     When forking the addon you should save the folder outside your WoW AddOns directory and  
     instead have two symlinks inside the AddOns folder pointing to
     ```Diminish/``` and ```Diminish_Options/```.
-- [Report bugs or missing spells.](https://wow.curseforge.com/projects/diminish/issues)
+- [Report bugs or missing spells.](https://github.com/wardz/diminish/issues)
 - [Help translate.](https://wow.curseforge.com/projects/diminish/localization)
 - [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)]((https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ))
