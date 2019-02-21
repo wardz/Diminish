@@ -159,21 +159,20 @@ NS.spellList = {
     [270196]  = C.ROOT,            -- Chains of Light (Item)
     [267024]  = C.ROOT,            -- Stranglevines (Item)
 
+    [209749]  = C.DISARM,          -- Faerie Swarm (Balance Honor talent)
     [207777]  = C.DISARM,          -- Dismantle
     [233759]  = C.DISARM,          -- Grapple Weapon
     [236077]  = C.DISARM,          -- Disarm
     [236236]  = C.DISARM,          -- Disarm (Prot)
-    [209749]  = C.DISARM,          -- Faerie Swarm (Balance)
 
     [56222]   = C.TAUNT,           -- Dark Command
-    [57603]   = C.TAUNT,           -- Death Grip
-    [51399]   = C.TAUNT,           -- Death Grip 2
+    [51399]   = C.TAUNT,           -- Death Grip
     [185245]  = C.TAUNT,           -- Torment
     [6795]    = C.TAUNT,           -- Growl (Druid)
     [2649]    = C.TAUNT,           -- Growl (Hunter Pet)
     [20736]   = C.TAUNT,           -- Distracting Shot
     [116189]  = C.TAUNT,           -- Provoke
-    [118635]  = C.TAUNT,           -- Provoke 2
+    [118635]  = C.TAUNT,           -- Provoke (Black Ox Statue)
     [196727]  = C.TAUNT,           -- Provoke (Niuzao)
     [204079]  = C.TAUNT,           -- Final Stand
     [62124]   = C.TAUNT,           -- Hand of Reckoning
