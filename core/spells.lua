@@ -72,8 +72,9 @@ NS.spellList = {
     [710]     = C.INCAPACITATE,    -- Banish
     [6789]    = C.INCAPACITATE,    -- Mortal Coil
     [107079]  = C.INCAPACITATE,    -- Quaking Palm (Pandaren)
-    [255228]  = C.INCAPACITATE,    -- Polymorphed (Organic Discombobulation Grenade)
     [89637]   = C.INCAPACITATE,    -- Big Daddy (Item)
+    [255228]  = C.INCAPACITATE,    -- Polymorphed (Organic Discombobulation Grenade)
+    [71988]   = C.INCAPACITATE,    -- Vile Fumes (Item)
 
     [47476]   = C.SILENCE,         -- Strangulate
     [204490]  = C.SILENCE,         -- Sigil of Silence
