@@ -1,16 +1,28 @@
-sudo: false
-language: c
+language: minimal
+sudo: true
 
 addons:
   apt:
     packages:
-      - pandoc
+      - luarocks
 
-script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+install:
+  - luarocks install --local luacheck
+
+script:
+  - |
+    if [ "$TRAVIS_BRANCH" == "master" -o -n "$TRAVIS_TAG" ]; then
+      /home/travis/.luarocks/bin/luacheck *.lua
+    fi
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" == "false" -a -n "$TRAVIS_TAG" ]; then
+      curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+    fi
 
 branches:
   only:
-    - /^v?\d+\.\d+(\.\d+)?(-\S*)?$/
+    - master
+    - /^v?\d+\.\d+(\.\d+)?(-\S*)?$/ # v1.0.0 or 1.0.0 etc
 
 notifications:
   email:
