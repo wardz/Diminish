@@ -269,8 +269,8 @@ do
         if not settings.watchFriendly and timer.isFriendly then return end
         if settings.disabledCategories[timer.category] then return end
 
-        -- Show root DR only for special mobs
-        if timer.isNotPetOrPlayer and timer.category == CATEGORY_ROOT then
+        -- Show root/taunt DR only for special mobs
+        if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT) then
             local classification = UnitClassification(unitID)
             if classification == "normal" or classification == "trivial" or classification == "minus" then
                 if not UnitIsQuestBoss(unitID) then
