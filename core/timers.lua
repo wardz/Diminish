@@ -275,7 +275,7 @@ do
             if classification == "normal" or classification == "trivial" or classification == "minus" then
                 if not UnitIsQuestBoss(unitID) then
                     -- No need to keep tracking it, just delete timer and return
-                    return Timers:Remove(timer.unitGUID, CATEGORY_ROOT, true)
+                    return Timers:Remove(timer.unitGUID, timer.category, true)
                 end
             end
         end
