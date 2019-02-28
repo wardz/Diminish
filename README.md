@@ -20,4 +20,4 @@ Copyright 2018 Wardz | [MIT License](https://opensource.org/licenses/mit-license
     ```Diminish/``` and ```Diminish_Options/```.
 - [Report bugs or missing spells.](https://github.com/wardz/diminish/issues)
 - [Help translate.](https://wow.curseforge.com/projects/diminish/localization)
-- [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)]((https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ))
+- [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ)
