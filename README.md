@@ -1,5 +1,5 @@
 # Diminish
-Diminish attaches icons to unit frames or nameplates, displaying time left until a diminishing returns category expires for that unit, as well as how far the category is diminished. *(Green border = 50% duration, yellow = 25%, red = 0%)* You can filter which categories/unitframes to track for and more.
+Diminish attaches icons to unit frames or nameplates, displaying time left until a [diminishing returns](https://wow.gamepedia.com/Diminishing_returns) category expires for that unit, as well as how far the category is diminished. *(Green border = 50% duration, yellow = 25%, red = 0%)* You can filter which categories/unitframes to track for and more.
 
 ## Install
 Installing from source is not always guaranteed to work. You can download a packaged version here instead:  
