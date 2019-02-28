@@ -76,7 +76,6 @@ do
         local raidCount = #CompactRaidFrameContainer.flowFrames
         for i = 1, (raidCount > 5 and raidCount or 5) do
             -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
-            -- TODO: merge with FindPartyFrameByUnit()
             local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
             -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")

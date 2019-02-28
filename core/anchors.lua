@@ -3,7 +3,6 @@ local _, NS = ...
 -- Third-party addon's unitframe anchors.
 -- Blizzard frame should always be last.
 -- Frames are cached so don't worry about performance
--- FIXME: dynamically generated frames won't work here if TestMode is ran first (arena/party)
 NS.anchors = {
     player = {
         "SUFUnitplayer",

@@ -1,9 +1,3 @@
--- TODO: add show friendly timers AND show enemy timers toggles
--- TODO: seperate player pet and pve tracking option
--- TODO: check if pet triggers UNIT_DIED when casting Play Dead
--- TODO: wipe party guids immediately on GROUP_LEFT event?
--- TODO: option to anchor to personal resource display instead of PlayerFrame
-
 local _, NS = ...
 local Timers = NS.Timers
 local Icons = NS.Icons
@@ -252,7 +246,6 @@ end
 
 function Diminish:PVP_BRAWL_INFO_UPDATED()
     if not IsInBrawl() then
-        -- TODO: needed?
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
     else
         self:ToggleForZone(true)

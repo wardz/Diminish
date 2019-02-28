@@ -64,7 +64,6 @@ NS.GetAuraDuration = function(unitID, spellID)
 end
 
 -- Pool for reusing tables. Sacrifices slight performance for less memory usage
--- TODO: this should no longer be needed with the new garbage collector optimization changes in Legion 7.3
 do
     local pool = {}
     local wipe = _G.table.wipe
