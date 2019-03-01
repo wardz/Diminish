@@ -290,8 +290,12 @@ function Diminish:GROUP_ROSTER_UPDATE()
 
     -- Refresh every single party member, even if they have already just been refreshed
     -- incase unit IDs have been shifted
-    for i = 1, members do
-        Timers:Refresh("party"..i)
+    for i = 1, 5 do
+        if UnitExists("party"..i) then
+            Timers:Refresh("party"..i)
+        else
+            Timers:RemoveActiveGUID("party"..i)
+        end
     end
 end
 Diminish.GROUP_JOINED = Diminish.GROUP_ROSTER_UPDATE
