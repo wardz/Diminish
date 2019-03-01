@@ -69,6 +69,7 @@ globals = {
     "format",
     "EMPTY",
     "InCombatLockdown",
+    "UnitAffectingCombat",
     "InActiveBattlefield",
     "IsActiveBattlefieldArena",
     "InterfaceOptionsFrame_OpenToCategory",

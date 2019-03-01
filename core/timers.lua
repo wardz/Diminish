@@ -191,7 +191,6 @@ end
 C_Timer.NewTicker(55, function()
     -- Remove inactive timers every X seconds incase they
     -- weren't detected in Refresh(), UNIT_DIED or OnHide script for removal
-
     if NS.Diminish.currInstanceType ~= "arena" then
         local currTime = GetTime()
         for guid, categories in pairs(activeTimers) do
@@ -200,6 +199,16 @@ C_Timer.NewTicker(55, function()
                     StopTimers(timer)
                 end
             end
+        end
+    end
+
+    -- Free table pool.
+    -- Normally this is free'd on loading screens, but when we're outdoors i.e questing, there
+    -- may not be a loading screen happening for a long period of time so attempt to free every 55s here instead
+    -- to avoid too much memory filling up
+    if not next(activeTimers) and NS.Diminish.currInstanceType == "none" then
+        if not UnitAffectingCombat("player") then
+            NS.ReleaseTables()
         end
     end
 end)
