@@ -1,8 +1,11 @@
 enable-nolib-creation: no
 
 externals:
-  Diminish_Options/libs/LibStub:
+  libs/LibStub:
     url: svn://svn.wowace.com/wow/libstub/mainline/trunk
+  libs/DRList-1.0:
+    url: git://github.com/wardz/DRList-1.0
+    tag: latest
   Diminish_Options/libs/PhanxConfig-Dropdown:
     url: git://github.com/phanx-wow/PhanxConfig-Dropdown
 
@@ -16,5 +19,5 @@ ignore:
   - README.md
   - .travis.yml
   - .luacheckrc
-  - Diminish_Options/libs/LibStub/LibStub.toc
-  - Diminish_Options/libs/LibStub/tests
+  - libs/LibStub/LibStub.toc
+  - libs/LibStub/tests

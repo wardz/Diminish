@@ -308,7 +308,7 @@ do
     local CATEGORY_STUN = NS.CATEGORIES.STUN
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local CATEGORY_ROOT = NS.CATEGORIES.ROOT
-    local spellList = NS.spellList
+    local spellList = LibStub("DRList-1.0"):GetSpells()
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
         local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
