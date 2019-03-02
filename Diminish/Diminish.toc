@@ -1,0 +1,17 @@
+## Interface: 80100
+## Title: Diminish
+## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
+## Notes-deDE: DR-Tracker für Einheitenfenster.
+## SavedVariables: DiminishSV
+## Version: @project-version@
+## X-Curse-Project-ID: 92871
+## X-WoWI-ID: 23628
+
+libs/LibStub/LibStub.lua
+libs/DRList-1.0/DRList-1.0.lua
+
+core\anchors.lua
+core\config.lua
+core\icons.lua
+core\timers.lua
+Diminish.lua
