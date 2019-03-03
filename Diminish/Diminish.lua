@@ -18,6 +18,10 @@ function Diminish:Module(name, obj)
 
 end
 
+function Diminish:RegisterUnitConfig(unitType, anchors, config)
+
+end
+
 function Diminish:MergeDefaultSettings(src, dst)
     if type(src) ~= "table" then return {} end
     if type(dst) ~= "table" then dst = {} end
