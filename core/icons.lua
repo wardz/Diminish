@@ -31,14 +31,8 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
         if unitID == "nameplate" then -- is testmode
             unitID = "target"
         end
-        local plate = GetNamePlateForUnit(unitID)
-        if not plate then return end
 
-        if plate.UnitFrame and plate.unitFrame then -- special case for ElvUI
-            return plate.unitFrame.HealthBar
-        else
-            return plate
-        end
+        return GetNamePlateForUnit(unitID)
     end
 
     local anchors = NS.anchors[unit]
