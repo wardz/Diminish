@@ -85,6 +85,8 @@ do
     NS.ReleaseTables = function()
         -- Remove tbl refs from pool to allow garbage collecting
         -- Only use this after every tbl reference has been removed elsewhere aswell
-        pool = {}
+        if next(pool) then
+            pool = {}
+        end
     end
 end
