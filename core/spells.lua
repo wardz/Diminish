@@ -11,7 +11,6 @@ local C = NS.CATEGORIES
 NS.spellList = {
     [207167]  = C.DISORIENT,       -- Blinding Sleet
     [207685]  = C.DISORIENT,       -- Sigil of Misery
-    [2637]    = C.DISORIENT,       -- Hibernate
     [33786]   = C.DISORIENT,       -- Cyclone
     [209753]  = C.DISORIENT,       -- Cyclone (Honor talent)
     [31661]   = C.DISORIENT,       -- Dragon's Breath
@@ -34,6 +33,7 @@ NS.spellList = {
 
     [217832]  = C.INCAPACITATE,    -- Imprison
     [221527]  = C.INCAPACITATE,    -- Imprison (Honor talent)
+    [2637]    = C.INCAPACITATE,    -- Hibernate
     [99]      = C.INCAPACITATE,    -- Incapacitating Roar
     [3355]    = C.INCAPACITATE,    -- Freezing Trap
     [203337]  = C.INCAPACITATE,    -- Freezing Trap (Honor talent)
