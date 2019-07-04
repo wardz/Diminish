@@ -1,4 +1,4 @@
-## Interface: 80100
+## Interface: 80200
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
 ## Notes-deDE: Konfiguration für Diminish.
