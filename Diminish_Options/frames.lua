@@ -154,6 +154,22 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end)
         frames.timerTextSize:SetPoint("LEFT", frames.iconPadding, 0, -50)
 
+        if unit == "nameplate" then
+            -- Blizzard blocked :GetCenter() and such for nameplates in 8.2 which broke our drag anchoring,
+            -- so add sliders for setting positions for nameplate icons. This is a temp solution.
+            frames.offsetX = Widgets:CreateSlider(panel, "Position X", "Set X position for nameplate icons. Blizzard broke our drag-to-move functionality in patch 8.2 for nameplates so this is a temp workaround.", -200, 200, 1, function(_, value)
+                db.offsetX = value
+                DIMINISH_NS.Icons:OnFrameConfigChanged()
+            end)
+            frames.offsetX:SetPoint("LEFT", frames.timerTextSize, 0, -50)
+
+            frames.offsetY = Widgets:CreateSlider(panel, "Position Y", "Set Y position for nameplate icons. Blizzard broke our drag-to-move functionality in patch 8.2 for nameplates so this is a temp workaround.", -200, 200, 1, function(_, value)
+                db.offsetY = value
+                DIMINISH_NS.Icons:OnFrameConfigChanged()
+            end)
+            frames.offsetY:SetPoint("LEFT", frames.offsetX, 0, -50)
+        end
+
         -------------------------------------------------------------------
 
         do
@@ -323,19 +339,21 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         frames.testBtn:SetPoint("BOTTOMRIGHT", panel, -15, 15)
 
 
-        frames.unlockBtn = Widgets:CreateButton(panel, L.UNLOCK, L.UNLOCK_TOOLTIP, function(btn)
-            if InCombatLockdown() then
-                return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
-            end
+        if unit ~= "nameplate" then
+            frames.unlockBtn = Widgets:CreateButton(panel, L.UNLOCK, L.UNLOCK_TOOLTIP, function(btn)
+                if InCombatLockdown() then
+                    return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
+                end
 
-            if not NS.TestMode:IsAnchoring() then
-                NS.TestMode:ShowAnchors(unit)
-            else
-                NS.TestMode:HideAnchors(unit)
-            end
-        end)
-        frames.unlockBtn:SetPoint("BOTTOMLEFT", panel, 15, 15)
-        frames.unlockBtn:SetSize(200, 25)
+                if not NS.TestMode:IsAnchoring() then
+                    NS.TestMode:ShowAnchors(unit)
+                else
+                    NS.TestMode:HideAnchors(unit)
+                end
+            end)
+            frames.unlockBtn:SetPoint("BOTTOMLEFT", panel, 15, 15)
+            frames.unlockBtn:SetSize(200, 25)
+        end
 
 
         frames.resetPosBtn = Widgets:CreateButton(panel, L.RESETPOS, L.RESETPOS_TOOLTIP, function(btn)

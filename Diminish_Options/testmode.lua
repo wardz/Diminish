@@ -248,7 +248,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
     isAnchoring = true
 end
 
-local function ReanchorForNameplate()
+--[[local function ReanchorForNameplate()
     local anchor = C_NamePlate.GetNamePlateForUnit("target")
     if not anchor then return end
 
@@ -265,14 +265,14 @@ local function ReanchorForNameplate()
 
         -- if we got here then dummy anchor hasn't been created yet
     TestMode:CreateDummyAnchor(anchor, "nameplate")
-end
+end]]
 
 local function OnTargetChanged()
     -- Delay function call because GetNamePlateForUnit() is not
     -- ready immediately after PLAYER_TARGET_CHANGED is triggered
-    if TestMode:IsAnchoring() then
+    --[[if TestMode:IsAnchoring() then
         C_Timer.After(0.2, ReanchorForNameplate)
-    end
+    end]]
 
     if TestMode:IsTesting() and UnitExists("target") then
         DIMINISH_NS.Timers:Refresh("nameplate")
@@ -295,11 +295,11 @@ function TestMode:ShowAnchors()
                 local anchor = DIMINISH_NS.Icons:GetAnchor(unit, DIMINISH_NS.db.unitFrames.party.anchorUIParent)
                 TestMode:CreateDummyAnchor(anchor, unitID, unit)
             end
-        elseif unitID == "nameplate" then
+        --[[elseif unitID == "nameplate" then
             local anchor = C_NamePlate.GetNamePlateForUnit("target")
             isAnchoring = true
             TestMode:CreateDummyAnchor(anchor, unitID)
-            self:RegisterEvent("PLAYER_TARGET_CHANGED")
+            self:RegisterEvent("PLAYER_TARGET_CHANGED")]]
         else
             local anchor = DIMINISH_NS.Icons:GetAnchor(unitID)
             TestMode:CreateDummyAnchor(anchor, unitID)
