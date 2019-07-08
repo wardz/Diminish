@@ -1,20 +1,17 @@
 enable-nolib-creation: no
+wowi-create-changelog=no
+manual-changelog: changelog.txt
+package-as: Diminish
 
 externals:
-  Diminish_Options/libs/LibStub:
-    url: svn://svn.wowace.com/wow/libstub/mainline/trunk
-  Diminish_Options/libs/PhanxConfig-Dropdown:
-    url: git://github.com/phanx-wow/PhanxConfig-Dropdown
+  Diminish/Diminish_Options/libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
+  Diminish/Diminish_Options/libs/PhanxConfig-Dropdown: git://github.com/phanx-wow/PhanxConfig-Dropdown
 
 move-folders:
+  Diminish/Diminish: Diminish
   Diminish/Diminish_Options: Diminish_Options
-
-manual-changelog: CHANGELOG.txt
-wowi-create-changelog=no
 
 ignore:
   - README.md
-  - .travis.yml
-  - .luacheckrc
   - Diminish_Options/libs/LibStub/LibStub.toc
   - Diminish_Options/libs/LibStub/tests

@@ -16,6 +16,7 @@ script:
     fi
   - |
     if [ "$TRAVIS_PULL_REQUEST" == "false" -a -n "$TRAVIS_TAG" ]; then
+      cd Diminish
       curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
     fi
 

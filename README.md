@@ -23,7 +23,7 @@ Copyright (C) 2018 Wardz | [MIT License](https://opensource.org/licenses/mit-lic
 - [Submit a pull request.](https://gist.github.com/Chaser324/ce0505fbed06b947d962)  
     When forking the addon you should save the folder outside your WoW AddOns directory and  
     instead have two symlinks inside the AddOns folder pointing to
-    ```Diminish/``` and ```Diminish_Options/```.
+    `Diminish/Diminish/` and `Diminish/Diminish_Options/`.
 - [Report bugs or missing spells.](https://github.com/wardz/diminish/issues)
 - [Help translate.](https://wow.curseforge.com/projects/diminish/localization)
 - [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ)
