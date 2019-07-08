@@ -4,12 +4,12 @@ manual-changelog: changelog.txt
 package-as: Diminish
 
 externals:
-  Diminish/Diminish_Options/libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
-  Diminish/Diminish_Options/libs/PhanxConfig-Dropdown: git://github.com/phanx-wow/PhanxConfig-Dropdown
+  Diminish_Options/libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
+  Diminish_Options/libs/PhanxConfig-Dropdown: git://github.com/phanx-wow/PhanxConfig-Dropdown
 
 move-folders:
-  Diminish/Diminish: Diminish
   Diminish/Diminish_Options: Diminish_Options
+  Diminish/Diminish: Diminish
 
 ignore:
   - README.md
