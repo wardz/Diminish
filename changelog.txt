@@ -1,1 +1,229 @@
-http://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html#changelog
+v2.1.8:
+- Fix incorrect spellID for Lightning Lasso.
+
+
+v2.1.7:
+- Fix incorrect DR category for Hibernate.
+- Patch 8.2 broke drag-to-move positioning for DR icons on nameplates, so there's now two sliders in the options panel
+to manually set XY coordinates instead.
+
+
+v2.1.6:
+- Taunt DR is now only shown for special mobs. (Elites, rares & quest bosses)
+- Add nameplate tracking for ElvUI v11. Old versions will no longer be supported.
+- Minor memory improvements when tracking DRs outdoors for a long period of time (non-instanced zones).
+
+
+
+v2.1.5:
+- Fix Seduction not being tracked when Grimoire of Sacrifice is used.
+- Removed some obsolete spells.
+- Add Final Stand to taunt DR.
+- Fix Lua error on addon first time loaded.
+
+
+v2.1.4:
+- Root DR is now trackable for elites and special mobs. (PvE mode)
+- Add Haymaker (racial) for stun tracking.
+- Add Metamorphosis for stun tracking. (PvE only)
+- Fix Deathchill root not being tracked when triggered by Remorseless Winter.
+- Fix bad anchoring for nameplate icons when using ElvUI nameplates.
+- Minor code cleanup. (Thanks to Wetxius for help cleaning up the DR spell list!)
+
+
+v2.1.3:
+- Minor changes to options text.
+- Added some missing german translations. (Thanks pas06 and Sorno!)
+- Add sArena 3.0.0+ frame support.
+
+
+v2.1.2:
+- Add Dead of Winter stun.
+- Add CompactRaidGroup1MemberX frame support.
+- Bump toc for patch 8.1.
+
+
+v2.1.1:
+- Fix Mind Control not updating DR timer when aura ends.
+- Fix party frame anchoring bug for ElvUI when "player" (self) is shown in party frames.
+- Fix DR icons anchoring to personal resource display if nameplate tracking is enabled. (Might add option for it later)
+
+
+v2.1.0:
+- Add global frame names for the DR icons to support some addons. ("DiminishIcon1", "DiminishIcon2", etc)
+- Improved icon design when using Indicator Text.
+
+
+v2.0.9:
+- Countdown size option is no longer global, you can now adjust it for every unitframe separately.
+- Add option for changing countdown text outline.
+- Removed cooldown finish effect animation. Icons now disappear immediately when the CD is over.
+- Increased font size for "Display DR Category Label" text when using a low UI scale setting.
+- Fix nameplate's testmode anchoring bugging out if target frame tracking is disabled.
+- Fix "Reset Position" giving lua error if Blizzard_ArenaUI is not loaded.
+- Fix raid frame anchoring not working if "Keep Groups Together" is checked in blizzard options.
+- Fix incorrect party frame anchoring for ElvUI if player is shown in party frames. (untested, requires compact raid frames to be disabled)
+
+
+v2.0.8:
+- Add Skeletal Hatchling Hex to DR list.
+- Increased draw layer for icons.
+- Changed some default configuration values. This will affect fresh installs only.
+- Borders for "Show Indicators Using Text" mode are now using default Blizzard icon borders.
+- Fix timers not being deleted immediately for non-player units on UNIT_DIED event unless they've been targeted twice.
+
+
+v2.0.7:
+- Fix nameplate tracking not working if target, focus & arena tracking are disabled.
+- Fix toggling certain options sometimes not updating icons for nameplate/arena tracking until reload ui.
+- Add button for unlocking frames to *all* options pages.
+
+
+v2.0.6:
+- Add nameplate DR tracking. (default off)
+- Add Double Barrel to stun DR.
+- Add Frozen Center, Hooked Deep Sea Net to root DR.
+- Add Island Expedition consumables to DR list.
+- Add new zone option "Scenario". This is for Island Expeditions etc.
+
+
+v2.0.5:
+- Minor performance optimizations for timers.
+- Replaced "Grow Left" option with dropdown for all grow directions.
+- Add option to manually select icon used for DR categories.
+(Right click DR category checkbox under Enabled Categories to open menu for it.)
+- Add zone toggle to enable arena tracking inside BGs. (Arena frames are used there aswell)
+- Add German translations, thanks to Pas06.
+- Add DR category translations for all locales.
+- Add some missing professions spells i.e engineering grenade.
+
+
+v2.0.4:
+- Fix arena icons not working with Tukui.
+- Add option to anchor icons to UIParent (screen).
+
+
+v2.0.3:
+- Fix minor profile issues.
+- Fix Lua error on entering arena if AceAddon is loaded.
+- Option "Start Cooldown On Aura Applied" is now renamed to start on aura removed instead and is default disabled. (Simplifies code)
+
+
+v2.0.2:
+- Profiles are no longer auto created on changing an option on a new character. There's now an option to manually create instead.
+- Add option to use/share an existing profile instead of just copying profile variables. Any changes to a shared profile will affect all characters using the profile.
+- Fix target/focus tracking not working for arena brawl mode.
+- Fix "Show Own Textures Only" option not working when spell is triggered by player pet.
+- Minor improvements to options panel.
+
+
+v2.0.1:
+- Fix Lua error on loading screens when player frame tracking is disabled.
+- Fix timers sometimes showing incorrect border color when refreshed on ~1s duration left.
+- Fix timers being reset on hunters using Feign Death outside of arenas/battlegrounds.
+- Fix target/focus icons on a very rare occassion not updating position correctly.
+- Fix deleting profile sometimes not updating dropdown until reloadui.
+- Fix copying profile not working if not using Default profile.
+- Fix repositioning icons not updating until reloadui after having reset your profile.
+- Add new texture to border option. (Same as default, but with glow like in older versions.)
+- Renamed colorblind mode to "Show Timers Using Text" also changed look of this mode.
+- Minor improvements to options panel.
+- Add oUF_Adirelle & Stuf unit frame support. (untested)
+
+
+v2.0.0:
+- Fix always resetting timers to 18s on target switch. (target/focus timers only)
+- Fix sometimes not tracking timers until next loading screen if you toggle an option inside arena.
+- Fix timer not updating countdown for OmniCC users.
+- Fix options not fully loading if shown in combat.
+- Add option to track mobs & player pets.
+
+
+v2.0.0b-0.4:
+- Diminish now works for both BfA beta and Legion 7.3.5.
+- Add colorblind mode option.
+- Add option for changing border styles.
+- Removed border glow/blend effect.
+- Tracking for PlayerFrame is now default set to enabled.
+- Combat log scanning is now enabled outdoors even while not in combat. (Should fix certain CC's like Sap not always being tracked.)
+- Add support for oUF, GW2 UI, Pitbull, SpartanUI, gUI4, Discord Unit Frames.
+- Fix toggle frames not working with ElvUI.
+- Fix Feign Death sometimes removing timers for hunters outside arena.
+- Improve CC detection.
+- Final beta version!
+
+
+v2.0.0b-0.3:
+- Fix border indicators not being shown for some Masque skins.
+- Fix bug introduced in previous update that removes active timers on target switched.
+- Minor optimizations & improvements.
+
+
+v2.0.0b-0.2:
+- Note: Upgrading from an earlier version to this version will wipe all custom settings at first load.
+- Increased frame strata for icons.
+- Fix profile copy/delete button not updating dropdown after being ran.
+- Fix moving party1 anchor not auto moving party2/3.
+- Fix changing icon size not working until reload ui.
+- Anchor bar for moving icons now have less width due to accuracy issues.
+- Memory improvements for timers.
+
+
+v2.0.0b-0.1:
+- Add profile options (wip)
+- Add correct spell IDs for Shockwave, Stormbolt, Fel Cleave, Hibernate.
+- Fix option "Show Own Textures Only" not working.
+- Remove player "Attach to Raid Frames" option. It is now shown player timers for both PlayerFrame and raid frame if those are toggled on.
+- Fix icons sometimes not disappearing after timer ended.
+
+
+v2.0.0b::
+- Add focus/target/party/self and friendly DR tracking. No longer arena only!
+- Add GUI for options.
+- Timers are now shown on CC start instead of removal. (May be toggled)
+- Timers now have indicator color green->yellow->red instead of none->yellow->red.
+- Add Masque support. (You need to run "Test frames" once before options show up for it since all frames are created on demand.)
+- Update spell list for BFA. Let me know if any spells are missing or incorrect.
+
+
+v1.2.6:
+- Add Lightning Lasso to stun DR.
+
+
+v1.2.5:
+- Bump toc for patch 7.3.0.
+- Added new option for icon padding.
+- Removed Metamorphosis stun.
+- Added warr Disarm.
+- Added some missing versions of Entangling Roots.
+- Command /diminish now triggers max 3 categories at once per arenaframe.
+
+
+v1.2.4:
+- Update for patch 7.2 & added some missing spellids.
+- Add Disarm category.
+
+
+v1.2.3:
+- Updated .toc for patch 7.1.
+- Added a few more spells for tracking.
+
+
+v1.2.2:
+- Added more legion spell IDs.
+- Spell IDs are now saved in new file Spells.lua instead of Config.lua
+
+
+v1.2.1:
+- Updated for legion. Some spellIDs may still be missing/incorrect.
+- Removed shared tracking of DRs between BM hunter & their pets.
+- Performance improvements.
+
+
+v1.2:
+- Options are moved from Diminish.lua to Config.lua.
+- Added options for color indicators on countdown text (default off) & borders.
+- Added option for reverse grow.
+- Removed MAX_UNITS option. 5 is now default.
+- Fix cooldown swipe background covering border edges.
+- Hopefully fix for DRs not being tracked in certain situations. (i.e when reflected)
