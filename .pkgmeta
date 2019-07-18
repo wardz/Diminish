@@ -1,5 +1,4 @@
 enable-nolib-creation: no
-wowi-create-changelog=no
 manual-changelog: changelog.txt
 package-as: Diminish
 
