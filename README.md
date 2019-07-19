@@ -25,5 +25,5 @@ Copyright (C) 2018 Wardz | [MIT License](https://opensource.org/licenses/mit-lic
     instead have two symlinks inside the AddOns folder pointing to
     `Diminish/Diminish/` and `Diminish/Diminish_Options/`.
 - [Report bugs or missing spells.](https://github.com/wardz/diminish/issues)
-- [Help translate.](https://wow.curseforge.com/projects/diminish/localization)
+- [Help translate.](https://www.curseforge.com/wow/addons/diminish/localization)
 - [![Donate](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G6PATC82FGWHQ)
