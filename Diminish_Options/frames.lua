@@ -35,7 +35,7 @@ local function Refresh(self)
 
     Widgets:RefreshWidgets(unitFrameSettings, self)
 
-    -- Refresh categories
+    -- Refresh
     for k, category in pairs(DIMINISH_NS.CATEGORIES) do
         if frames.categories[k] then
             frames.categories[k]:SetChecked(not unitFrameSettings.disabledCategories[category])

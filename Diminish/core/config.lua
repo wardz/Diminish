@@ -1,7 +1,8 @@
 local _, NS = ...
+local DRList = LibStub("DRList-1.0")
 
 -- How long a diminishing return lasts.
-NS.DR_TIME = 18.5
+NS.DR_TIME = DRList:GetResetTime()
 
 -- Font size & position for DR category label
 NS.CATEGORY_FONT = {
@@ -24,13 +25,13 @@ NS.DR_STATES_COLORS = {
 
 -- "enum" for categories
 NS.CATEGORIES = {
-    DISORIENT = NS.L.DISORIENT,
-    INCAPACITATE = NS.L.INCAPACITATE,
-    SILENCE = NS.L.SILENCE,
-    STUN = NS.L.STUN,
-    ROOT = NS.L.ROOT,
-    DISARM = NS.L.DISARM,
-    TAUNT = NS.L.TAUNT,
+    DISORIENT = DRList:GetCategories().disorient, -- too lazy to rename keys, otherwise we could just do NS.CATEGORIES = DRList:GetCategories()
+    INCAPACITATE = DRList:GetCategories().incapacitate,
+    SILENCE = DRList:GetCategories().silence,
+    STUN = DRList:GetCategories().stun,
+    ROOT = DRList:GetCategories().root,
+    DISARM = DRList:GetCategories().disarm,
+    TAUNT = DRList:GetCategories().taunt,
 }
 
 -------------------------------------------------------

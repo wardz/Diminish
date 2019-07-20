@@ -63,7 +63,7 @@ NS.GetAuraDuration = function(unitID, spellID)
     end
 end
 
--- Pool for reusing tables. Sacrifices slight performance for less memory usage
+-- Pool for reusing tables. (Garbage collector isn't ran in combat unless max garbage is reached, which causes fps drops)
 do
     local pool = {}
     local wipe = _G.table.wipe
@@ -83,8 +83,6 @@ do
     end
 
     NS.ReleaseTables = function()
-        -- Remove tbl refs from pool to allow garbage collecting
-        -- Only use this after every tbl reference has been removed elsewhere aswell
         if next(pool) then
             pool = {}
         end

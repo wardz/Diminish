@@ -1,6 +1,7 @@
 # Project specifics
 .release/
 release.sh
+Diminish/libs
 
 # luarocks build files
 *.src.rock
