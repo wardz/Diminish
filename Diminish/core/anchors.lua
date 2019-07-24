@@ -2,7 +2,6 @@ local _, NS = ...
 
 -- Third-party addon's unitframe anchors.
 -- Blizzard frame should always be last.
--- Frames are cached so don't worry about performance
 NS.anchors = {
     player = {
         "SUFUnitplayer",
@@ -18,6 +17,8 @@ NS.anchors = {
         "gUI4_UnitPlayer",
         "oUF_Adirelle_Player",
         "Stuf.units.player",
+        "oUF_AftermathhPlayer",
+        "LUFUnitplayer",
         "PlayerFrame",
     },
 
@@ -35,6 +36,8 @@ NS.anchors = {
         "gUI4_UnitTarget",
         "oUF_Adirelle_Target",
         "Stuf.units.target",
+        "oUF_AftermathhTarget",
+        "LUFUnittarget",
         "TargetFrame",
     },
 
@@ -52,6 +55,8 @@ NS.anchors = {
         "gUI4_UnitFocus",
         "oUF_Adirelle_Focus",
         "Stuf.units.focus",
+        "oUF_AftermathhFocus",
+        "LUFUnitfocus",
         "FocusFrame",
     },
 
@@ -66,6 +71,7 @@ NS.anchors = {
         "GwPartyFrame%d",
         "gUI4_GroupFramesGroup5UnitButton%d",
         "Stuf.units.party%d",
+        "Aftermathh_Party%d",
         "PartyMemberFrame%d",
     },
 
