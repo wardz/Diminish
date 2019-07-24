@@ -312,7 +312,8 @@ do
     local CATEGORY_STUN = NS.CATEGORIES.STUN
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local CATEGORY_ROOT = NS.CATEGORIES.ROOT
-    local spellList = LibStub("DRList-1.0"):GetSpells()
+    local DRList = LibStub("DRList-1.0")
+    local spellList = DRList:GetSpells()
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
         local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
@@ -321,8 +322,9 @@ do
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
 
-            local category = spellList[spellID] -- DR category
+            local category = spellList[spellID]
             if not category or category == "knockback" then return end
+            category = DRList:GetCategoryLocalization(category)
 
             local isMindControlled = false
             local isNotPetOrPlayer = false
