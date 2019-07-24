@@ -518,7 +518,6 @@ function Icons:ReleaseFrame(frame, unitID, timer, category)
 end
 
 do
-    local textureCachePlayer = {}
     local GetSpellTexture = _G.GetSpellTexture
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local indicatorColors = NS.DR_STATES_COLORS
@@ -556,24 +555,11 @@ do
 
     local function SetSpellTexture(frame, timer)
         if NS.db.categoryTextures[timer.category] then
-            -- Icon has been sat manually in Diminish_Options, frames.lua
+            -- Icon has been sat manually in Diminish_Options
             return frame.icon:SetTexture(NS.db.categoryTextures[timer.category])
         end
 
-        if NS.db.spellBookTextures then
-            if not textureCachePlayer[timer.category] then
-                if timer.srcGUID == NS.Diminish.PLAYER_GUID or timer.srcGUID == UnitGUID("pet") then
-                    textureCachePlayer[timer.category] = GetSpellTexture(timer.spellID)
-                end
-            end
-        end
-
-        -- always set texture that player has cast before for this category, but only if timer is for enemy target
-        if NS.db.spellBookTextures and textureCachePlayer[timer.category] and not timer.isFriendly then
-            frame.icon:SetTexture(textureCachePlayer[timer.category])
-        else
-            frame.icon:SetTexture(GetSpellTexture(timer.spellID))
-        end
+        frame.icon:SetTexture(GetSpellTexture(timer.spellID))
     end
 
     function Icons:StartCooldown(timer, unitID, onAuraEnd)

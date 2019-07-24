@@ -62,13 +62,12 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.2",
+        version = "1.3",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
         timerColors = false,
         timerStartAuraEnd = false,
-        spellBookTextures = false,
         showCategoryText = false,
         colorBlind = false,
         trackNPCs = false,

@@ -119,13 +119,6 @@ function Panel:Setup()
     subMisc:SetPoint("TOPRIGHT", -64, -50)
 
 
-    frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
-        db.showCategoryText = not db.showCategoryText
-        Icons:OnFrameConfigChanged()
-    end)
-    frames.showCategoryText:SetPoint("RIGHT", -225, 160)
-
-
     frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
         db.trackNPCs = not db.trackNPCs
 
@@ -139,20 +132,21 @@ function Panel:Setup()
 
         DIMINISH_NS.Diminish:ToggleForZone()
     end)
-    frames.trackNPCs:SetPoint("LEFT", frames.showCategoryText, 0, -40)
+    frames.trackNPCs:SetPoint("RIGHT", -225, 160)
 
 
-    frames.spellBookTextures = Widgets:CreateCheckbox(self, L.SPELLBOOKTEXTURES, L.SPELLBOOKTEXTURES_TOOLTIP, function()
-        db.spellBookTextures = not db.spellBookTextures
+    frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
+        db.showCategoryText = not db.showCategoryText
+        Icons:OnFrameConfigChanged()
     end)
-    frames.spellBookTextures:SetPoint("LEFT", frames.trackNPCs, 0, -40)
+    frames.showCategoryText:SetPoint("LEFT", frames.trackNPCs, 0, -40)
 
 
     frames.colorBlind = Widgets:CreateCheckbox(self, L.COLORBLIND, format(L.COLORBLIND_TOOLTIP, L.TIMERTEXT), function()
         db.colorBlind = not db.colorBlind
         Icons:OnFrameConfigChanged()
     end)
-    frames.colorBlind:SetPoint("LEFT", frames.spellBookTextures, 0, -40)
+    frames.colorBlind:SetPoint("LEFT", frames.showCategoryText, 0, -40)
 
 
     do
