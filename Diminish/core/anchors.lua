@@ -19,6 +19,7 @@ NS.anchors = {
         "Stuf.units.player",
         "oUF_AftermathhPlayer",
         "LUFUnitplayer",
+        "oUF_LumenPlayer",
         "PlayerFrame",
     },
 
@@ -38,6 +39,7 @@ NS.anchors = {
         "Stuf.units.target",
         "oUF_AftermathhTarget",
         "LUFUnittarget",
+        "oUF_LumenTarget",
         "TargetFrame",
     },
 
@@ -57,6 +59,7 @@ NS.anchors = {
         "Stuf.units.focus",
         "oUF_AftermathhFocus",
         "LUFUnitfocus",
+        "oUF_LumenFocus",
         "FocusFrame",
     },
 
@@ -72,6 +75,8 @@ NS.anchors = {
         "gUI4_GroupFramesGroup5UnitButton%d",
         "Stuf.units.party%d",
         "Aftermathh_Party%d",
+        "Grid2LayoutHeader1UnitButton%d",
+        "oUF_LumenParty%d",
         "PartyMemberFrame%d",
     },
 
@@ -83,6 +88,7 @@ NS.anchors = {
         "oUF_Adirelle_Arena%d",
         "Stuf.units.arena%d",
         "sArenaEnemyFrame%d",
+        "oUF_LumenArena%d",
         "ArenaEnemyFrame%d",
     },
 }
