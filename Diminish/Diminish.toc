@@ -1,4 +1,4 @@
-## Interface: 80200
+## Interface: 80205
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.
