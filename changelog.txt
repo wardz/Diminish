@@ -1,3 +1,10 @@
+v2.2.0:
+- Update for patch 8.2.5. Let me know if there's any bugs and I'll fix it asap.
+- Removed use familiar textures option. You can manually change texture instead by right clicking a checkbox under "Enabled Categories".
+- Diminish now uses DRList-1.0 library for diminishing returns spell data, as a side effect your
+  enabled DR categories settings may reset when there are localization updates. (rare & only for non english clients.)
+
+
 v2.1.8:
 - Fix incorrect spellID for Lightning Lasso.
 
