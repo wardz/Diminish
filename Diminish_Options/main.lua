@@ -63,17 +63,24 @@ function Panel:Setup()
     subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
+    --@retail@
     frames.timerStartAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
         db.timerStartAuraEnd = not db.timerStartAuraEnd
     end)
     frames.timerStartAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
+    --@end-retail@
 
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
         db.timerSwipe = not db.timerSwipe
         Icons:OnFrameConfigChanged()
     end)
+    --@retail@
     frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
+    --@end-retail@
+    --@non-retail@
+    frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
+    --@end-non-retail@
 
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
@@ -229,7 +236,7 @@ function Panel:Setup()
 
     -- Test mode for timers
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
-        if InCombatLockdown() or InActiveBattlefield() or IsActiveBattlefieldArena() then
+        if InCombatLockdown() or InActiveBattlefield() or (IsActiveBattlefieldArena and IsActiveBattlefieldArena()) then
             return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end
 

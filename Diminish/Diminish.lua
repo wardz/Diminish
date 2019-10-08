@@ -16,11 +16,13 @@ _G.DIMINISH_NS = NS
 
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
-    focus = "PLAYER_FOCUS_CHANGED",
     party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",  -- csv
-    arena = "ARENA_OPPONENT_UPDATE",
     player = "COMBAT_LOG_EVENT_UNFILTERED",
     nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED",
+    --@retail@
+    arena = "ARENA_OPPONENT_UPDATE",
+    focus = "PLAYER_FOCUS_CHANGED",
+    --@end-retail@
 }
 
 function Diminish:ToggleUnitEvent(events, enable)
@@ -47,6 +49,7 @@ function Diminish:ToggleForZone(dontRunEnable)
     self.currInstanceType = select(2, IsInInstance())
     local registeredOnce = false
 
+    --@retail@
     if self.currInstanceType == "arena" then
         -- HACK: check if inside arena brawl, C_PvP.IsInBrawl() doesn't
         -- always work on PLAYER_ENTERING_WORLD so delay it with this event.
@@ -61,6 +64,7 @@ function Diminish:ToggleForZone(dontRunEnable)
         self.currInstanceType = "pvp" -- treat arena brawl as a battleground
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
     end
+    --@end-retail@
 
     -- (Un)register unit events for current zone depending on user settings
     for unit, settings in pairs(NS.db.unitFrames) do -- DR tracking for focus/target etc each have their own seperate settings
@@ -198,7 +202,7 @@ function Diminish:InitDB()
     -- Always use this directly or reference will be invalid
     -- after changing profile in Diminish_Options
     NS.db = DiminishDB.profiles[profile]
-    NS.db.version = "1.3"
+    NS.db.version = NS.DEFAULT_SETTINGS.version
     NS.activeProfile = profile
 
     -- Remove table values no longer found in default settings
@@ -244,6 +248,7 @@ function Diminish:CVAR_UPDATE(name, value)
     end
 end
 
+--@retail@
 function Diminish:PVP_BRAWL_INFO_UPDATED()
     if not IsInBrawl() then
         self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
@@ -251,6 +256,7 @@ function Diminish:PVP_BRAWL_INFO_UPDATED()
         self:ToggleForZone(true)
     end
 end
+--@end-retail@
 
 function Diminish:PLAYER_ENTERING_WORLD()
     self:ToggleForZone()
@@ -260,9 +266,11 @@ function Diminish:PLAYER_TARGET_CHANGED()
     Timers:Refresh("target")
 end
 
+--@retail@
 function Diminish:PLAYER_FOCUS_CHANGED()
     Timers:Refresh("focus")
 end
+--@end-retail@
 
 function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
     if UnitIsUnit("player", namePlateUnitToken) then return end -- ignore personal resource display
@@ -277,12 +285,14 @@ function Diminish:NAME_PLATE_UNIT_REMOVED(namePlateUnitToken)
     Icons:ReleaseNameplate(namePlateUnitToken)
 end
 
+--@retail@
 function Diminish:ARENA_OPPONENT_UPDATE(unitID, status)
     if status == "seen" and not strfind(unitID, "pet") then
         if IsInBrawl() and not NS.db.unitFrames.arena.zones.pvp then return end
         Timers:Refresh(unitID)
     end
 end
+--@end-retail@
 
 function Diminish:GROUP_ROSTER_UPDATE()
     local members = min(GetNumGroupMembers(), 4)
@@ -313,7 +323,6 @@ do
     local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
     local CATEGORY_ROOT = NS.CATEGORIES.ROOT
     local DRList = LibStub("DRList-1.0")
-    local spellList = DRList:GetSpells()
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
         local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
@@ -322,9 +331,12 @@ do
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
 
-            local category = spellList[spellID]
+            local category, drSpellID = DRList:GetCategoryBySpellID(spellID)
             if not category or category == "knockback" then return end
             category = DRList:GetCategoryLocalization(category)
+            --@non-retail@
+            spellID = drSpellID
+            --@end-non-retail@
 
             local isMindControlled = false
             local isNotPetOrPlayer = false
@@ -382,7 +394,9 @@ do
         -------------------------------------------------------------------------------------------------------
 
         if eventType == "UNIT_DIED" or eventType == "PARTY_KILL" then
+            --@retail@
             if self.currInstanceType == "arena" and not IsInBrawl() then return end
+            --@end-retail@
 
             -- Delete all timers when player died
             if destGUID == self.PLAYER_GUID then

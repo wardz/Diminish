@@ -40,9 +40,29 @@ NS.anchors = {
         "oUF_AftermathhTarget",
         "LUFUnittarget",
         "oUF_LumenTarget",
+        "TukuiTargetFrame",
+        "CG_UnitFrame_2",
         "TargetFrame",
     },
 
+    party = {
+        "SUFHeaderpartyUnitButton%d",
+        "XPerl_party%d",
+        "ElvUF_PartyGroup1UnitButton%d",
+        "TukuiPartyUnitButton%d",
+        "DUF_PartyFrame%d",
+        "PitBull4_Groups_PartyUnitButton%d",
+        "oUF_Raid%d",
+        "GwPartyFrame%d",
+        "gUI4_GroupFramesGroup5UnitButton%d",
+        "Stuf.units.party%d",
+        "Aftermathh_Party%d",
+        "Grid2LayoutHeader1UnitButton%d",
+        "oUF_LumenParty%d",
+        "PartyMemberFrame%d",
+    },
+
+    --@retail@
     focus = {
         "SUFUnitfocus",
         "XPerl_FocusportraitFrame",
@@ -63,23 +83,6 @@ NS.anchors = {
         "FocusFrame",
     },
 
-    party = {
-        "SUFHeaderpartyUnitButton%d",
-        "XPerl_party%d",
-        "ElvUF_PartyGroup1UnitButton%d",
-        "TukuiPartyUnitButton%d",
-        "DUF_PartyFrame%d",
-        "PitBull4_Groups_PartyUnitButton%d",
-        "oUF_Raid%d",
-        "GwPartyFrame%d",
-        "gUI4_GroupFramesGroup5UnitButton%d",
-        "Stuf.units.party%d",
-        "Aftermathh_Party%d",
-        "Grid2LayoutHeader1UnitButton%d",
-        "oUF_LumenParty%d",
-        "PartyMemberFrame%d",
-    },
-
     arena =  {
         "ElvUF_Arena%d",
         "oUF_TukuiArena%d",
@@ -91,4 +94,5 @@ NS.anchors = {
         "oUF_LumenArena%d",
         "ArenaEnemyFrame%d",
     },
+    --@end-retail@
 }

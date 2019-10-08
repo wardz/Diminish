@@ -59,10 +59,14 @@ local function Refresh(self)
         if frames.zones[L.ZONE_DUNGEONS] then
             if DIMINISH_NS.db.trackNPCs then
                 frames.zones[L.ZONE_DUNGEONS]:Enable()
-                frames.categories.TAUNT:Enable()
+                if frames.categories.TAUNT then
+                    frames.categories.TAUNT:Enable()
+                end
             else
                 frames.zones[L.ZONE_DUNGEONS]:Disable()
-                frames.categories.TAUNT:Disable()
+                if frames.categories.TAUNT then
+                    frames.categories.TAUNT:Disable()
+                end
             end
         end
     end
@@ -252,12 +256,24 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 preferredIndex = 4,
             }
 
+            -- Generate checkbox toggle for every category
             frames.categories = {}
-            local x, y = -70, 10
+            local x, y = -10, 10
             local dbCategories = NS.GetDBProxy("unitFrames", unit, "disabledCategories")
 
-            -- Generate checkbox toggle for every category
-            local i = 1
+            local scrollBg = Widgets:CreatePanelBackground(panel)
+            scrollBg:SetPoint("BOTTOMLEFT", subCategories, -10, -238)
+            scrollBg:SetSize(250, 200)
+
+            local scrollArea = CreateFrame("ScrollFrame", "Diminish_ScrollArea"..unit, scrollBg, "UIPanelScrollFrameTemplate")
+            scrollArea:SetPoint("TOPLEFT", scrollBg, "TOPLEFT", 5, -5)
+            scrollArea:SetPoint("BOTTOMRIGHT", scrollBg, "BOTTOMRIGHT", -5, 5)
+
+            scrollArea.child = CreateFrame("Frame", "Diminish_ScrollChild"..unit, scrollArea)
+            scrollArea:SetScrollChild(scrollArea.child)
+            scrollArea.child:SetPoint("CENTER", subCategories, 0, 0)
+            scrollArea.child:SetSize(250, 200)
+
             for k, category in pairs(DIMINISH_NS.CATEGORIES) do
                 local continue = true
                 if category == DIMINISH_NS.CATEGORIES.TAUNT and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
@@ -266,11 +282,12 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 end
 
                 if continue then
-                    frames.categories[k] = Widgets:CreateCheckbox(panel, category, L.CATEGORIES_TOOLTIP, function(self)
+                    frames.categories[k] = Widgets:CreateCheckbox(scrollArea.child, category, L.CATEGORIES_TOOLTIP, function(self)
                         dbCategories[category] = self:GetChecked() == false and true or false
                     end)
 
-                    frames.categories[k]:SetPoint("LEFT", subCategories, y, x)
+                    frames.categories[k]:ClearAllPoints()
+                    frames.categories[k]:SetPoint("TOPLEFT", y, x)
                     frames.categories[k]:SetChecked(true)
                     frames.categories[k]:HookScript("OnMouseDown", function(self, button)
                         if button == "RightButton" then
@@ -279,13 +296,6 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                         end
                     end)
                     x = x - 30
-                    i = i + 1
-
-                    if i > (unit == "arena" and 3 or 4) then
-                        i = 1
-                        x = -70
-                        y = y + 120
-                    end
                 end
             end
         end
@@ -331,7 +341,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
         frames.testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
-            if InCombatLockdown() or InActiveBattlefield() or IsActiveBattlefieldArena() then
+            if InCombatLockdown() or InActiveBattlefield() or (IsActiveBattlefieldArena and IsActiveBattlefieldArena()) then
                 return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
             end
             NS.TestMode:Test()

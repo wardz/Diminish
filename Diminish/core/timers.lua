@@ -258,10 +258,11 @@ do
     local UnitClassification = _G.UnitClassification
 
     local testModeUnits = {
-        "player", "target", "focus",
-        "arena1", "arena2", "arena3",
+        "player", "target", "nameplate",
         "party1", "party2", "party3",
-        "nameplate",
+        --@retail@
+        "focus", "arena1", "arena2", "arena3",
+        --@end-retail@
     }
 
     local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)
@@ -279,6 +280,7 @@ do
         if settings.disabledCategories[timer.category] then return end
 
         -- Show root/taunt DR only for special mobs
+        --@retail@
         if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT) then
             local classification = UnitClassification(unitID)
             if classification == "normal" or classification == "trivial" or classification == "minus" then
@@ -310,6 +312,7 @@ do
                 end
             end
         end
+        --@end-retail@
 
         Icons:StartCooldown(timer, origUnitID and "player-party" or unitID, onAuraEnd)
         --@debug@

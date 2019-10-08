@@ -107,17 +107,22 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     local settings = DIMINISH_NS.db.unitFrames
 
+    --@retail@
     if not IsAddOnLoaded("Blizzard_ArenaUI") then
         LoadAddOn("Blizzard_ArenaUI")
     end
+    --@end-retail@
 
     local showFlag
     if state ~= nil then
         showFlag = state
     else
+        --@retail@
         showFlag = not ArenaEnemyFrames:IsShown()
+        --@end-retail@
     end
 
+    --@retail@
     local isInArena = select(2, IsInInstance()) == "arena"
     if forceHide or settings.arena.enabled and not isInArena then
         ArenaEnemyFrames:SetShown(showFlag)
@@ -132,6 +137,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
             end
         end
     end
+    --@end-retail@
 
     local useCompact = GetCVarBool("useCompactPartyFrames")
     if useCompact and settings.party.enabled and showFlag then
@@ -145,9 +151,11 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         local E = unpack(ElvUI)
         local UF = E and E:GetModule("UnitFrames")
         if UF then
+            --@retail@
             if settings.arena.enabled then
                 UF:ToggleForceShowGroupFrames('arena', 5)
             end
+            --@end-retail@
             if settings.party.enabled then
                 UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
             end
@@ -162,6 +170,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     for i = 1, 5 do
+        --@retail@
         if not isInArena then
             local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
             if frame and frame ~= UIParent then
@@ -170,6 +179,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
                 end
             end
         end
+        --@end-retail@
 
         if forceHide or not useCompact and settings.party.enabled then
             if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
@@ -285,10 +295,12 @@ function TestMode:ShowAnchors()
 
     for _, unitID in pairs(NS.unitFrames) do
         if unitID == "arena" then
+            --@retail@
             for i = 1, 5 do
                 local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i, true)
                 TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
             end
+            --@end-retail@
         elseif unitID == "party" then
             for i = 0, 4 do
                 local unit = i == 0 and "player-party" or "party"..i
@@ -328,7 +340,7 @@ function TestMode:Test(hide)
 
     local DNS = DIMINISH_NS
     DNS.Timers:ResetAll()
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 81429, false, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 853, false, false, true, true)
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.ROOT, 122, false, false, true, true)
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.INCAPACITATE, 118, false, true, true, true)
 end

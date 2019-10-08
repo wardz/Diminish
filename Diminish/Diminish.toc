@@ -1,4 +1,9 @@
+#@non-retail@
+## Interface: 11302
+#@end-non-retail@
+#@retail@
 ## Interface: 80205
+#@end-retail@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.

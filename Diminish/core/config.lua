@@ -24,14 +24,28 @@ NS.DR_STATES_COLORS = {
 -------------------------------------------------------
 
 -- "enum" for categories
+-- too lazy to rename keys at this point, otherwise we could just do NS.CATEGORIES = DRList:GetCategories()
 NS.CATEGORIES = {
-    DISORIENT = DRList:GetCategories().disorient, -- too lazy to rename keys, otherwise we could just do NS.CATEGORIES = DRList:GetCategories()
     INCAPACITATE = DRList:GetCategories().incapacitate,
     SILENCE = DRList:GetCategories().silence,
     STUN = DRList:GetCategories().stun,
     ROOT = DRList:GetCategories().root,
     DISARM = DRList:GetCategories().disarm,
+
+    --@retail@
+    DISORIENT = DRList:GetCategories().disorient,
     TAUNT = DRList:GetCategories().taunt,
+    --@end-retail@
+
+    --@non-retail@
+    CHARGE = DRList:GetCategories().charge,
+    OPENER_STUN = DRList:GetCategories().opener_stun,
+    RANDOM_STUN = DRList:GetCategories().random_stun,
+    RANDOM_ROOT = DRList:GetCategories().random_root,
+    FEAR = DRList:GetCategories().fear,
+    FROST_SHOCK = DRList:GetCategories().frost_shock,
+    MIND_CONTROL = DRList:GetCategories().mind_control,
+    --@end-non-retail@
 }
 
 -------------------------------------------------------
@@ -40,8 +54,15 @@ NS.CATEGORIES = {
 
 do
     local defaultsDisabledCategories = {
+        --@retail@
         [NS.CATEGORIES.DISARM] = true,
         [NS.CATEGORIES.TAUNT] = true,
+        --@end-retail@
+
+        --@non-retail@
+        [NS.CATEGORIES.FROST_SHOCK] = true,
+        [NS.CATEGORIES.MIND_CONTROL] = true,
+        --@end-non-retail@
     }
 
     local defaultsTarget = {
@@ -62,12 +83,17 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.3",
+        version = "1.4",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
         timerColors = false,
-        timerStartAuraEnd = false,
+        --@retail@
+        timerStartAuraEnd = false, -- luacheck: ignore
+        --@end-retail@
+        --@non-retail@
+        timerStartAuraEnd = true,
+        --@end-non-retail@
         showCategoryText = false,
         colorBlind = false,
         trackNPCs = false,

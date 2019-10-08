@@ -1,4 +1,9 @@
+#@non-retail@
+## Interface: 11302
+#@end-non-retail@
+#@retail@
 ## Interface: 80205
+#@end-retail@
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
 ## Notes-deDE: Konfiguration für Diminish.
@@ -15,6 +20,7 @@ widgets\editbox.lua
 widgets\slider.lua
 widgets\header.lua
 widgets\panel.lua
+widgets\background.lua
 
 testmode.lua
 main.lua
