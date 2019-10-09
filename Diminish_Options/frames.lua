@@ -276,7 +276,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
 
             for k, category in pairs(DIMINISH_NS.CATEGORIES) do
                 local continue = true
-                if category == DIMINISH_NS.CATEGORIES.TAUNT and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
+                if category == DIMINISH_NS.CATEGORIES.taunt and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
                     -- only show Taunt for focus/target panel
                     continue = false
                 end

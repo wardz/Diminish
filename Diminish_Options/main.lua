@@ -75,12 +75,10 @@ function Panel:Setup()
         db.timerSwipe = not db.timerSwipe
         Icons:OnFrameConfigChanged()
     end)
+    frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
     --@retail@
     frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
     --@end-retail@
-    --@non-retail@
-    frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
-    --@end-non-retail@
 
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
@@ -131,7 +129,9 @@ function Panel:Setup()
 
         for _, unit in pairs({ "target", "focus", "nameplate" }) do
             local cfg = db.unitFrames[unit]
-            cfg.disabledCategories[DIMINISH_NS.CATEGORIES.TAUNT] = not db.trackNPCs
+            --@retail@
+            cfg.disabledCategories[DIMINISH_NS.CATEGORIES.taunt] = not db.trackNPCs
+            --@end-retail@
             cfg.zones.party = db.trackNPCs
             --cfg.zones.scenario = db.trackNPCs
             cfg.zones.raid = db.trackNPCs

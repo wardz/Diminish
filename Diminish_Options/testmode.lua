@@ -340,7 +340,7 @@ function TestMode:Test(hide)
 
     local DNS = DIMINISH_NS
     DNS.Timers:ResetAll()
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.STUN, 853, false, false, true, true)
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.ROOT, 122, false, false, true, true)
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.INCAPACITATE, 118, false, true, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.stun, 853, false, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.root, 122, false, false, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.incapacitate, 118, false, true, true, true)
 end

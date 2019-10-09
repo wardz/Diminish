@@ -24,46 +24,25 @@ NS.DR_STATES_COLORS = {
 -------------------------------------------------------
 
 -- "enum" for categories
--- too lazy to rename keys at this point, otherwise we could just do NS.CATEGORIES = DRList:GetCategories()
-NS.CATEGORIES = {
-    INCAPACITATE = DRList:GetCategories().incapacitate,
-    SILENCE = DRList:GetCategories().silence,
-    STUN = DRList:GetCategories().stun,
-    ROOT = DRList:GetCategories().root,
-    DISARM = DRList:GetCategories().disarm,
+NS.CATEGORIES = DRList:GetCategories()
 
-    --@retail@
-    DISORIENT = DRList:GetCategories().disorient,
-    TAUNT = DRList:GetCategories().taunt,
-    --@end-retail@
-
-    --@non-retail@
-    CHARGE = DRList:GetCategories().charge,
-    OPENER_STUN = DRList:GetCategories().opener_stun,
-    RANDOM_STUN = DRList:GetCategories().random_stun,
-    RANDOM_ROOT = DRList:GetCategories().random_root,
-    FEAR = DRList:GetCategories().fear,
-    FROST_SHOCK = DRList:GetCategories().frost_shock,
-    MIND_CONTROL = DRList:GetCategories().mind_control,
-    --@end-non-retail@
-}
+NS.IS_CLASSIC = select(4, GetBuildInfo()) < 80000
 
 -------------------------------------------------------
 -- Default SavedVariables
 -------------------------------------------------------
 
 do
-    local defaultsDisabledCategories = {
-        --@retail@
-        [NS.CATEGORIES.DISARM] = true,
-        [NS.CATEGORIES.TAUNT] = true,
-        --@end-retail@
+    local defaultsDisabledCategories = {}
+    if NS.IS_CLASSIC then -- @non-retail@ filter doesn't work at the time of writing this
+        defaultsDisabledCategories[NS.CATEGORIES.frost_shock] = true
+        defaultsDisabledCategories[NS.CATEGORIES.mind_control] = true
+    end
 
-        --@non-retail@
-        [NS.CATEGORIES.FROST_SHOCK] = true,
-        [NS.CATEGORIES.MIND_CONTROL] = true,
-        --@end-non-retail@
-    }
+    --@retail@
+    defaultsDisabledCategories[NS.CATEGORIES.disarm] = true
+    defaultsDisabledCategories[NS.CATEGORIES.taunt] = true
+    --@end-retail@
 
     local defaultsTarget = {
         enabled = true,
@@ -88,12 +67,7 @@ do
         timerText = true,
         timerSwipe = true,
         timerColors = false,
-        --@retail@
-        timerStartAuraEnd = false, -- luacheck: ignore
-        --@end-retail@
-        --@non-retail@
-        timerStartAuraEnd = true,
-        --@end-non-retail@
+        timerStartAuraEnd = false,
         showCategoryText = false,
         colorBlind = false,
         trackNPCs = false,
@@ -176,4 +150,8 @@ do
             },
         },
     }
+
+    if NS.IS_CLASSIC then
+        NS.DEFAULT_SETTINGS.timerStartAuraEnd = true
+    end
 end

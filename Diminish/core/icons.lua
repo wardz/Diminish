@@ -519,7 +519,7 @@ end
 
 do
     local GetSpellTexture = _G.GetSpellTexture
-    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
+    local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local indicatorColors = NS.DR_STATES_COLORS
     local DR_TIME = NS.DR_TIME
 

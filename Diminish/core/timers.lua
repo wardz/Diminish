@@ -252,8 +252,8 @@ end
 
 do
     local GetAuraDuration = NS.GetAuraDuration
-    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
-    local CATEGORY_ROOT = NS.CATEGORIES.ROOT
+    local CATEGORY_TAUNT = NS.CATEGORIES.taunt
+    local CATEGORY_ROOT = NS.CATEGORIES.root
     local UnitIsQuestBoss = _G.UnitIsQuestBoss
     local UnitClassification = _G.UnitClassification
 

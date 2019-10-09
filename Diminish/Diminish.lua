@@ -319,28 +319,32 @@ do
     local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
     local bit_band = _G.bit.band
 
-    local CATEGORY_STUN = NS.CATEGORIES.STUN
-    local CATEGORY_TAUNT = NS.CATEGORIES.TAUNT
-    local CATEGORY_ROOT = NS.CATEGORIES.ROOT
+    local IS_CLASSIC = NS.IS_CLASSIC
+    local CATEGORY_STUN = NS.CATEGORIES.stun
+    local CATEGORY_TAUNT = NS.CATEGORIES.taunt
+    local CATEGORY_ROOT = NS.CATEGORIES.root
     local DRList = LibStub("DRList-1.0")
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
-        local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, _, _, auraType = CombatLogGetCurrentEventInfo()
+        local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, spellName, _, auraType = CombatLogGetCurrentEventInfo()
         if not destGUID then return end -- sanity check
 
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
+            if spellID == 0 then -- for classic
+                spellID = spellName
+            end
 
             local category, drSpellID = DRList:GetCategoryBySpellID(spellID)
             if not category or category == "knockback" then return end
             category = DRList:GetCategoryLocalization(category)
-            --@non-retail@
-            spellID = drSpellID
-            --@end-non-retail@
+            if drSpellID then
+                spellID = drSpellID
+            end
 
             local isMindControlled = false
             local isNotPetOrPlayer = false
-            local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+            local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 -- TODO: might need to ignore npc src
             if not isPlayer then
                 if strfind(destGUID, "Player-") then
                     -- Players have same bitmask as player pets when they're mindcontrolled and MC aura breaks, so we need to distinguish these
@@ -350,6 +354,7 @@ do
                 if not self.isWatchingNPCs and not isMindControlled then return end
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
+                    if IS_CLASSIC then return end
                     if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT then
                         -- only show taunt and stun for normal mobs (roots for special mobs), player pets will show all
                         return
