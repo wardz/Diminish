@@ -19,8 +19,8 @@ script:
       cd Diminish
       curl -L -s -o release.sh https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
       chmod +x ./release.sh
-      ./release.sh -g 1.13.2 # classic
-      ./release.sh # retail
+      ./release.sh -g 1.13.2 # classic TODO: add -w id once we upload to WoWI
+      ./release.sh -w 23628 # retail
     fi
 
 branches:

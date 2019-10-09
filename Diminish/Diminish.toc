@@ -1,16 +1,15 @@
-#@non-retail@
-## Interface: 11302
-#@end-non-retail@
 #@retail@
 ## Interface: 80205
 #@end-retail@
+#@non-retail@
+# ## Interface: 11302
+#@end-non-retail@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.
 ## SavedVariables: DiminishDB
 ## Version: @project-version@
 ## X-Curse-Project-ID: 92871
-## X-WoWI-ID: 23628
 
 libs\LibStub\LibStub.lua
 libs\DRList-1.0\DRList-1.0.xml
