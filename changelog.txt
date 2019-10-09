@@ -1,5 +1,5 @@
 v2.2.1:
-- Update to work with Classic. (Work in progress, might be bugs and incorrect DR categories or spells missing, let me know.)
+- Updated to work with Classic. (Work in progress, might be bugs and incorrect DR categories, let me know, it helps a lot.)
   Note that in Classic, Diminish will only start the DR timer when the CC ends, not on CC applied.
   Also make sure you start from a fresh config, do not copy your old retail Diminish settings file.
 - Enabled Categories section in the options panel is now a scrollable area.
