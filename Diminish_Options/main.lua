@@ -9,9 +9,11 @@ NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 NS.unitFrames = {
     [L.PLAYER] = "player", -- localized, unlocalized unitID
     [L.TARGET] = "target",
+    --@retail@
     [L.FOCUS] = "focus",
-    [L.PARTY] = "party",
     [L.ARENA] = "arena",
+    --@end-retail@
+    [L.PARTY] = "party",
     [L.NAMEPLATE] = "nameplate",
 }
 
