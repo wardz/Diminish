@@ -326,7 +326,7 @@ do
     local DRList = LibStub("DRList-1.0")
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
-        local _, eventType, _, srcGUID, _, _, _, destGUID, _, destFlags, _, spellID, spellName, _, auraType = CombatLogGetCurrentEventInfo()
+        local _, eventType, _, srcGUID, _, srcFlags, _, destGUID, _, destFlags, _, spellID, spellName, _, auraType = CombatLogGetCurrentEventInfo()
         if not destGUID then return end -- sanity check
 
         if auraType == "DEBUFF" then
@@ -344,7 +344,7 @@ do
 
             local isMindControlled = false
             local isNotPetOrPlayer = false
-            local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 -- TODO: might need to ignore npc src
+            local isPlayer = bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
             if not isPlayer then
                 if strfind(destGUID, "Player-") then
                     -- Players have same bitmask as player pets when they're mindcontrolled and MC aura breaks, so we need to distinguish these
@@ -364,6 +364,10 @@ do
             else
                 -- Ignore taunts for players
                 if category == CATEGORY_TAUNT then return end
+                if IS_CLASSIC then
+                    local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 -- TODO: or pet
+                    if not isSrcPlayer then return end
+                end
             end
 
             local isFriendly = bit_band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0
