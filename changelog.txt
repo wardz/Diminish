@@ -1,3 +1,9 @@
+v2.2.2:
+- Fixes for DR categories. Let me know if there's still any incorrect spells.
+- Disable arena and focus options for Classic.
+- Fix some crowd control spells casted by NPCs showing DR timer on player in Classic.
+
+
 v2.2.1:
 - Updated to work with Classic. (Work in progress, might be bugs and incorrect DR categories, let me know, it helps a lot.)
   Note that in Classic, Diminish will only start the DR timer when the CC ends, not on CC applied.
