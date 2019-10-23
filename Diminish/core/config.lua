@@ -80,8 +80,8 @@ do
         },
 
         unitFrames = {
-            target = defaultsTarget,
-            focus = defaultsTarget,
+            target = CopyTable(defaultsTarget),
+            focus = CopyTable(defaultsTarget),
 
             player = {
                 enabled = true,

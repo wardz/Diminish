@@ -28,6 +28,7 @@ globals = {
 
     -- Misc wow globals in random order
     "_G",
+    "CopyTable",
     "GetBuildInfo",
     "gmatch",
     "bit",
