@@ -1,3 +1,6 @@
+v2.2.3:
+- Hotfix for target DR tracking being default disabled for fresh installs after using v2.2.2.
+
 v2.2.2:
 - Fixes for DR categories. Let me know if there's still any incorrect spells.
 - Disable arena and focus options for Classic.
