@@ -1,8 +1,10 @@
 #@retail@
 ## Interface: 80205
+## X-Classic: 0
 #@end-retail@
 #@non-retail@
 # ## Interface: 11302
+# ## X-Classic: 1
 #@end-non-retail@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.

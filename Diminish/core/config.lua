@@ -28,6 +28,13 @@ NS.CATEGORIES = DRList:GetCategories()
 
 NS.IS_CLASSIC = select(4, GetBuildInfo()) < 80000
 
+local alert = _G.message or _G.print
+if NS.IS_CLASSIC and GetAddOnMetadata("Diminish", "X-Classic") == "0" then
+    alert("Diminish: You're currently using the Retail version of Diminish on a Classic client. You should download the Classic version instead for it to work.")
+elseif not NS.IS_CLASSIC and GetAddOnMetadata("Diminish", "X-Classic") == "1" then
+    alert("Diminish: You're currently using the Classic version of Diminish on a Retail client. You should download the Retail version instead for it to work.")
+end
+
 -------------------------------------------------------
 -- Default SavedVariables
 -------------------------------------------------------
