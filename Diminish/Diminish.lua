@@ -365,7 +365,7 @@ do
                 -- Ignore taunts for players
                 if category == CATEGORY_TAUNT then return end
                 if IS_CLASSIC then
-                    local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 -- TODO: or pet
+                    local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0
                     if not isSrcPlayer then return end
                 end
             end
