@@ -1,3 +1,8 @@
+v2.2.4:
+- A warning message now pops up if you use the Classic version of Diminish on a Retail client or vice versa.
+- Fix pet crowd controls not being tracked in Classic.
+
+
 v2.2.3:
 - Hotfix for target DR tracking being default disabled for fresh installs after using v2.2.2.
 
