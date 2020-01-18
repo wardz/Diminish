@@ -19,7 +19,7 @@ script:
       cd Diminish
       curl -L -s -o release.sh https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh
       chmod +x ./release.sh
-      ./release.sh -g 1.13.2 -w 25391 # classic
+      ./release.sh -g 1.13.3 -w 25391 # classic
       ./release.sh -w 23628 # retail
     fi
 
