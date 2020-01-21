@@ -4,7 +4,7 @@ local Widgets = NS.Widgets
 local TestMode = NS.TestMode
 local L = NS.L
 
-local Dropdown = LibStub("PhanxConfig-Dropdown")
+local Dropdown = LibStub("DiminishConfig-Dropdown")
 local profiles = {}
 
 local function RemoveProfileFromTable(value)

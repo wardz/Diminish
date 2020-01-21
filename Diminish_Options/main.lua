@@ -109,7 +109,7 @@ function Panel:Setup()
             { value = "THICKOUTLINE", text = "Thick Outline" },
         }
 
-        frames.timerTextOutline = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.TIMEROUTLINE, L.TIMEROUTLINE_TOOLTIP, fontOutlines)
+        frames.timerTextOutline = LibStub("DiminishConfig-Dropdown").CreateDropdown(self, L.TIMEROUTLINE, L.TIMEROUTLINE_TOOLTIP, fontOutlines)
         frames.timerTextOutline:SetSize(90, 45)
         frames.timerTextOutline:SetPoint("LEFT", frames.timerColors, 0, -45)
         frames.timerTextOutline.OnValueChanged = function(_, value)
@@ -190,7 +190,7 @@ function Panel:Setup()
             }},
         }
 
-        frames.border = LibStub("PhanxConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
+        frames.border = LibStub("DiminishConfig-Dropdown").CreateDropdown(self, L.SELECTBORDER, L.SELECTBORDER_TOOLTIP, textures)
         frames.border:SetPoint("LEFT", frames.colorBlind, 7, -55)
         frames.border:SetWidth(180)
 

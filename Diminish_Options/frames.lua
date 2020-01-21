@@ -3,7 +3,7 @@ local Panel = NS.Panel
 local Widgets = NS.Widgets
 local L = NS.L
 
-local Dropdown = LibStub("PhanxConfig-Dropdown")
+local Dropdown = LibStub("DiminishConfig-Dropdown")
 
 local zones = {
     [L.ZONE_ARENA] = "arena", -- localized name, instanceType

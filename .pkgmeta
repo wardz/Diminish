@@ -5,7 +5,7 @@ package-as: Diminish
 externals:
   Diminish/libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
   Diminish/libs/DRList-1.0: git://github.com/wardz/DRList-1.0
-  Diminish_Options/libs/PhanxConfig-Dropdown: git://github.com/phanx-wow/PhanxConfig-Dropdown
+  Diminish_Options/libs/PhanxConfig-Dropdown: git://github.com/wardz/PhanxConfig-Dropdown
 
 move-folders:
   Diminish/Diminish_Options: Diminish_Options
