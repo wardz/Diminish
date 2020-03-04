@@ -9,7 +9,7 @@
 ## Notes-deDE: Konfiguration für Diminish.
 ## Dependencies: Diminish
 
-libs\PhanxConfig-Dropdown\PhanxConfig-Dropdown.lua
+libs\WardzConfigDropdown-1.0\WardzConfigDropdown-1.0.lua
 
 locales\localization.lua
 

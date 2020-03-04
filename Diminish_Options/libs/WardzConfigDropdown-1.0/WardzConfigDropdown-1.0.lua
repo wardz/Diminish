@@ -1,19 +1,15 @@
 --[[--------------------------------------------------------------------
-	PhanxConfig-Dropdown
-	Simple scrolling dropdown widget generator. Requires LibStub.
+	WardzConfig-Dropdown, a fork of PhanxConfig-Dropdown which is no longer maintained.
+	(Renamed as requested from the original author)
+
 	https://github.com/Phanx/PhanxConfig-Dropdown
-	Copyright (c) 2009-2016 Phanx <addons@phanx.net>. All rights reserved.
-	Feel free to include copies of this file WITHOUT CHANGES inside World of
-	Warcraft addons that make use of it as a library, and feel free to use code
-	from this file in other projects as long as you DO NOT use my name or the
-	original name of this file anywhere in your project outside of an optional
-	credits line -- any modified versions must be renamed to avoid conflicts.
+	https://github.com/wardz/PhanxConfig-Dropdown
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20200121
+local MAJOR_VERSION, MINOR_VERSION = "WardzConfigDropdown-1.0", 1
 
-local lib, oldminor = LibStub:NewLibrary("DiminishConfig-Dropdown", MINOR_VERSION)
-if not lib then return end
+local lib = assert(LibStub, MAJOR_VERSION .. " requires LibStub"):NewLibrary(MAJOR_VERSION, MINOR_VERSION)
+if not lib then return end -- Already loaded or failed
 
 lib.listFrames = lib.listFrames or {}
 
@@ -30,10 +26,11 @@ local function OpenDropdown(dropdown)
 		dropdown.list = list
 	end
 
-	local show = not list:IsShown()
 	for i = 1, #lib.listFrames do
 		lib.listFrames[i].isActive = false
 	end
+
+	local show = not list:IsShown()
 	CloseDropDownMenus()
 
 	if show then
@@ -72,7 +69,7 @@ hooksecurefunc("ToggleDropDownMenu", CloseDropdowns)
 local function Frame_OnEnter(self)
 	if self.OnEnter then
 		self:OnEnter()
-	elseif self.tooltipText then
+	elseif self.tooltipText and not GameTooltip:IsForbidden() then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
 		GameTooltip:Show()
@@ -83,7 +80,9 @@ local function Frame_OnLeave(self)
 	if self.OnLeave then
 		self:OnLeave()
 	else
-		GameTooltip:Hide()
+		if not GameTooltip:IsForbidden() then
+			GameTooltip:Hide()
+		end
 	end
 end
 
@@ -119,12 +118,7 @@ end
 local function CreateListButton(parent)
 	local button = CreateFrame("Button", nil, parent)
 	button:SetHeight(UIDROPDOWNMENU_BUTTON_HEIGHT)
---[[
-	local bg = button:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("BOTTOMLEFT", 1, 1)
-	bg:SetPoint("TOPRIGHT", -1, -1)
-	bg:SetTexture(0, 128, 255, 0.25)
-]]
+
 	local label = button:CreateFontString(nil, "OVERLAY")
 	label:SetPoint("LEFT", 27, 0)
 	label:SetFont((GameFontHighlightSmallLeft:GetFont()), UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT)
@@ -255,7 +249,7 @@ function CreateList(dropdown) -- local
 
 	id = id + 1
 
-	local list = CreateFrame("Button", "DiminishConfigDropdown" .. id, dropdown)
+	local list = CreateFrame("Button", MAJOR_VERSION .. id, dropdown)
 	list:SetFrameStrata("DIALOG")
 	list:SetToplevel(true)
 	list:Hide()
@@ -361,7 +355,7 @@ end
 ------------------------------------------------------------------------
 
 function lib:New(parent, name, tooltipText, items, keepShownOnClick)
-	assert(type(parent) == "table" and type(rawget(parent, 0)) == "userdata", "DiminishConfig-Dropdown: parent must be a frame")
+	assert(type(parent) == "table" and type(rawget(parent, 0)) == "userdata", format("%s: parent must be a frame", MAJOR_VERSION))
 
 	local dropdown = CreateFrame("Frame", nil, parent)
 	dropdown:SetSize(200, 48)
@@ -369,11 +363,7 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	dropdown:SetScript("OnEnter", Frame_OnEnter)
 	dropdown:SetScript("OnLeave", Frame_OnLeave)
 	dropdown:SetScript("OnHide", Frame_OnHide)
---[[
-	dropdown.bg = dropdown:CreateTexture(nil, "BACKGROUND")
-	dropdown.bg:SetAllPoints(true)
-	dropdown.bg:SetTexture(0, 0.5, 0, 0.5)
-]]
+
 	local left = dropdown:CreateTexture(nil, "BORDER")
 	left:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", -16, 47)
 	left:SetSize(25, 64)

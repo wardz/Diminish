@@ -53,7 +53,7 @@ function Widgets:RefreshWidgets(db, panel)
                     frames[setting]:SetValue(value)
                 elseif frames[setting]:IsObjectType("CheckButton") then
                     frames[setting]:SetChecked(value)
-                elseif frames[setting].items then -- phanx dropdown
+                elseif frames[setting].items then -- WardzConfigDropdown-1.0 dropdown
                     frames[setting]:SetValue(type(value) == "table" and value.name or value)
                 end
             end
