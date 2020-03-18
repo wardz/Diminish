@@ -4,7 +4,7 @@ local Widgets = NS.Widgets
 local TestMode = NS.TestMode
 local L = NS.L
 
-local Dropdown = LibStub("DiminishConfig-Dropdown")
+local Dropdown = LibStub("WardzConfigDropdown-1.0")
 local profiles = {}
 
 local function RemoveProfileFromTable(value)

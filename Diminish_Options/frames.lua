@@ -3,7 +3,7 @@ local Panel = NS.Panel
 local Widgets = NS.Widgets
 local L = NS.L
 
-local Dropdown = LibStub("DiminishConfig-Dropdown")
+local Dropdown = LibStub("WardzConfigDropdown-1.0")
 
 local zones = {
     [L.ZONE_ARENA] = "arena", -- localized name, instanceType

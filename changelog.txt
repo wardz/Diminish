@@ -1,3 +1,7 @@
+v2.2.9:
+- Fix lua errors for Diminish_Options introduced in v2.2.8.
+
+
 v2.2.8:
 - Bump toc version for Classic patch 1.13.4.
 - Library updates.
