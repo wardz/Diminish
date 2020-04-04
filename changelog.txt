@@ -1,3 +1,8 @@
+v2.2.10:
+- Enable in zone checkbox for Dungeons & Raids has now been seperated into two checkboxes so it's now possible to enable the addon
+  in dungeons but not raids and vice versa if needed.
+
+
 v2.2.9:
 - Fix lua errors for Diminish_Options introduced in v2.2.8.
 

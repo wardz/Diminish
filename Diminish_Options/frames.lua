@@ -10,7 +10,8 @@ local zones = {
     [L.ZONE_BATTLEGROUNDS] = "pvp",
     [L.ZONE_OUTDOORS] = "none",
     [L.ZONE_SCENARIO] = "scenario",
-    [L.ZONE_DUNGEONS] = { "party", "raid" },
+    [L.ZONE_DUNGEONS] = "party",
+    [L.ZONE_RAIDS] = "raid",
 }
 
 local growDirections = {
@@ -56,17 +57,21 @@ local function Refresh(self)
         end
 
         -- Toggle widgets for taunt/zone dungeon depending on if PvE mode is enabled
-        if frames.zones[L.ZONE_DUNGEONS] then
-            if DIMINISH_NS.db.trackNPCs then
+        if DIMINISH_NS.db.trackNPCs then
+            if frames.zones[L.ZONE_DUNGEONS] and frames.zones[L.ZONE_RAIDS] then
                 frames.zones[L.ZONE_DUNGEONS]:Enable()
-                if frames.categories.TAUNT then
-                    frames.categories.TAUNT:Enable()
-                end
-            else
+                frames.zones[L.ZONE_RAIDS]:Enable()
+            end
+            if frames.categories.TAUNT then
+                frames.categories.TAUNT:Enable()
+            end
+        else
+            if frames.zones[L.ZONE_DUNGEONS] and frames.zones[L.ZONE_RAIDS] then
                 frames.zones[L.ZONE_DUNGEONS]:Disable()
-                if frames.categories.TAUNT then
-                    frames.categories.TAUNT:Disable()
-                end
+                frames.zones[L.ZONE_RAIDS]:Disable()
+            end
+            if frames.categories.TAUNT then
+                frames.categories.TAUNT:Disable()
             end
         end
     end
@@ -312,8 +317,8 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         -- Generate checkbox toggle for every zone option
         for label, instance in pairs(zones) do
             local continue = true
-            if label == L.ZONE_DUNGEONS and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
-                -- only show L.ZONE_DUNGEONS for focus/target/nameplate panel
+            if (label == L.ZONE_DUNGEONS or label == L.ZONE_RAIDS) and unit ~= "focus" and unit ~= "target" and unit ~= "nameplate" then
+                -- only show L.ZONE_DUNGEONS/RAID for focus/target/nameplate panel
                 continue = false
             end
 
@@ -336,7 +341,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 end)
 
                 frames.zones[label]:SetPoint("LEFT", subZones, 10, x)
-                x = x - 30
+                x = x - 28
             end
         end
 

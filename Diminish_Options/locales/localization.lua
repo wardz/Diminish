@@ -107,9 +107,10 @@ L["WATCHFRIENDLY_TOOLTIP"] = [=[Toggle diminishing returns tracking for friendly
 Enabling this may drastically increase memory usage in large Battlegrounds.]=]
 L["ZONE_ARENA"] = "Arena"
 L["ZONE_BATTLEGROUNDS"] = "Battlegrounds & Brawls"
-L["ZONE_DUNGEONS"] = "Dungeons & Raids"
+L["ZONE_DUNGEONS"] = "Dungeons"
 L["ZONE_OUTDOORS"] = "World"
 L["ZONE_SCENARIO"] = "Scenario"
+L["ZONE_RAIDS"] = "Raids"
 L["ZONES_TOOLTIP"] = "Enable tracking for this zone."
 
 -- luacheck: push ignore 542
