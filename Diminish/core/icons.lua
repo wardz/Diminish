@@ -32,7 +32,14 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
             unitID = "target"
         end
 
-        return GetNamePlateForUnit(unitID)
+        local f = GetNamePlateForUnit(unitID)
+        if f then
+            local threatPlates = f.TPFrame
+            if threatPlates and threatPlates.Active then
+                return threatPlates
+            end
+        end
+        return f
     end
 
     local anchors = NS.anchors[unit]
@@ -570,8 +577,14 @@ do
             -- HACK: reanchor test nameplate frames to new target's nameplate
             local parent = GetNamePlateForUnit("target")
             if parent then
-                frame:ClearAllPoints()
-                frame:SetParent(parent)
+                local threatPlates = parent.TPFrame
+                if threatPlates and threatPlates.Active then
+                    frame:ClearAllPoints()
+                    frame:SetParent(threatPlates)
+                else
+                    frame:ClearAllPoints()
+                    frame:SetParent(parent)
+                end
             end
         end
 
