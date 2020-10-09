@@ -1,3 +1,8 @@
+v2.3.0:
+- Update for Shadowlands. Please let me know if any spells are missing and I'll add them asap.
+- Fix anchor labels not displaying unit id for russian clients.
+
+
 v2.2.11:
 - Fix nameplate DRs not hiding properly when using ThreatPlates.
 - Bump toc version for Classic patch 1.13.5.
