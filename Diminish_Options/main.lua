@@ -238,6 +238,7 @@ function Panel:Setup()
 
     -- Test mode for timers
     local testBtn = Widgets:CreateButton(self, L.TEST, L.TEST_TOOLTIP, function(btn)
+        local InActiveBattlefield = _G.InActiveBattlefield or _G.C_PvP.IsActiveBattlefield
         if InCombatLockdown() or InActiveBattlefield() or (IsActiveBattlefieldArena and IsActiveBattlefieldArena()) then
             return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
         end

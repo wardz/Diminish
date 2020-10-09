@@ -346,6 +346,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
         frames.testBtn = Widgets:CreateButton(panel, L.TEST, L.TEST_TOOLTIP, function(btn)
+            local InActiveBattlefield = _G.InActiveBattlefield or _G.C_PvP.IsActiveBattlefield
             if InCombatLockdown() or InActiveBattlefield() or (IsActiveBattlefieldArena and IsActiveBattlefieldArena()) then
                 return Widgets:ShowError(L.COMBATLOCKDOWN_ERROR)
             end

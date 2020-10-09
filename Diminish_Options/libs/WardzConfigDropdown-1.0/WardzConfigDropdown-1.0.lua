@@ -6,7 +6,7 @@
 	https://github.com/wardz/PhanxConfig-Dropdown
 ----------------------------------------------------------------------]]
 
-local MAJOR_VERSION, MINOR_VERSION = "WardzConfigDropdown-1.0", 1
+local MAJOR_VERSION, MINOR_VERSION = "WardzConfigDropdown-1.0", 2
 
 local lib = assert(LibStub, MAJOR_VERSION .. " requires LibStub"):NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end -- Already loaded or failed
@@ -249,7 +249,7 @@ function CreateList(dropdown) -- local
 
 	id = id + 1
 
-	local list = CreateFrame("Button", MAJOR_VERSION .. id, dropdown)
+	local list = CreateFrame("Button", MAJOR_VERSION .. id, dropdown, "BackdropTemplate")
 	list:SetFrameStrata("DIALOG")
 	list:SetToplevel(true)
 	list:Hide()

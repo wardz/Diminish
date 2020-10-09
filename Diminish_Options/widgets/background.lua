@@ -8,7 +8,7 @@ local panelBackdrop = {
 }
 
 function Widgets:CreatePanelBackground(parent)
-	local frame = CreateFrame("Frame", nil, parent)
+	local frame = CreateFrame("Frame", nil, parent, _G.BackdropTemplateMixin and "BackdropTemplate")
 	frame:SetBackdrop(panelBackdrop)
 	frame:SetBackdropColor(0.06, 0.06, 0.06, 0.4)
 	frame:SetBackdropBorderColor(0.6, 0.6, 0.6, 1)

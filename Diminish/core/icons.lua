@@ -4,7 +4,7 @@ local frames = {}
 NS.Icons = Icons
 NS.iconFrames = frames
 
-local pool = CreateFramePool("CheckButton") -- CheckButton to support Masque
+local pool = CreateFramePool("CheckButton", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- CheckButton to support Masque
 
 local _G = _G
 local pairs = _G.pairs
