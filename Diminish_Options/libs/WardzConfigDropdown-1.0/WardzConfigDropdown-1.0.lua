@@ -249,7 +249,7 @@ function CreateList(dropdown) -- local
 
 	id = id + 1
 
-	local list = CreateFrame("Button", MAJOR_VERSION .. id, dropdown, "BackdropTemplate")
+	local list = CreateFrame("Button", MAJOR_VERSION .. id, dropdown,  _G.BackdropTemplateMixin and "BackdropTemplate")
 	list:SetFrameStrata("DIALOG")
 	list:SetToplevel(true)
 	list:Hide()
