@@ -1,5 +1,5 @@
 #@retail@
-## Interface: 90002
+## Interface: 90001
 ## X-Classic: 0
 #@end-retail@
 #@non-retail@
