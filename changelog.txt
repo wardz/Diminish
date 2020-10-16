@@ -1,3 +1,8 @@
+v2.3.1:
+- Fix Lua error when moving frames after patch 9.0.1.
+- Fix localizations not being included for DR categories.
+
+
 v2.3.0:
 - Update for Shadowlands. Please let me know if any spells are missing and I'll add them asap.
 - Fix anchor labels not displaying unit id for russian clients.
