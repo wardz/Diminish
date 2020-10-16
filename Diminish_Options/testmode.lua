@@ -10,7 +10,7 @@ local backdrop = {
 }
 
 local TestMode = CreateFrame("Frame")
-TestMode.pool = CreateFramePool("Frame") -- just for testing purposes
+TestMode.pool = CreateFramePool("Frame", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- just for testing purposes
 NS.TestMode = TestMode
 
 -- Thanks sArena
