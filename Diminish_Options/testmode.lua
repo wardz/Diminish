@@ -35,6 +35,7 @@ local function GetUnitIndex(str)
 end
 
 local function OnDragStop(self)
+    if self.unit == "nameplate" then return end
     self:StopMovingOrSizing()
 
     -- frames loses relativity to parent and is instead relative to UIParent after dragging
@@ -205,6 +206,14 @@ function TestMode:HideAnchors()
     self:ToggleArenaAndPartyFrames(false)
 end
 
+local function OnMouseDown(self)
+    if self.unit == "nameplate" then
+        return print("Please use the position sliders in Diminish_Options to set nameplate position. WoW patch 8.3.0 broke the drag to move functionaliy for nameplates.")
+    end
+
+    self:StartMoving()
+end
+
 function TestMode:CreateDummyAnchor(parent, unit, unitID)
     if not parent then return end
 
@@ -231,7 +240,7 @@ function TestMode:CreateDummyAnchor(parent, unit, unitID)
         frame.tooltip:SetPoint("TOP", frame, 0, 10)
 
         frame:SetClampedToScreen(true)
-        frame:SetScript("OnMouseDown", frame.StartMoving)
+        frame:SetScript("OnMouseDown", OnMouseDown)
         frame:SetScript("OnMouseUp", OnDragStop)
         frame:EnableMouse(true)
         frame:SetMovable(true)
