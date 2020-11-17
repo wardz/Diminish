@@ -254,7 +254,7 @@ do
         if not db.offsetsY or not db.offsetsX then
             -- When anchoring to UIParent we need to setup new offsets for every frame belonging to this unitID
             if unit == "arena" or unit == "party" then
-                db.offsetsY = { db.offsetY, db.offsetY, db.offsetY, db.offsetY, db.offsetY}
+                db.offsetsY = { db.offsetY, db.offsetY, db.offsetY, db.offsetY, db.offsetY }
                 db.offsetsX = { 0, 0, 0, 0, 0 }
             else
                 db.offsetsY = { db.offsetY }
