@@ -1,5 +1,5 @@
 #@retail@
-## Interface: 90001
+## Interface: 90002
 #@end-retail@
 #@non-retail@
 # ## Interface: 11305
@@ -7,6 +7,7 @@
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
 ## Notes-deDE: Konfiguration für Diminish.
+## Version: @project-version@
 ## Dependencies: Diminish
 
 libs\WardzConfigDropdown-1.0\WardzConfigDropdown-1.0.lua
