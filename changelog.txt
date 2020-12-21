@@ -1,3 +1,11 @@
+v2.3.3:
+- Add Agent of Chaos disorient.
+
+
+v2.3.2:
+- Bump toc version.
+
+
 v2.3.1:
 - Fix Lua error when moving frames after patch 9.0.1.
 - Fix localizations not being included for DR categories.
