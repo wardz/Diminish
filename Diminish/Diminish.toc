@@ -3,7 +3,7 @@
 ## X-Classic: 0
 #@end-retail@
 #@non-retail@
-# ## Interface: 11305
+# ## Interface: 11306
 # ## X-Classic: 1
 #@end-non-retail@
 ## Title: Diminish
