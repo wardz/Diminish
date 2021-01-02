@@ -1,3 +1,8 @@
+v2.3.4:
+- Add Absolute Zero root.
+- Add new spellIDs for Intimidating Shout.
+
+
 v2.3.3:
 - Add Agent of Chaos disorient.
 
