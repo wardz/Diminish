@@ -1,3 +1,7 @@
+v2.3.5:
+- Add Howl of Terror disorient (retail).
+
+
 v2.3.4:
 - Add Absolute Zero root.
 - Add new spellIDs for Intimidating Shout.
