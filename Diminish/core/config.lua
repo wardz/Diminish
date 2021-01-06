@@ -24,7 +24,10 @@ NS.DR_STATES_COLORS = {
 -------------------------------------------------------
 
 -- "enum" for categories
-NS.CATEGORIES = DRList:GetCategories()
+NS.CATEGORIES = CopyTable(DRList:GetCategories())
+if NS.CATEGORIES.knockback then
+    NS.CATEGORIES.knockback = nil
+end
 
 NS.IS_CLASSIC = select(4, GetBuildInfo()) < 80000
 
