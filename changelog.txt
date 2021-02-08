@@ -1,3 +1,9 @@
+v2.4.0:
+- [Retail] Add DR timers for incapacitates & disorient on special/elite mobs. Seems like they DR now.
+- Changed DR timer on mobs from 18.5 to 23 seconds as it seems to last longer for NPCs. Player timers are still always 18s.
+  Let me know if there's any more inconsistencies with tracking and I'll try to fix it asap. I no longer play retail so its hard for me to check everything.
+
+
 v2.3.6:
 - Move Absolute Zero from root to stun category.
 
