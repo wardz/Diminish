@@ -58,8 +58,9 @@ function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isNotPe
         activeTimers[unitGUID] = {}
     end
 
+    local drTime = isNotPetOrPlayer and 23 or DR_TIME
     local timer = NewTable() -- table pooling from helpers.lua
-    timer.expiration = GetTime() + (not testMode and DR_TIME or random(6, DR_TIME))
+    timer.expiration = GetTime() + (not testMode and drTime or random(6, drTime))
     timer.applied = not testMode and 1 or random(1, 3)
     timer.category = category
     timer.isFriendly = isFriendly
@@ -96,9 +97,10 @@ function Timers:Update(unitGUID, srcGUID, category, spellID, isFriendly, isNotPe
         timer.applied = (timer.applied or 0) + 1
     end
 
+    local drTime = isNotPetOrPlayer and 23 or DR_TIME
     timer.spellID = spellID
     timer.isFriendly = isFriendly
-    timer.expiration = GetTime() + (not timer.testMode and DR_TIME or random(6, DR_TIME))
+    timer.expiration = GetTime() + (not timer.testMode and drTime or random(6, drTime))
 
     StartTimers(timer, true, nil, true, nil, onAuraEnd)
 end
@@ -297,8 +299,9 @@ do
                 local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
 
                 if expirationTime and expirationTime > 0 then
-                    timer.expiration = (expirationTime or GetTime()) + DR_TIME
+                    timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
 
+                    if not timer.isNotPetOrPlayer then
                     if timer.applied >= 2 and duration >= 5 then
                         -- is no DR but timer shows immune/75%
                         -- may happen if server reset DR before our timer did & new CC got applied
@@ -311,6 +314,7 @@ do
                     end
                 end
             end
+        end
         end
         --@end-retail@
 
