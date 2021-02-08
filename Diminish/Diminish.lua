@@ -323,6 +323,8 @@ do
     local CATEGORY_STUN = NS.CATEGORIES.stun
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local CATEGORY_ROOT = NS.CATEGORIES.root
+    local CATEGORY_INCAP = NS.CATEGORIES.incapacitate
+    local CATEGORY_DISORIENT = NS.CATEGORIES.disorient
     local DRList = LibStub("DRList-1.0")
 
     function Diminish:COMBAT_LOG_EVENT_UNFILTERED()
@@ -355,8 +357,8 @@ do
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
                     if IS_CLASSIC then return end
-                    if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT then
-                        -- only show taunt and stun for normal mobs (roots for special mobs), player pets will show all
+                    if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT and category ~= CATEGORY_INCAP and category ~= CATEGORY_DISORIENT then
+                        -- only show taunt and stun for normal mobs (roots/incaps/disorient for special mobs), player pets will show all
                         return
                     end
                     isNotPetOrPlayer = true

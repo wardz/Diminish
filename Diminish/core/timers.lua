@@ -256,6 +256,8 @@ do
     local GetAuraDuration = NS.GetAuraDuration
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local CATEGORY_ROOT = NS.CATEGORIES.root
+    local CATEGORY_INCAP = NS.CATEGORIES.incapacitate
+    local CATEGORY_DISORIENT = NS.CATEGORIES.disorient
     local UnitIsQuestBoss = _G.UnitIsQuestBoss
     local UnitClassification = _G.UnitClassification
 
@@ -281,9 +283,9 @@ do
         if not settings.watchFriendly and timer.isFriendly then return end
         if settings.disabledCategories[timer.category] then return end
 
-        -- Show root/taunt DR only for special mobs
+        -- Show root/taunt/incap/disorients DR only for special mobs
         --@retail@
-        if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT) then
+        if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT or timer.category == CATEGORY_INCAP or timer.category == CATEGORY_DISORIENT) then
             local classification = UnitClassification(unitID)
             if classification == "normal" or classification == "trivial" or classification == "minus" then
                 if not UnitIsQuestBoss(unitID) then
@@ -302,19 +304,19 @@ do
                     timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
 
                     if not timer.isNotPetOrPlayer then
-                    if timer.applied >= 2 and duration >= 5 then
-                        -- is no DR but timer shows immune/75%
-                        -- may happen if server reset DR before our timer did & new CC got applied
-                        timer.applied = 1
-                    elseif timer.applied > 3 and duration > 0 then
-                        -- Timer shows immune but aura duration was found, so reset
-                        if timer.category ~= CATEGORY_TAUNT then
+                        if timer.applied >= 2 and duration >= 5 then
+                            -- is no DR but timer shows immune/75%
+                            -- may happen if server reset DR before our timer did & new CC got applied
                             timer.applied = 1
+                        elseif timer.applied > 3 and duration > 0 then
+                            -- Timer shows immune but aura duration was found, so reset
+                            if timer.category ~= CATEGORY_TAUNT then
+                                timer.applied = 1
+                            end
                         end
                     end
                 end
             end
-        end
         end
         --@end-retail@
 
