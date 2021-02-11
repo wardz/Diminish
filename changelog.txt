@@ -1,3 +1,8 @@
+v2.4.1:
+- [Retail] Add missing stuns: Wild Hunt's Charge, Wake of Ashes, Sparkling Driftglobe Core.
+- [Retail] Add missing roots: Clash, Surge of Power
+
+
 v2.4.0:
 - [Retail] Add DR timers for incapacitates & disorient on special/elite mobs. Seems like they DR now.
 - Changed DR timer on mobs from 18.5 to 23 seconds as it seems to last longer for NPCs. Player timers are still always 18s.
