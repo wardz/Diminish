@@ -10,6 +10,7 @@
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.
 ## SavedVariables: DiminishDB
+## OptionalDeps: TellMeWhen
 ## Version: @project-version@
 ## X-Curse-Project-ID: 92871
 
