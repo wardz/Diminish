@@ -1,3 +1,8 @@
+v2.4.2:
+- Fix old DR data being used if an old version of DRList-1.0 library is loaded before Diminish.
+- Add option to attach player frame DR icons to your own nameplate (personal resource display).
+
+
 v2.4.1:
 - [Retail] Add missing stuns: Wild Hunt's Charge, Wake of Ashes, Sparkling Driftglobe Core.
 - [Retail] Add missing roots: Clash, Surge of Power
