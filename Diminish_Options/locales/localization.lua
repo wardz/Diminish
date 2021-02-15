@@ -14,6 +14,8 @@ Grows: %s]=]
 L["ANCHORUIPARENT"] = "Anchor to UIParent"
 L["ANCHORUIPARENT_TOOLTIP"] = "Deattaches the icons from the unitframe(s) and anchors them directly to the screen (UIParent) instead. Requires re-positioning after enabling."
 L["ARENA"] = "Arena"
+L["ATTACH_PERSONAL_NAMEPLATE"] = "Attach To Personal Nameplate"
+L["ATTACH_PERSONAL_NAMEPLATE_TOOLTIP"] = "Attaches DR icons to your own personal resource display nameplate instead of the player frame."
 L["CATEGORIES_TOOLTIP"] = "Toggle category for tracking. Right-click to manually set an icon used for the category."
 L["COLORBLIND"] = "Display DR Indicator Numbers"
 L["COLORBLIND_TOOLTIP"] = [=[Show DR indicator numbers next to icons. 1 = first DR, 2 = second DR, 3 = last DR. May not work with some Masque skins.

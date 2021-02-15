@@ -72,7 +72,7 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.4",
+        version = "1.5",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
@@ -108,6 +108,7 @@ do
                 offsetY = 40,
                 offsetX = -6,
                 timerTextSize = 12,
+                usePersonalNameplate = false,
             },
 
             party = {

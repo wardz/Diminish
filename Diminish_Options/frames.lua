@@ -129,9 +129,19 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
 
+        if unit == "player" and not DIMINISH_NS.IS_CLASSIC then
+            frames.usePersonalNameplate = Widgets:CreateCheckbox(panel, L.ATTACH_PERSONAL_NAMEPLATE, L.ATTACH_PERSONAL_NAMEPLATE_TOOLTIP, function()
+                db.usePersonalNameplate = not db.usePersonalNameplate
+                DIMINISH_NS.Diminish:ToggleForZone()
+            end)
+
+            frames.usePersonalNameplate:SetPoint("LEFT", frames.anchorUIParent, 0, -40)
+        end
+
+
         frames.growDirection = Dropdown.CreateDropdown(panel, L.GROWDIRECTION, L.GROWDIRECTION_TOOLTIP, growDirections)
         frames.growDirection:SetSize(150, 45)
-        frames.growDirection:SetPoint("LEFT", frames.anchorUIParent or frames.watchFriendly or frames.enabled, 0, -45)
+        frames.growDirection:SetPoint("LEFT", frames.usePersonalNameplate or frames.anchorUIParent or frames.watchFriendly or frames.enabled, 0, -45)
         frames.growDirection.OnValueChanged = function(self, value)
             if not value or value == EMPTY then return end
             db.growDirection = value

@@ -21,6 +21,10 @@ local CATEGORY_FONT = NS.CATEGORY_FONT
 local anchorCache = {}
 
 function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
+    if unitID == "player" and NS.db.unitFrames.player.usePersonalNameplate then
+        return GetNamePlateForUnit("player")
+    end
+
     if anchorCache[unitID] and not defaultAnchor then
         return anchorCache[unitID]
     end

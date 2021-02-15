@@ -273,7 +273,10 @@ end
 --@end-retail@
 
 function Diminish:NAME_PLATE_UNIT_ADDED(namePlateUnitToken)
-    if UnitIsUnit("player", namePlateUnitToken) then return end -- ignore personal resource display
+    if UnitIsUnit("player", namePlateUnitToken) then
+        if not NS.db.unitFrames.player.usePersonalNameplate then return end
+    end
+
     Timers:Refresh(namePlateUnitToken)
 
     if DIMINISH_OPTIONS and DIMINISH_OPTIONS.TestMode:IsTesting() then
