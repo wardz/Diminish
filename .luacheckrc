@@ -27,6 +27,10 @@ globals = {
     "Tukui",
 
     -- Misc wow globals in random order
+    "WOW_PROJECT_ID",
+    "WOW_PROJECT_CLASSIC",
+    "WOW_PROJECT_MAINLINE",
+    "WOW_PROJECT_TBC",
     "_G",
     "CopyTable",
     "GetBuildInfo",

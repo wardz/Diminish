@@ -26,16 +26,27 @@ NS.DR_STATES_COLORS = {
 -- "enum" for categories
 NS.CATEGORIES = CopyTable(DRList:GetCategories())
 if NS.CATEGORIES.knockback then
-    NS.CATEGORIES.knockback = nil
+    NS.CATEGORIES.knockback = nil -- unreliable to track, remove it for now
 end
 
-NS.IS_CLASSIC = select(4, GetBuildInfo()) < 80000
+do
+    local expansions = {
+        [WOW_PROJECT_MAINLINE] = "retail",
+        [WOW_PROJECT_CLASSIC] = "classic",
+        [WOW_PROJECT_TBC or 3] = "tbc",
+    }
 
-local alert = _G.message or _G.print
-if NS.IS_CLASSIC and GetAddOnMetadata("Diminish", "X-Classic") == "0" then
-    alert("Diminish: You're currently using the Retail version of Diminish on a Classic client. You should download the Classic version instead for it to work.")
-elseif not NS.IS_CLASSIC and GetAddOnMetadata("Diminish", "X-Classic") == "1" then
-    alert("Diminish: You're currently using the Classic version of Diminish on a Retail client. You should download the Retail version instead for it to work.")
+    NS.IS_CLASSIC = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+
+    local alert = _G.message or _G.print
+    local currExp = expansions[WOW_PROJECT_ID]
+    if currExp == "classic" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "2" then
+        alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", currExp))
+    elseif currExp == "retail" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "1" then
+        alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", currExp))
+    elseif currExp == "tbc" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "3" then
+        alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", currExp))
+    end
 end
 
 -------------------------------------------------------
@@ -44,6 +55,7 @@ end
 
 do
     local defaultsDisabledCategories = {}
+    -- TODO: tbc
     if NS.IS_CLASSIC then -- @non-retail@ filter doesn't work at the time of writing this
         defaultsDisabledCategories[NS.CATEGORIES.frost_shock] = true
         defaultsDisabledCategories[NS.CATEGORIES.mind_control] = true
