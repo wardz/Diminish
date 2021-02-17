@@ -36,6 +36,18 @@ local function Refresh(self)
 
     Widgets:RefreshWidgets(unitFrameSettings, self)
 
+    if unit == "player" then
+        if unitFrameSettings.usePersonalNameplate then
+            frames.unlockBtn:Hide()
+            frames.offsetX:Show()
+            frames.offsetY:Show()
+        else
+            frames.unlockBtn:Show()
+            frames.offsetX:Hide()
+            frames.offsetY:Hide()
+        end
+    end
+
     -- Refresh
     for k, category in pairs(DIMINISH_NS.CATEGORIES) do
         if frames.categories[k] then
@@ -128,6 +140,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 if NS.TestMode:IsTestingOrAnchoring() then
                     NS.TestMode:HideAnchors()
                 end
+                panel.refresh(panel)
             end)
 
             frames.anchorUIParent:SetPoint("LEFT", frames.watchFriendly or frames.enabled, 0, -40)
@@ -149,6 +162,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 end
 
                 DIMINISH_NS.Diminish:ToggleForZone()
+                panel.refresh(panel)
             end)
 
             frames.usePersonalNameplate:SetPoint("LEFT", frames.anchorUIParent, 0, -40)
@@ -189,7 +203,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end)
         frames.timerTextSize:SetPoint("LEFT", frames.iconPadding, 0, -50)
 
-        if unit == "nameplate" then
+        if unit == "nameplate" or unit == "player" then
             -- Blizzard blocked :GetCenter() and such for nameplates in 8.2 which broke our drag anchoring,
             -- so add sliders for setting positions for nameplate icons. This is a temp solution.
             frames.offsetX = Widgets:CreateSlider(panel, "Position X", "Set X position for nameplate icons. Blizzard broke our drag-to-move functionality in patch 8.2 for nameplates so this is a temp workaround.", -200, 200, 1, function(_, value)
@@ -415,5 +429,17 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end)
         frames.resetPosBtn:SetPoint("LEFT", frames.testBtn, -120, 0)
         frames.resetPosBtn:SetWidth(120)
+
+        if unit == "player" then
+            if db.usePersonalNameplate then
+                frames.unlockBtn:Hide()
+                frames.offsetX:Show()
+                frames.offsetY:Show()
+            else
+                frames.unlockBtn:Show()
+                frames.offsetX:Hide()
+                frames.offsetY:Hide()
+            end
+        end
     end)
 end

@@ -36,6 +36,7 @@ end
 
 local function OnDragStop(self)
     if self.unit == "nameplate" then return end
+    if self.unit == "player" and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then return end
     self:StopMovingOrSizing()
 
     -- frames loses relativity to parent and is instead relative to UIParent after dragging
@@ -207,7 +208,7 @@ function TestMode:HideAnchors()
 end
 
 local function OnMouseDown(self)
-    if self.unit == "nameplate" then
+    if self.unit == "nameplate" or (self.unit == "player" and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate) then
         return print("Please use the position sliders in Diminish_Options to set nameplate position. WoW patch 8.3.0 broke the drag to move functionaliy for nameplates.")
     end
 
