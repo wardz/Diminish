@@ -577,6 +577,17 @@ do
         local frame = self:GetFrame(unitID, timer.category)
         if not frame then return end
 
+        if unitID == "player" then
+            if NS.db.unitFrames.player.usePersonalNameplate then
+                local personalResourceDisplay = GetNamePlateForUnit("player")
+                if not personalResourceDisplay then return end -- skip starting cd until nameplate is shown
+                if frame:GetParent() ~= personalResourceDisplay then
+                    frame:ClearAllPoints()
+                    frame:SetParent(personalResourceDisplay)
+                end
+            end
+        end
+
         if unitID == "nameplate" then
             -- HACK: reanchor test nameplate frames to new target's nameplate
             local parent = GetNamePlateForUnit("target")

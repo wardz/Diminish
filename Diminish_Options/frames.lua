@@ -117,6 +117,11 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             frames.anchorUIParent = Widgets:CreateCheckbox(panel, L.ANCHORUIPARENT, L.ANCHORUIPARENT_TOOLTIP, function()
                 db.anchorUIParent = not db.anchorUIParent
 
+                if db.usePersonalNameplate and db.anchorUIParent then
+                    db.usePersonalNameplate = false
+                    frames.usePersonalNameplate:SetChecked(false)
+                end
+
                 DIMINISH_NS.Icons:CreateUIParentOffsets(db, unit)
                 DIMINISH_NS.Icons:OnFrameConfigChanged() -- reanchors from UIParent to UnitFrame or vice versa
                 DIMINISH_NS.Diminish:GROUP_ROSTER_UPDATE()
@@ -132,6 +137,17 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         if unit == "player" and not DIMINISH_NS.IS_CLASSIC then
             frames.usePersonalNameplate = Widgets:CreateCheckbox(panel, L.ATTACH_PERSONAL_NAMEPLATE, L.ATTACH_PERSONAL_NAMEPLATE_TOOLTIP, function()
                 db.usePersonalNameplate = not db.usePersonalNameplate
+
+                if db.usePersonalNameplate and db.anchorUIParent then
+                    db.anchorUIParent = false
+                    frames.anchorUIParent:SetChecked(false)
+                    DIMINISH_NS.Icons:OnFrameConfigChanged()
+                end
+
+                if NS.TestMode:IsTestingOrAnchoring() then
+                    NS.TestMode:HideAnchors()
+                end
+
                 DIMINISH_NS.Diminish:ToggleForZone()
             end)
 
