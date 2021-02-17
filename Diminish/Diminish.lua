@@ -205,6 +205,10 @@ function Diminish:InitDB()
     NS.db.version = NS.DEFAULT_SETTINGS.version
     NS.activeProfile = profile
 
+    if NS.IS_CLASSIC and NS.db.unitFrames.player.usePersonalNameplate then
+        NS.db.unitFrames.player.usePersonalNameplate = false
+    end
+
     -- Remove table values no longer found in default settings
     NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
 

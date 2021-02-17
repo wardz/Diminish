@@ -78,6 +78,10 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             [value] = DIMINISH_NS.DEFAULT_SETTINGS
         }, DiminishDB.profiles)
 
+        if DIMINISH_NS.IS_CLASSIC and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
+            DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
+        end
+
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()
     end)
@@ -103,6 +107,10 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
         DIMINISH_NS.CopyDefaults({
             [profile] = DIMINISH_NS.DEFAULT_SETTINGS
         }, DiminishDB.profiles)
+
+        if DIMINISH_NS.IS_CLASSIC and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
+            DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
+        end
 
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()
