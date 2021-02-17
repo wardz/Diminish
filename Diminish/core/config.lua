@@ -40,12 +40,13 @@ do
 
     local alert = _G.message or _G.print
     local currExp = expansions[WOW_PROJECT_ID]
-    if currExp == "classic" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "2" then
-        alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", currExp))
-    elseif currExp == "retail" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "1" then
-        alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", currExp))
-    elseif currExp == "tbc" and GetAddOnMetadata("Diminish", "X-Expansion") ~= "3" then
-        alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", currExp))
+    local tocExp = tonumber(GetAddOnMetadata("Diminish", "X-Expansion"))
+    if currExp == "classic" and tocExp ~= 2 then
+        alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", expansions[tocExp]))
+    elseif currExp == "retail" and tocExp ~= 1 then
+        alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
+    elseif currExp == "tbc" and tocExp ~= 3 then
+        alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
     end
 end
 
