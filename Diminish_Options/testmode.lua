@@ -287,17 +287,24 @@ end
     TestMode:CreateDummyAnchor(anchor, "nameplate")
 end]]
 
-local function OnTargetChanged()
+local function OnTargetChanged(self, event)
     -- Delay function call because GetNamePlateForUnit() is not
     -- ready immediately after PLAYER_TARGET_CHANGED is triggered
     --[[if TestMode:IsAnchoring() then
         C_Timer.After(0.2, ReanchorForNameplate)
     end]]
 
-    if TestMode:IsTesting() and UnitExists("target") then
-        DIMINISH_NS.Timers:Refresh("nameplate")
+    if event == "PLAYER_LOGOUT" then
+        if TestMode.personalNameplateCfg ~= nil then
+            SetCVar("NameplatePersonalShowAlways", TestMode.personalNameplateCfg)
+        end
+    else
+        if TestMode:IsTesting() and UnitExists("target") then
+            DIMINISH_NS.Timers:Refresh("nameplate")
+        end
     end
 end
+TestMode:RegisterEvent("PLAYER_LOGOUT")
 TestMode:SetScript("OnEvent", OnTargetChanged)
 
 function TestMode:ShowAnchors()
@@ -341,12 +348,25 @@ function TestMode:Test(hide)
         if not TestMode:IsTestingOrAnchoring() then
             self:UnregisterEvent("PLAYER_TARGET_CHANGED")
         end
+
+        if self.personalNameplateCfg ~= nil then
+            SetCVar("NameplatePersonalShowAlways", self.personalNameplateCfg)
+            self.personalNameplateCfg = nil
+        end
         return
     end
 
     TestMode:ToggleArenaAndPartyFrames(true)
     isTesting = true
     self:RegisterEvent("PLAYER_TARGET_CHANGED")
+
+    if DIMINISH_NS.db.unitFrames.player.enabled and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
+        self.personalNameplateCfg = self.personalNameplateCfg or GetCVar("NameplatePersonalShowAlways")
+        SetCVar("NameplatePersonalShowAlways", 1)
+        C_Timer.After(0.15, function()
+            DIMINISH_NS.Timers:Refresh("player")
+        end)
+    end
 
     local DNS = DIMINISH_NS
     DNS.Timers:ResetAll()

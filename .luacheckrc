@@ -31,6 +31,7 @@ globals = {
     "WOW_PROJECT_CLASSIC",
     "WOW_PROJECT_MAINLINE",
     "WOW_PROJECT_TBC",
+    "SetCVar",
     "_G",
     "CopyTable",
     "GetBuildInfo",

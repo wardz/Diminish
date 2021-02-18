@@ -151,10 +151,11 @@ for unitFrame, unit in pairs(NS.unitFrames) do
             frames.usePersonalNameplate = Widgets:CreateCheckbox(panel, L.ATTACH_PERSONAL_NAMEPLATE, L.ATTACH_PERSONAL_NAMEPLATE_TOOLTIP, function()
                 db.usePersonalNameplate = not db.usePersonalNameplate
 
+                DIMINISH_NS.Icons:OnFrameConfigChanged()
+
                 if db.usePersonalNameplate and db.anchorUIParent then
                     db.anchorUIParent = false
                     frames.anchorUIParent:SetChecked(false)
-                    DIMINISH_NS.Icons:OnFrameConfigChanged()
                 end
 
                 if NS.TestMode:IsTestingOrAnchoring() then
