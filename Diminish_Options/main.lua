@@ -146,6 +146,7 @@ function Panel:Setup()
 
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
         db.showCategoryText = not db.showCategoryText
+        frames.categoryFontSize:SetShown(db.showCategoryText)
         Icons:OnFrameConfigChanged()
     end)
     frames.showCategoryText:SetPoint("LEFT", frames.trackNPCs, 0, -40)
@@ -201,6 +202,12 @@ function Panel:Setup()
         end
     end
 
+    frames.categoryFontSize = Widgets:CreateSlider(self, "Category Label Size", "Adjust font size for DR category labels.", 1, 40, 1, function(_, value)
+        db.categoryFont.size = value
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
+    end)
+    frames.categoryFontSize:SetPoint("LEFT", frames.border, 0, -70)
+
     -------------------------------------------------------------------
 
     local tip = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
@@ -255,6 +262,8 @@ end
 
 function Panel:refresh()
     Widgets:RefreshWidgets(DIMINISH_NS.db, self)
+    self.frames.categoryFontSize:SetShown(DIMINISH_NS.db.showCategoryText)
+    self.frames.categoryFontSize:SetValue(DIMINISH_NS.db.categoryFont.size)
 
     -- Disable rest of timer options if timer countdown is not checked
     Widgets:ToggleState(self.frames.timerColors, self.frames.timerText:GetChecked())

@@ -4,15 +4,6 @@ local DRList = LibStub("DRList-1.0")
 -- How long a diminishing return lasts.
 NS.DR_TIME = DRList:GetResetTime()
 
--- Font size & position for DR category label
-NS.CATEGORY_FONT = {
-    font = nil, -- uses font from template instead
-    size = tonumber(GetCVar("UIScale")) <= 0.75 and 11 or 9,
-    x = 0,
-    y = 12,
-    flags = nil,
-}
-
 -- Border/text indicator colors
 NS.DR_STATES_COLORS = {
     { 0, 1, 0, 1 }, -- applied 1, green
@@ -85,7 +76,7 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.5",
+        version = "1.6",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
@@ -100,6 +91,13 @@ do
             edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
             layer = "BORDER",
             name = "Default",
+        },
+        categoryFont = {
+            font = nil, -- uses font from template instead
+            size = tonumber(GetCVar("UIScale")) <= 0.75 and 11 or 9,
+            x = 0,
+            --y = 12,
+            flags = nil,
         },
 
         unitFrames = {

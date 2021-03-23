@@ -16,7 +16,6 @@ local strmatch = _G.string.match
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local STANDARD_TEXT_FONT = _G.STANDARD_TEXT_FONT
-local CATEGORY_FONT = NS.CATEGORY_FONT
 
 local anchorCache = {}
 
@@ -361,10 +360,13 @@ do
 
             -- label above an icon that displays category text
             local ctext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            ctext:SetFont(CATEGORY_FONT.font or ctext:GetFont(), CATEGORY_FONT.size, CATEGORY_FONT.flags)
-            ctext:SetPoint("TOP", CATEGORY_FONT.x, CATEGORY_FONT.y)
+            ctext:SetFont(db.categoryFont.font or ctext:GetFont(), db.categoryFont.size, db.categoryFont.flags)
+            --ctext:SetPoint("BOTTOMLEFT", db.categoryFont.x, size + 2)
             ctext:SetShown(db.showCategoryText)
+            ctext:SetJustifyH("LEFT")
+            ctext:SetJustifyH("TOP")
             frame.categoryText = ctext
+            frame.categoryTextSize = db.categoryFont.size
 
             frame.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 
@@ -387,6 +389,10 @@ do
                 frame.categoryText:SetText(category)
             end
         --end
+
+        if frame.categoryText then
+            frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
+        end
 
         return frame
     end
@@ -444,10 +450,20 @@ do
             for _, frame in pairs(tbl) do
                 RefreshIcon(frame, db)
 
+                if frame.categoryTextSize and frame.categoryTextSize ~= db.categoryFont.size then
+                    frame.categoryText:SetFont(db.categoryFont.font or frame.categoryText:GetFont(), db.categoryFont.size, db.categoryFont.flags)
+                    frame.categoryText:SetShown(db.showCategoryText)
+                    frame.categoryTextSize = db.categoryFont.size
+                end
+
                 -- Refresh settings that require unit ID
                 frame.unitSettingsRef = db.unitFrames[frame.unitFormatted] -- need to update pointer if changed profile
                 local size = frame.unitSettingsRef.iconSize
                 frame:SetSize(size, size)
+
+                if frame.categoryText then
+                    frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
+                end
 
                 local name, height, flags = frame.countdown:GetFont()
                 if flags ~= db.timerTextOutline or height ~= frame.unitSettingsRef.timerTextSize then
