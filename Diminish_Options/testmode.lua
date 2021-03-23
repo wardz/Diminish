@@ -120,14 +120,18 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         showFlag = state
     else
         --@retail@
-        showFlag = not ArenaEnemyFrames:IsShown()
+        if ArenaEnemyFrames then
+            showFlag = not ArenaEnemyFrames:IsShown()
+        end
         --@end-retail@
     end
 
     --@retail@
     local isInArena = select(2, IsInInstance()) == "arena"
     if forceHide or settings.arena.enabled and not isInArena then
-        ArenaEnemyFrames:SetShown(showFlag)
+        if ArenaEnemyFrames then
+            ArenaEnemyFrames:SetShown(showFlag)
+        end
 
         if LibStub and LibStub("AceAddon-3.0", true) then
             local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
