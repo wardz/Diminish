@@ -1,3 +1,8 @@
+v2.4.3:
+- Fix test mode conflicts with newest ElvUI.
+- Add option to change DR category label font size.
+
+
 v2.4.2:
 - Fix old DR data being used if an old version of DRList-1.0 library is loaded before Diminish.
 - Add option to attach player frame DR icons to your own nameplate (personal resource display).
