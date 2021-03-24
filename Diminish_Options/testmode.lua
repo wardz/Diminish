@@ -120,31 +120,12 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         showFlag = state
     else
         --@retail@
-        if ArenaEnemyFrames then
-            showFlag = not ArenaEnemyFrames:IsShown()
-        end
+        showFlag = not ArenaEnemyFrames:IsShown()
         --@end-retail@
     end
 
-    --@retail@
     local isInArena = select(2, IsInInstance()) == "arena"
-    if forceHide or settings.arena.enabled and not isInArena then
-        if ArenaEnemyFrames then
-            ArenaEnemyFrames:SetShown(showFlag)
-        end
-
-        if LibStub and LibStub("AceAddon-3.0", true) then
-            local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
-            if sArena and sArena.ArenaEnemyFrames then
-                -- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
-                -- incase anyone is using the old version)
-                -- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
-                sArena.ArenaEnemyFrames:SetShown(showFlag)
-            end
-        end
-    end
-    --@end-retail@
-
+    
     local useCompact = GetCVarBool("useCompactPartyFrames")
     if useCompact and settings.party.enabled and showFlag then
         if not IsInGroup() then
@@ -173,7 +154,23 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         if Test then
             return Test:EnableOrDisable()
         end
-    end
+	else
+		--@retail@
+		if forceHide or settings.arena.enabled and not isInArena then
+			ArenaEnemyFrames:SetShown(showFlag)
+
+			if LibStub and LibStub("AceAddon-3.0", true) then
+				local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
+				if sArena and sArena.ArenaEnemyFrames then
+					-- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
+					-- incase anyone is using the old version)
+					-- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
+					sArena.ArenaEnemyFrames:SetShown(showFlag)
+				end
+			end
+		end
+		--@end-retail@
+    end		    
 
     for i = 1, 5 do
         --@retail@
