@@ -125,7 +125,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     local isInArena = select(2, IsInInstance()) == "arena"
-    
+
     local useCompact = GetCVarBool("useCompactPartyFrames")
     if useCompact and settings.party.enabled and showFlag then
         if not IsInGroup() then
@@ -170,7 +170,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 			end
 		end
 		--@end-retail@
-    end		    
+    end
 
     for i = 1, 5 do
         --@retail@
