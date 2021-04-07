@@ -10,9 +10,9 @@
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.
 ## SavedVariables: DiminishDB
-## OptionalDeps: TellMeWhen
 ## Version: @project-version@
 ## X-Curse-Project-ID: 92871
+## X-Wago-ID: 7nGvPW6x
 
 libs\LibStub\LibStub.lua
 libs\DRList-1.0\DRList-1.0.xml
