@@ -1,3 +1,7 @@
+v2.5.0:
+- Add support for The Burning Crusade. Note that this is still work in progress, so DR data might not be fully accurate.
+
+
 v2.4.3:
 - Fix test mode conflicts with newest ElvUI.
 - Add option to change DR category label font size.
