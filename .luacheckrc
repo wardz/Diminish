@@ -16,6 +16,8 @@ ignore = {
     "212/cb",
 }
 
+not_globals = { "print" } -- just to help not forgetting to remove debug print statements
+
 globals = {
     -- Addon globals
     "LibStub",

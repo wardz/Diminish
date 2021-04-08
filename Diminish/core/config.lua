@@ -27,16 +27,19 @@ do
         [WOW_PROJECT_TBC or 3] = "tbc",
     }
 
-    NS.IS_CLASSIC = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
+    local isClassic = _G.BackdropTemplateMixin == nil and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+    local isTBC = _G.BackdropTemplateMixin and WOW_PROJECT_ID == 2
+    local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+    NS.IS_CLASSIC = isClassic
+    NS.IS_CLASSIC_OR_TBC = isClassic or isTBC
 
     local alert = _G.message or _G.print
-    local currExp = expansions[WOW_PROJECT_ID]
     local tocExp = tonumber(GetAddOnMetadata("Diminish", "X-Expansion"))
-    if currExp == "classic" and tocExp ~= 2 then
+    if isClassic and tocExp ~= 2 then
         alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", expansions[tocExp]))
-    elseif currExp == "retail" and tocExp ~= 1 then
+    elseif isRetail and tocExp ~= 1 then
         alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
-    elseif currExp == "tbc" and tocExp ~= 3 then
+    elseif isTBC and tocExp ~= 3 then
         alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
     end
 end
@@ -47,10 +50,9 @@ end
 
 do
     local defaultsDisabledCategories = {}
-    -- TODO: tbc
-    if NS.IS_CLASSIC then -- @non-retail@ filter doesn't work at the time of writing this
+
+    if NS.IS_CLASSIC then
         defaultsDisabledCategories[NS.CATEGORIES.frost_shock] = true
-        defaultsDisabledCategories[NS.CATEGORIES.mind_control] = true
     end
 
     --@retail@

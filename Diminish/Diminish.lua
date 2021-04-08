@@ -205,7 +205,7 @@ function Diminish:InitDB()
     NS.db.version = NS.DEFAULT_SETTINGS.version
     NS.activeProfile = profile
 
-    if NS.IS_CLASSIC and NS.db.unitFrames.player.usePersonalNameplate then
+    if NS.IS_CLASSIC_OR_TBC and NS.db.unitFrames.player.usePersonalNameplate then
         NS.db.unitFrames.player.usePersonalNameplate = false
     end
 
@@ -326,7 +326,7 @@ do
     local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
     local bit_band = _G.bit.band
 
-    local IS_CLASSIC = NS.IS_CLASSIC
+    local IS_CLASSIC_OR_TBC = NS.IS_CLASSIC_OR_TBC
     local CATEGORY_STUN = NS.CATEGORIES.stun
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local CATEGORY_ROOT = NS.CATEGORIES.root
@@ -363,7 +363,7 @@ do
                 if not self.isWatchingNPCs and not isMindControlled then return end
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
-                    if IS_CLASSIC then return end -- TODO: tbc too?
+                    if IS_CLASSIC_OR_TBC then return end
                     if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT and category ~= CATEGORY_INCAP and category ~= CATEGORY_DISORIENT then
                         -- only show taunt and stun for normal mobs (roots/incaps/disorient for special mobs), player pets will show all
                         return
@@ -373,7 +373,7 @@ do
             else
                 -- Ignore taunts for players
                 if category == CATEGORY_TAUNT then return end
-                if IS_CLASSIC then
+                if IS_CLASSIC_OR_TBC then
                     local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0
                     if not isSrcPlayer then return end
                 end

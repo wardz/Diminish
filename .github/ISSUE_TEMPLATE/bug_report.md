@@ -13,7 +13,7 @@ assignees: wardz
 **What is the problem? Is there any Lua errors?**
 
 
-**Is this issue for Classic or Retail?**
+**Is this issue for Classic, TBC or Retail?**
 
 
 **What steps will reproduce the problem?**
