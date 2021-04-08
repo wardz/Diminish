@@ -23,8 +23,8 @@ libs\LibStub\LibStub.lua
 libs\DRList-1.0\DRList-1.0.xml
 
 helpers.lua
-core\anchors.lua
 core\config.lua
+core\anchors.lua
 core\icons.lua
 core\timers.lua
 Diminish.lua

@@ -264,10 +264,13 @@ do
     local testModeUnits = {
         "player", "target", "nameplate",
         "party1", "party2", "party3",
-        --@retail@
-        "focus", "arena1", "arena2", "arena3",
-        --@end-retail@
     }
+    if not NS.IS_CLASSIC then
+        tinsert(testModeUnits, "focus")
+        tinsert(testModeUnits, "arena1")
+        tinsert(testModeUnits, "arena2")
+        tinsert(testModeUnits, "arena3")
+    end
 
     local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)
         local origUnitID
@@ -294,31 +297,33 @@ do
                 end
             end
         end
+        --@end-retail@
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
-        if isApplied and not NS.db.timerStartAuraEnd then
-            if not timer.testMode --[[and not isRefresh]] then
-                local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+        if not NS.IS_CLASSIC then
+            if isApplied and not NS.db.timerStartAuraEnd then
+                if not timer.testMode --[[and not isRefresh]] then
+                    local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
 
-                if expirationTime and expirationTime > 0 then
-                    timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
+                    if expirationTime and expirationTime > 0 then
+                        timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
 
-                    if not timer.isNotPetOrPlayer then
-                        if timer.applied >= 2 and duration >= 5 then
-                            -- is no DR but timer shows immune/75%
-                            -- may happen if server reset DR before our timer did & new CC got applied
-                            timer.applied = 1
-                        elseif timer.applied > 3 and duration > 0 then
-                            -- Timer shows immune but aura duration was found, so reset
-                            if timer.category ~= CATEGORY_TAUNT then
+                        if not timer.isNotPetOrPlayer then
+                            if timer.applied >= 2 and duration >= 5 then
+                                -- is no DR but timer shows immune/75%
+                                -- may happen if server reset DR before our timer did & new CC got applied
                                 timer.applied = 1
+                            elseif timer.applied > 3 and duration > 0 then
+                                -- Timer shows immune but aura duration was found, so reset
+                                if timer.category ~= CATEGORY_TAUNT then
+                                    timer.applied = 1
+                                end
                             end
                         end
                     end
                 end
             end
         end
-        --@end-retail@
 
         Icons:StartCooldown(timer, origUnitID and "player-party" or unitID, onAuraEnd)
         --@debug@

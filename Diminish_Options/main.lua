@@ -9,10 +9,8 @@ NS.PLAYER_NAME = UnitName("player") .. "-" .. GetRealmName()
 NS.unitFrames = {
     [L.PLAYER] = "player", -- localized, unlocalized unitID
     [L.TARGET] = "target",
-    --@retail@
-    [L.FOCUS] = "focus",
-    [L.ARENA] = "arena",
-    --@end-retail@
+    [L.FOCUS] = not DIMINISH_NS.IS_CLASSIC and "focus" or nil,
+    [L.ARENA] = not DIMINISH_NS.IS_CLASSIC and "arena" or nil,
     [L.PARTY] = "party",
     [L.NAMEPLATE] = "nameplate",
 }
@@ -65,12 +63,12 @@ function Panel:Setup()
     subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
-    --@retail@
-    frames.timerStartAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
-        db.timerStartAuraEnd = not db.timerStartAuraEnd
-    end)
-    frames.timerStartAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
-    --@end-retail@
+    if not DIMINISH_NS.IS_CLASSIC then
+        frames.timerStartAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
+            db.timerStartAuraEnd = not db.timerStartAuraEnd
+        end)
+        frames.timerStartAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
+    end
 
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
@@ -78,9 +76,9 @@ function Panel:Setup()
         Icons:OnFrameConfigChanged()
     end)
     frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
-    --@retail@
-    frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
-    --@end-retail@
+    if not DIMINISH_NS.IS_CLASSIC then
+        frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
+    end
 
 
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()

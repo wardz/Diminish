@@ -109,45 +109,46 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     local settings = DIMINISH_NS.db.unitFrames
 
-    --@retail@
-    if not IsAddOnLoaded("Blizzard_ArenaUI") then
-        LoadAddOn("Blizzard_ArenaUI")
+    if not DIMINISH_NS.IS_CLASSIC then
+        if not IsAddOnLoaded("Blizzard_ArenaUI") then
+            LoadAddOn("Blizzard_ArenaUI")
+        end
     end
-    --@end-retail@
 
     local showFlag
     if state ~= nil then
         showFlag = state
     else
-        --@retail@
-        if ArenaEnemyFrames then
-            showFlag = not ArenaEnemyFrames:IsShown()
-        end
-        --@end-retail@
-    end
-
-    --@retail@
-    local isInArena = select(2, IsInInstance()) == "arena"
-    if forceHide or settings.arena.enabled and not isInArena then
-        if ArenaEnemyFrames then
-            ArenaEnemyFrames:SetShown(showFlag)
-        end
-
-        if LibStub and LibStub("AceAddon-3.0", true) then
-            local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
-            if sArena and sArena.ArenaEnemyFrames then
-                -- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
-                -- incase anyone is using the old version)
-                -- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
-                sArena.ArenaEnemyFrames:SetShown(showFlag)
+        if not DIMINISH_NS.IS_CLASSIC then
+            if ArenaEnemyFrames then
+                showFlag = not ArenaEnemyFrames:IsShown()
             end
         end
     end
-    --@end-retail@
+
+    if not DIMINISH_NS.IS_CLASSIC then
+        local isInArena = select(2, IsInInstance()) == "arena"
+        if forceHide or settings.arena.enabled and not isInArena then
+            if ArenaEnemyFrames then
+                ArenaEnemyFrames:SetShown(showFlag)
+            end
+
+            if LibStub and LibStub("AceAddon-3.0", true) then
+                local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
+                if sArena and sArena.ArenaEnemyFrames then
+                    -- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
+                    -- incase anyone is using the old version)
+                    -- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
+                    sArena.ArenaEnemyFrames:SetShown(showFlag)
+                end
+            end
+        end
+    end
 
     local useCompact = GetCVarBool("useCompactPartyFrames")
     if useCompact and settings.party.enabled and showFlag then
         if not IsInGroup() then
+            -- luacheck: ignore
             print("Diminish: " .. L.COMPACTFRAMES_ERROR)
         end
     end
@@ -157,11 +158,11 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         local E = unpack(ElvUI)
         local UF = E and E:GetModule("UnitFrames")
         if UF then
-            --@retail@
-            if settings.arena.enabled then
-                UF:ToggleForceShowGroupFrames('arena', 5)
+            if not DIMINISH_NS.IS_CLASSIC then
+                if settings.arena.enabled then
+                    UF:ToggleForceShowGroupFrames('arena', 5)
+                end
             end
-            --@end-retail@
             if settings.party.enabled then
                 UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
             end
@@ -176,16 +177,16 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     for i = 1, 5 do
-        --@retail@
-        if not isInArena then
-            local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
-            if frame and frame ~= UIParent then
-                if frame:IsVisible() or settings.arena.enabled then
-                    frame:SetShown(showFlag)
+        if not DIMINISH_NS.IS_CLASSIC then
+            if not isInArena then
+                local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
+                if frame and frame ~= UIParent then
+                    if frame:IsVisible() or settings.arena.enabled then
+                        frame:SetShown(showFlag)
+                    end
                 end
             end
         end
-        --@end-retail@
 
         if forceHide or not useCompact and settings.party.enabled then
             if not UnitExists("party"..i) then -- do not toggle if frame belongs to a group member
@@ -213,6 +214,7 @@ end
 
 local function OnMouseDown(self)
     if self.unit == "nameplate" or (self.unit == "player" and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate) then
+        -- luacheck: ignore
         return print("Please use the position sliders in Diminish_Options to set nameplate position. WoW patch 8.3.0 broke the drag to move functionaliy for nameplates.")
     end
 
@@ -316,12 +318,12 @@ function TestMode:ShowAnchors()
 
     for _, unitID in pairs(NS.unitFrames) do
         if unitID == "arena" then
-            --@retail@
-            for i = 1, 5 do
-                local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i, true)
-                TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
+            if not DIMINISH_NS.IS_CLASSIC then
+                for i = 1, 5 do
+                    local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i, true)
+                    TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)
+                end
             end
-            --@end-retail@
         elseif unitID == "party" then
             for i = 0, 4 do
                 local unit = i == 0 and "player-party" or "party"..i
@@ -342,6 +344,7 @@ end
 
 function TestMode:Test(hide)
     if InCombatLockdown() then
+        -- luacheck: ignore
         return print(L.COMBATLOCKDOWN_ERROR)
     end
 

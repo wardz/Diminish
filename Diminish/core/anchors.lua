@@ -61,9 +61,10 @@ NS.anchors = {
         "oUF_LumenParty%d",
         "PartyMemberFrame%d",
     },
+}
 
-    --@retail@
-    focus = {
+if not NS.IS_CLASSIC then
+    NS.anchors.focus = {
         "SUFUnitfocus",
         "XPerl_FocusportraitFrame",
         "ElvUF_Focus",
@@ -81,9 +82,9 @@ NS.anchors = {
         "LUFUnitfocus",
         "oUF_LumenFocus",
         "FocusFrame",
-    },
+    }
 
-    arena =  {
+    NS.anchors.arena = {
         "ElvUF_Arena%d",
         "oUF_TukuiArena%d",
         "barena%dUnitFrame",
@@ -93,6 +94,5 @@ NS.anchors = {
         "sArenaEnemyFrame%d",
         "oUF_LumenArena%d",
         "ArenaEnemyFrame%d",
-    },
-    --@end-retail@
-}
+    }
+end

@@ -87,6 +87,9 @@ local function CreateChildPanel(self, name, callback)
     end
 end
 
+--InterfaceOptionsFrameCategoriesTop = InterfaceOptionsFrameCategories.TopEdge;
+--InterfaceOptionsFrameAddOnsTop = InterfaceOptionsFrameAddOns.TopEdge;
+
 function Widgets:CreateMainPanel(name)
     self.ADDON_NAME = name
 

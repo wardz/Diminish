@@ -56,7 +56,6 @@ do
     end
 
     --@retail@
-    defaultsDisabledCategories[NS.CATEGORIES.disarm] = true
     defaultsDisabledCategories[NS.CATEGORIES.taunt] = true
     --@end-retail@
 
