@@ -47,22 +47,22 @@ function Diminish:ToggleForZone(dontRunEnable)
     self.currInstanceType = select(2, IsInInstance())
     local registeredOnce = false
 
-    if not NS.IS_CLASSIC then
-        if self.currInstanceType == "arena" then
-            -- HACK: check if inside arena brawl, C_PvP.IsInBrawl() doesn't
-            -- always work on PLAYER_ENTERING_WORLD so delay it with this event.
-            -- Once event is fired it'll call ToggleForZone again
+    --@retail@
+    if self.currInstanceType == "arena" then
+        -- HACK: check if inside arena brawl, C_PvP.IsInBrawl() doesn't
+        -- always work on PLAYER_ENTERING_WORLD so delay it with this event.
+        -- Once event is fired it'll call ToggleForZone again
         self:RegisterEvent("PVP_BRAWL_INFO_UPDATED")
-        else
-            self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
-        end
-
-        -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone
-        if self.currInstanceType == "arena" and IsInBrawl() then
-            self.currInstanceType = "pvp" -- treat arena brawl as a battleground
-            self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
-        end
+    else
+        self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
     end
+
+    -- PVP_BRAWL_INFO_UPDATED triggered ToggleForZone
+    if self.currInstanceType == "arena" and IsInBrawl() then
+        self.currInstanceType = "pvp" -- treat arena brawl as a battleground
+        self:UnregisterEvent("PVP_BRAWL_INFO_UPDATED")
+    end
+    --@end-retail@
 
     -- (Un)register unit events for current zone depending on user settings
     for unit, settings in pairs(NS.db.unitFrames) do -- DR tracking for focus/target etc each have their own seperate settings
