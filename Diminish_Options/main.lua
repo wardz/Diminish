@@ -10,7 +10,7 @@ NS.unitFrames = {
     [L.PLAYER] = "player", -- localized, unlocalized unitID
     [L.TARGET] = "target",
     [L.FOCUS] = not DIMINISH_NS.IS_CLASSIC and "focus" or nil,
-    [L.ARENA] = not DIMINISH_NS.IS_CLASSIC and "arena" or nil,
+    [L.ARENA] = not DIMINISH_NS.IS_CLASSIC_OR_TBC and "arena" or nil,
     [L.PARTY] = "party",
     [L.NAMEPLATE] = "nameplate",
 }

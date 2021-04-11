@@ -83,7 +83,9 @@ if not NS.IS_CLASSIC then
         "oUF_LumenFocus",
         "FocusFrame",
     }
+end
 
+if not NS.IS_CLASSIC_OR_TBC then
     NS.anchors.arena = {
         "ElvUF_Arena%d",
         "oUF_TukuiArena%d",

@@ -176,7 +176,10 @@ do
 
     if NS.IS_CLASSIC then
         NS.DEFAULT_SETTINGS.timerStartAuraEnd = true
-        NS.DEFAULT_SETTINGS.unitFrames.arena.enabled = false
         NS.DEFAULT_SETTINGS.unitFrames.focus.enabled = false
+    end
+
+    if NS.IS_CLASSIC_OR_TBC then
+        NS.DEFAULT_SETTINGS.unitFrames.arena.enabled = false
     end
 end
