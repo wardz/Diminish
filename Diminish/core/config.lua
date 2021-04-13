@@ -28,7 +28,7 @@ do
     }
 
     local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-    local isTBC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+    local isTBC = WOW_PROJECT_ID == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5)
     local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
     NS.IS_CLASSIC = isClassic
     NS.IS_CLASSIC_OR_TBC = isClassic or isTBC
@@ -39,7 +39,7 @@ do
         alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", expansions[tocExp]))
     elseif isRetail and tocExp ~= 1 then
         alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
-    elseif isTBC and tocExp ~= 3 then
+    elseif isTBC and tocExp ~= 5 then
         alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
     end
 end
