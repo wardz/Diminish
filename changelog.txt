@@ -1,4 +1,4 @@
-v2.5.0:
+v2.4.4:
 - Add support for The Burning Crusade. Note that this is still work in progress, so DR data might not be fully accurate.
   Also options are not fully working yet due to a bug on Blizzard's end.
 
