@@ -24,11 +24,11 @@ do
     local expansions = {
         [WOW_PROJECT_MAINLINE] = "retail",
         [WOW_PROJECT_CLASSIC] = "classic",
-        [WOW_PROJECT_TBC or 3] = "tbc",
+        [WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5] = "tbc",
     }
 
-    local isClassic = _G.BackdropTemplateMixin == nil and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-    local isTBC = _G.BackdropTemplateMixin and WOW_PROJECT_ID == 2
+    local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+    local isTBC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
     local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
     NS.IS_CLASSIC = isClassic
     NS.IS_CLASSIC_OR_TBC = isClassic or isTBC

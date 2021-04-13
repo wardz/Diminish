@@ -32,7 +32,7 @@ globals = {
     "WOW_PROJECT_ID",
     "WOW_PROJECT_CLASSIC",
     "WOW_PROJECT_MAINLINE",
-    "WOW_PROJECT_TBC",
+    "WOW_PROJECT_BURNING_CRUSADE_CLASSIC",
     "SetCVar",
     "_G",
     "CopyTable",
