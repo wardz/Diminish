@@ -55,6 +55,13 @@ do
         defaultsDisabledCategories[NS.CATEGORIES.frost_shock] = true
     end
 
+    if not NS.IS_CLASSIC and NS.IS_CLASSIC_OR_TBC then -- is tbc
+        defaultsDisabledCategories[NS.CATEGORIES.random_root] = true
+        defaultsDisabledCategories[NS.CATEGORIES.death_coil] = true
+        defaultsDisabledCategories[NS.CATEGORIES.freezing_trap] = true
+        defaultsDisabledCategories[NS.CATEGORIES.scatter_shot] = true
+    end
+
     --@retail@
     defaultsDisabledCategories[NS.CATEGORIES.taunt] = true
     --@end-retail@
