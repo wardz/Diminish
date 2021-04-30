@@ -148,8 +148,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     local useCompact = GetCVarBool("useCompactPartyFrames")
     if useCompact and settings.party.enabled and showFlag then
         if not IsInGroup() then
-            -- luacheck: ignore
-            print("Diminish: " .. L.COMPACTFRAMES_ERROR)
+            print("Diminish: " .. L.COMPACTFRAMES_ERROR) -- luacheck: ignore
         end
     end
 
@@ -178,7 +177,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     for i = 1, 5 do
         if not DIMINISH_NS.IS_CLASSIC then
-            if not isInArena then
+            if select(2, IsInInstance()) ~= "arena" then
                 local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
                 if frame and frame ~= UIParent then
                     if frame:IsVisible() or settings.arena.enabled then
@@ -214,8 +213,7 @@ end
 
 local function OnMouseDown(self)
     if self.unit == "nameplate" or (self.unit == "player" and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate) then
-        -- luacheck: ignore
-        return print("Please use the position sliders in Diminish_Options to set nameplate position. WoW patch 8.3.0 broke the drag to move functionaliy for nameplates.")
+        return print("Please use the position sliders in Diminish_Options to set nameplate position. WoW patch 8.3.0 broke the drag to move functionaliy for nameplates.") -- luacheck: ignore
     end
 
     self:StartMoving()
@@ -344,8 +342,7 @@ end
 
 function TestMode:Test(hide)
     if InCombatLockdown() then
-        -- luacheck: ignore
-        return print(L.COMBATLOCKDOWN_ERROR)
+        return print(L.COMBATLOCKDOWN_ERROR) -- luacheck: ignore
     end
 
     if isTesting or hide then
