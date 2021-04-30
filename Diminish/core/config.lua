@@ -177,14 +177,6 @@ do
     if NS.IS_CLASSIC then
         NS.DEFAULT_SETTINGS.timerStartAuraEnd = true
         NS.DEFAULT_SETTINGS.unitFrames.focus.enabled = false
-    end
-
-    if NS.IS_CLASSIC_OR_TBC then
         NS.DEFAULT_SETTINGS.unitFrames.arena.enabled = false
-    end
-
-    if not NS.IS_CLASSIC and NS.IS_CLASSIC_OR_TBC then -- is tbc but not classic
-        NS.DEFAULT_SETTINGS.unitFrames.target.zones.arena = true
-        NS.DEFAULT_SETTINGS.unitFrames.focus.zones.arena = true
     end
 end

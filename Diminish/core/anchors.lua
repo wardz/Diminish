@@ -85,7 +85,7 @@ if not NS.IS_CLASSIC then
     }
 end
 
-if not NS.IS_CLASSIC_OR_TBC then
+if not NS.IS_CLASSIC then
     NS.anchors.arena = {
         "ElvUF_Arena%d",
         "oUF_TukuiArena%d",

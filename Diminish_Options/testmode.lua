@@ -109,7 +109,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
 
     local settings = DIMINISH_NS.db.unitFrames
 
-    if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+    if not DIMINISH_NS.IS_CLASSIC then
         if not IsAddOnLoaded("Blizzard_ArenaUI") then
             LoadAddOn("Blizzard_ArenaUI")
         end
@@ -119,14 +119,14 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     if state ~= nil then
         showFlag = state
     else
-        if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+        if not DIMINISH_NS.IS_CLASSIC then
             if ArenaEnemyFrames then
                 showFlag = not ArenaEnemyFrames:IsShown()
             end
         end
     end
 
-    if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+    if not DIMINISH_NS.IS_CLASSIC then
         local isInArena = select(2, IsInInstance()) == "arena"
         if forceHide or settings.arena.enabled and not isInArena then
             if ArenaEnemyFrames then
@@ -158,7 +158,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         local E = unpack(ElvUI)
         local UF = E and E:GetModule("UnitFrames")
         if UF then
-            if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+            if not DIMINISH_NS.IS_CLASSIC then
                 if settings.arena.enabled then
                     UF:ToggleForceShowGroupFrames('arena', 5)
                 end
@@ -177,7 +177,7 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     for i = 1, 5 do
-        if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+        if not DIMINISH_NS.IS_CLASSIC then
             if not isInArena then
                 local frame = DIMINISH_NS.Icons:GetAnchor("arena"..i, true, true)
                 if frame and frame ~= UIParent then
@@ -318,7 +318,7 @@ function TestMode:ShowAnchors()
 
     for _, unitID in pairs(NS.unitFrames) do
         if unitID == "arena" then
-            if not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+            if not DIMINISH_NS.IS_CLASSIC then
                 for i = 1, 5 do
                     local anchor = DIMINISH_NS.Icons:GetAnchor(unitID..i, true)
                     TestMode:CreateDummyAnchor(anchor, unitID, unitID..i)

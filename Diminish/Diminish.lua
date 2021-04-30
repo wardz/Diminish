@@ -19,7 +19,7 @@ local unitEvents = {
     party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",  -- csv
     player = "COMBAT_LOG_EVENT_UNFILTERED",
     nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED",
-    arena = not NS.IS_CLASSIC_OR_TBC and "ARENA_OPPONENT_UPDATE" or nil,
+    arena = not NS.IS_CLASSIC and "ARENA_OPPONENT_UPDATE" or nil,
     focus = not NS.IS_CLASSIC and "PLAYER_FOCUS_CHANGED" or nil,
 }
 

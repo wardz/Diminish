@@ -267,8 +267,6 @@ do
     }
     if not NS.IS_CLASSIC then
         tinsert(testModeUnits, "focus")
-    end
-    if not NS.IS_CLASSIC_OR_TBC then
         tinsert(testModeUnits, "arena1")
         tinsert(testModeUnits, "arena2")
         tinsert(testModeUnits, "arena3")
