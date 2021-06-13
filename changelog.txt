@@ -1,3 +1,7 @@
+v2.4.7:
+- Fix PvE stun DR not being tracked on classic.
+
+
 v2.4.6:
 - Add back arena unitframe tracking for TBC now that the default Blizzard arena frames are included again.
 - DR spell data improvements for TBC.
