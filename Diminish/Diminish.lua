@@ -357,7 +357,7 @@ do
                 if not self.isWatchingNPCs and not isMindControlled then return end
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
-                    if IS_CLASSIC_OR_TBC then return end
+                    if IS_CLASSIC_OR_TBC and category ~= CATEGORY_STUN then return end
                     if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT and category ~= CATEGORY_INCAP and category ~= CATEGORY_DISORIENT then
                         -- only show taunt and stun for normal mobs (roots/incaps/disorient for special mobs), player pets will show all
                         return
