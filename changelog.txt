@@ -1,3 +1,7 @@
+v2.4.8:
+- Fix typo giving incorrect addon version on tbc.
+
+
 v2.4.7:
 - Fix PvE stun DR not being tracked on classic.
 
