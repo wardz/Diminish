@@ -50,7 +50,7 @@ jobs:
         uses: BigWigsMods/packager@master
         if: ${{ success() && github.event_name != 'pull_request' && contains(github.ref, 'tags/v') }}
         with:
-          args: -g bc -w 25967
+          args: -g bcc -w 25967
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
