@@ -8,9 +8,9 @@
 #@version-classic@
 ## X-Expansion: 2
 #@end-version-classic@
-#@version-bc@
+#@version-bcc@
 ## X-Expansion: 5
-#@end-version-bc@
+#@end-version-bcc@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## Notes-deDE: DR-Tracker für Einheitenfenster.
