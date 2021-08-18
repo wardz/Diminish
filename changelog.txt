@@ -1,5 +1,13 @@
+v2.4.11:
+- [TBC] Fix some ranks of Intercept not being tracked.
+- [Retail] Add Spider Venom & Steelclaw Trap DRs.
+- [All] Change to better anchor for Xperl focus frame.
+- [All] DR category label text will now wrap to a new line instead of truncating text when possible.
+
+
 v2.4.10:
 - Fix Polymorph Rank 4 not being tracked in TBC against players.
+
 
 v2.4.9:
 - Fix stuns/kidney not being tracked for Classic in PvE.
