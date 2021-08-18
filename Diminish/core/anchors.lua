@@ -66,7 +66,7 @@ NS.anchors = {
 if not NS.IS_CLASSIC then
     NS.anchors.focus = {
         "SUFUnitfocus",
-        "XPerl_FocusportraitFrame",
+        "XPerl_Focushighlight",
         "ElvUF_Focus",
         "oUF_TukuiFocus",
         "bfocusUnitFrame",
