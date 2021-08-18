@@ -154,7 +154,6 @@ end
 
 do
     local CreateFrame = _G.CreateFrame
-    local strlen = _G.string.len
 
     local function MasqueAddFrame(frame)
         frame:SetNormalTexture(NS.db.borderTexture)
@@ -365,6 +364,8 @@ do
             ctext:SetShown(db.showCategoryText)
             ctext:SetJustifyH("LEFT")
             ctext:SetJustifyH("TOP")
+            ctext:SetNonSpaceWrap(true)
+            ctext:SetWidth(unitDB.iconSize + 4)
             frame.categoryText = ctext
             frame.categoryTextSize = db.categoryFont.size
 
@@ -380,17 +381,8 @@ do
             frame.indicatorText:Hide()
         end
 
-        --if db.showCategoryText then
-            if strlen(category) >= 10 then
-                -- truncate text. Could set max width instead but it adds "..." at the end
-                -- and changes text position
-                frame.categoryText:SetText(strsub(category, 1, 5))
-            else
-                frame.categoryText:SetText(category)
-            end
-        --end
-
         if frame.categoryText then
+            frame.categoryText:SetText(category)
             frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
         end
 
@@ -463,6 +455,8 @@ do
 
                 if frame.categoryText then
                     frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
+                    frame.categoryText:SetWidth(size + 4)
+                    --frame.categoryText:SetHeight(db.categoryFont.size * 2)
                 end
 
                 local name, height, flags = frame.countdown:GetFont()
