@@ -365,7 +365,8 @@ do
             ctext:SetJustifyH("LEFT")
             ctext:SetJustifyH("TOP")
             ctext:SetNonSpaceWrap(true)
-            ctext:SetWidth(unitDB.iconSize + 4)
+            ctext:SetWidth(unitDB.iconSize + 11)
+            ctext:SetMaxLines(2)
             frame.categoryText = ctext
             frame.categoryTextSize = db.categoryFont.size
 
@@ -455,7 +456,7 @@ do
 
                 if frame.categoryText then
                     frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
-                    frame.categoryText:SetWidth(size + 4)
+                    frame.categoryText:SetWidth(size + 11)
                     --frame.categoryText:SetHeight(db.categoryFont.size * 2)
                 end
 
