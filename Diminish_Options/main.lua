@@ -145,6 +145,7 @@ function Panel:Setup()
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
         db.showCategoryText = not db.showCategoryText
         frames.categoryFontSize:SetShown(db.showCategoryText)
+        frames.categoryTextMaxLines:SetShown(db.showCategoryText)
         Icons:OnFrameConfigChanged()
     end)
     frames.showCategoryText:SetPoint("LEFT", frames.trackNPCs, 0, -40)
@@ -206,6 +207,12 @@ function Panel:Setup()
     end)
     frames.categoryFontSize:SetPoint("LEFT", frames.border, 0, -70)
 
+    frames.categoryTextMaxLines = Widgets:CreateSlider(self, "Category Label Max Lines", "Set how many lines the DR category text will grow until it gets abbreviated instead.", 1, 4, 1, function(_, value)
+        db.categoryTextMaxLines = value
+        DIMINISH_NS.Icons:OnFrameConfigChanged()
+    end)
+    frames.categoryTextMaxLines:SetPoint("LEFT", frames.categoryFontSize, 0, -50)
+
     -------------------------------------------------------------------
 
     local tip = self:CreateFontString(nil, "ARTWORK", "GameFontNormalMed2")
@@ -262,6 +269,7 @@ function Panel:refresh()
     Widgets:RefreshWidgets(DIMINISH_NS.db, self)
     self.frames.categoryFontSize:SetShown(DIMINISH_NS.db.showCategoryText)
     self.frames.categoryFontSize:SetValue(DIMINISH_NS.db.categoryFont.size)
+    self.frames.categoryTextMaxLines:SetShown(DIMINISH_NS.db.showCategoryText)
 
     -- Disable rest of timer options if timer countdown is not checked
     Widgets:ToggleState(self.frames.timerColors, self.frames.timerText:GetChecked())
