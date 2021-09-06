@@ -1,3 +1,7 @@
+v2.4.13:
+- [TBC] Fix sometimes not displaying red indicator color in tbc.
+
+
 v2.4.12:
 - [TBC] Update for latest patch.
 - [All] Add option for setting category text max new lines until abbreviation.
