@@ -3,11 +3,11 @@ manual-changelog: changelog.txt
 package-as: Diminish
 
 externals:
-  Diminish/libs/LibStub: git://github.com/sbaildon/LibStub
+  Diminish_Options/libs/WardzConfigDropdown-1.0: git://github.com/wardz/WardzConfigDropdown-1.0
+  Diminish/libs/LibStub: git://github.com/wardz/LibStub
   Diminish/libs/DRList-1.0:
     url: git://github.com/wardz/DRList-1.0
     tag: latest
-  Diminish_Options/libs/WardzConfigDropdown-1.0: git://github.com/wardz/WardzConfigDropdown-1.0
 
 move-folders:
   Diminish/Diminish_Options: Diminish_Options

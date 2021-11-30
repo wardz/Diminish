@@ -1,6 +1,8 @@
 # Project specifics
-.release/
 release.sh
+/.release
+/.vscode
+/.idea
 Diminish/libs
 
 # luarocks build files
@@ -17,6 +19,7 @@ Thumbs.db
 $RECYCLE.BIN/
 *.lnk
 .DS_Store
+.DS_Store?
 .AppleDouble
 .LSOverride
 Icon\r\r
