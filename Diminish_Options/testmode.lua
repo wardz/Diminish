@@ -9,6 +9,8 @@ local backdrop = {
     tile = false,
 }
 
+local SetCVar = _G.SetCVar or _G.C_CVar.SetCVar
+
 local TestMode = CreateFrame("Frame")
 TestMode.pool = CreateFramePool("Frame", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- just for testing purposes
 NS.TestMode = TestMode
