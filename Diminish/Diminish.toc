@@ -1,6 +1,6 @@
-## Interface: 90005
-## Interface-Retail: 90005
-## Interface-Classic: 11307
+## Interface: 90105
+## Interface-Retail: 90105
+## Interface-Classic: 11401
 ## Interface-BCC: 20502
 #@version-retail@
 ## X-Expansion: 1
@@ -13,7 +13,6 @@
 #@end-version-bcc@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
-## Notes-deDE: DR-Tracker für Einheitenfenster.
 ## SavedVariables: DiminishDB
 ## Version: @project-version@
 ## X-Curse-Project-ID: 92871
