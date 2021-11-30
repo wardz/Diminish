@@ -376,6 +376,11 @@ do
             end
         end
 
+        if NS.MasqueGroup and not isNew then
+            frame:SetNormalTexture(NS.db.borderTexture)
+            NS.MasqueGroup:ReSkin(frame)
+        end
+
         if not db.colorBlind then
             frame.indicatorBg:Hide()
             frame.indicatorText:Hide()
@@ -417,6 +422,9 @@ do
             frame.border:SetTexture(db.border.edgeFile)
             frame.border:SetPoint("TOPLEFT", -db.border.edgeSize, db.border.edgeSize)
             frame.border:SetPoint("BOTTOMRIGHT", db.border.edgeSize, -db.border.edgeSize)
+        else
+            frame:SetNormalTexture(NS.db.borderTexture)
+            NS.MasqueGroup:ReSkin(frame)
         end
 
         frame.cooldown.noCooldownCount = db.timerColors or not db.timerText -- toggle OmniCC
