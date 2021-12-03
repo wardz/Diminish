@@ -16,7 +16,7 @@ _G.DIMINISH_NS = NS
 
 local unitEvents = {
     target = "PLAYER_TARGET_CHANGED",
-    party = "GROUP_ROSTER_UPDATE, GROUP_JOINED",  -- csv
+    party = "GROUP_ROSTER_UPDATE, GROUP_JOINED", -- csv
     player = "COMBAT_LOG_EVENT_UNFILTERED",
     nameplate = "NAME_PLATE_UNIT_ADDED, NAME_PLATE_UNIT_REMOVED",
     arena = not NS.IS_CLASSIC and "ARENA_OPPONENT_UPDATE" or nil,
