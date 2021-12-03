@@ -1,5 +1,7 @@
 v2.4.14:
-- Bump toc versions.
+- [All] Bump toc versions.
+- [All] Update DRList-1.0 lib.
+- [Retail] Fix for testmode Lua errors on latest retail patch.
 
 
 v2.4.13:
