@@ -13,4 +13,4 @@ Installing from source is not always guaranteed to work. You should download a p
 
 ## License
 
-Copyright (C) 2021 Wardz | [MIT License](https://opensource.org/licenses/mit-license.php).
+Copyright (C) 2022 Wardz | [MIT License](https://opensource.org/licenses/mit-license.php).
