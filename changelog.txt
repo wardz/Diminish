@@ -1,3 +1,13 @@
+v2.4.16:
+- Update DRList-1.0 library.
+- [BCC] engineering bombs are now considered incapacitate instead of stun.
+- [BCC+Classic] remove Inferno Effect and some unused spellIDs.
+- [BCC] add tracking for Stoneclaw Stun, Stormherald/Deep Thunder stun proc, Turn Evil, Entrapment.
+- [BCC] move Hibernate into Incapacitate category & mark 'sleep' category as deprecated.
+- [BCC] Add new category 'chastise' & move Counterattack from root into its own new category.
+- [BCC] merge Scatter Shot & Dragon's Breath into new category 'scatter'.
+
+
 v2.4.15:
 - [All] Bump toc versions.
 
