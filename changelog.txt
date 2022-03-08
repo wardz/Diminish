@@ -1,3 +1,7 @@
+v2.4.17:
+- [BCC] Hopefully fix spellIDs for Riposte disarm.
+
+
 v2.4.16:
 - Update DRList-1.0 library.
 - [BCC] engineering bombs are now considered incapacitate instead of stun.
