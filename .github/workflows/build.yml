@@ -6,7 +6,7 @@ on:
       - master
     tags:
       - "v*"
-      - '!**-alpha**'
+      - "!**-alpha**"
   pull_request:
     branches:
       - master
