@@ -1,7 +1,7 @@
 ## Interface: 90200
 ## Interface-Retail: 90200
-## Interface-Classic: 11401
-## Interface-BCC: 20503
+## Interface-Classic: 11402
+## Interface-BCC: 20504
 #@version-retail@
 ## X-Expansion: 1
 #@end-version-retail@
