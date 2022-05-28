@@ -32,6 +32,7 @@ body:
     description: Which version(s) of World of Warcraft are you experiencing the issue for?
     multiple: true
     options:
+      - Retail
       - The Burning Crusade Classic
       - Classic Era
   validations:
