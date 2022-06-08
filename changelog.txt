@@ -2,6 +2,7 @@ v2.4.20:
 - [Retail] Bump toc version.
 - [Retail] Add Consecutive Concussion stun.
 - [BCC] Fix random stuns not being tracked in PvE mode.
+- [All] Add option for cooldown swipe edge effect. (Default off, recommended on when not using countdown text).
 
 
 v2.4.19:
