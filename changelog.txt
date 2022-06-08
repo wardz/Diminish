@@ -1,7 +1,7 @@
 v2.4.20:
 - [Retail] Bump toc version.
 - [Retail] Add Consecutive Concussion stun.
-- [BCC+Classic] Fix random stuns not being tracked in PvE mode.
+- [BCC] Fix random stuns not being tracked in PvE mode.
 
 
 v2.4.19:
