@@ -84,10 +84,11 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.9",
+        version = "1.10",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
+        timerEdge = false,
         timerColors = false,
         timerStartAuraEnd = false,
         showCategoryText = false,

@@ -329,7 +329,7 @@ do
             cooldown:SetAllPoints(frame)
             cooldown:SetHideCountdownNumbers(not db.timerText)
             cooldown:SetDrawSwipe(db.timerSwipe)
-            cooldown:SetDrawEdge(false)
+            cooldown:SetDrawEdge(db.timerEdge)
             cooldown:SetDrawBling(false)
             cooldown:SetSwipeColor(0, 0, 0, 0.65)
             cooldown:SetScript("OnShow", CooldownOnShow)
@@ -415,6 +415,7 @@ do
     local function RefreshIcon(frame, db)
         frame.cooldown:SetHideCountdownNumbers(not db.timerText)
         frame.cooldown:SetDrawSwipe(db.timerSwipe)
+        frame.cooldown:SetDrawEdge(db.timerEdge)
         frame.categoryText:SetShown(db.showCategoryText)
 
         if not NS.MasqueGroup then

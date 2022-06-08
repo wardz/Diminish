@@ -81,13 +81,20 @@ function Panel:Setup()
     end
 
 
+    frames.timerEdge = Widgets:CreateCheckbox(self, L.TIMEREDGE, L.TIMEREDGE_TOOLTIP, function()
+        db.timerEdge = not db.timerEdge
+        Icons:OnFrameConfigChanged()
+    end)
+    frames.timerEdge:SetPoint("LEFT", frames.timerSwipe, 15, -40)
+
+
     frames.timerText = Widgets:CreateCheckbox(self, L.TIMERTEXT, L.TIMERTEXT_TOOLTIP, function()
         Widgets:ToggleState(frames.timerColors, frames.timerText:GetChecked())
 
         db.timerText = not db.timerText
         Icons:OnFrameConfigChanged()
     end)
-    frames.timerText:SetPoint("LEFT", frames.timerSwipe, 0, -40)
+    frames.timerText:SetPoint("LEFT", frames.timerSwipe, 0, -80)
 
 
     frames.timerColors = Widgets:CreateCheckbox(self, L.TIMERCOLORS, L.TIMERCOLORS_TOOLTIP, function()
