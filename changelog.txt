@@ -1,3 +1,7 @@
+v2.4.21:
+- [All] Update DRList-1.0 library to correct tag, fixes Consecutive Concussion stun DR.
+
+
 v2.4.20:
 - [Retail] Bump toc version.
 - [Retail] Add Consecutive Concussion stun.
