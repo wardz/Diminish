@@ -34,6 +34,8 @@ globals = {
 }
 
 read_globals = {
+    "IsInRaid",
+    "LE_PARTY_CATEGORY_HOME",
     "ArenaEnemyFrames",
     "bit",
     "ceil",

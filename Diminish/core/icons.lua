@@ -1,4 +1,4 @@
-﻿local _, NS = ...
+local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -124,11 +124,14 @@ do
             local unit = i == 0 and "player" or "party"..i
             local parent
 
-            if NS.useCompactPartyFrames and not cfg.anchorUIParent then
-                parent = FindCompactRaidFrameByUnit(unit)
+            if not cfg.anchorUIParent then
+                if NS.useCompactPartyFrames or IsInRaid(LE_PARTY_CATEGORY_HOME) then
+                    parent = FindCompactRaidFrameByUnit(unit)
+                else
+                    parent = FindPartyFrameByUnit(unit)
+                end
             else
                 parent = FindPartyFrameByUnit(unit)
-                -- unit = parent.unit
             end
 
             if parent then
