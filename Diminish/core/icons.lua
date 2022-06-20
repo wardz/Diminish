@@ -1,4 +1,4 @@
-local _, NS = ...
+﻿local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -77,8 +77,7 @@ do
         local guid = UnitGUID(unitID)
         if not guid then return end
 
-        local raidCount = #CompactRaidFrameContainer.flowFrames
-        for i = 1, (raidCount > 5 and raidCount or 5) do
+        for i = 1, 40 do
             -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
             local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
@@ -91,9 +90,7 @@ do
                 frame = _G["CompactRaidGroup1Member"..i]
             end
 
-            if not frame then return end -- no more frames exists
-
-            if frame.unit and UnitGUID(frame.unit) == guid then
+            if frame and frame.unit and UnitGUID(frame.unit) == guid then
                 return frame
             end
         end
