@@ -1,3 +1,7 @@
+v2.4.22:
+- [All] Fix bug in raid/party frame anchoring sometimes causing party DR icons to be invisible until /reload.
+
+
 v2.4.21:
 - [All] Update DRList-1.0 library to correct tag, fixes Consecutive Concussion stun DR.
 
