@@ -1,4 +1,4 @@
-﻿local _, NS = ...
+local _, NS = ...
 local Icons = {}
 local frames = {}
 NS.Icons = Icons
@@ -128,7 +128,7 @@ do
                     parent = FindPartyFrameByUnit(unit)
                 end
             else
-                parent = FindPartyFrameByUnit(unit)
+                parent = UIParent
             end
 
             if parent then
