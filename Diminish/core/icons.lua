@@ -123,7 +123,7 @@ do
 
             if not cfg.anchorUIParent then
                 if NS.useCompactPartyFrames or IsInRaid(LE_PARTY_CATEGORY_HOME) then
-                    parent = FindCompactRaidFrameByUnit(unit)
+                    parent = FindCompactRaidFrameByUnit(unit) or FindPartyFrameByUnit(unit)
                 else
                     parent = FindPartyFrameByUnit(unit)
                 end
