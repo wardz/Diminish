@@ -310,6 +310,11 @@ function Diminish:GROUP_ROSTER_UPDATE()
     end
 end
 Diminish.GROUP_JOINED = Diminish.GROUP_ROSTER_UPDATE
+hooksecurefunc("CompactRaidGroup_UpdateLayout", function()
+    if next(NS.db or {}) then -- is initialized
+        Diminish:GROUP_ROSTER_UPDATE()
+    end
+end)
 
 -- Combat log scanning for DRs
 do
