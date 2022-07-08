@@ -34,6 +34,7 @@ globals = {
 }
 
 read_globals = {
+    "hooksecurefunc",
     "IsInRaid",
     "LE_PARTY_CATEGORY_HOME",
     "ArenaEnemyFrames",
@@ -97,7 +98,6 @@ read_globals = {
     "RequestBattlefieldScoreData",
     "ResetCursor",
     "SetCursor",
-    "SlashCmdList",
     "STANDARD_TEXT_FONT",
     "StaticPopup_Show",
     "strfind",
