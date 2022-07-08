@@ -82,11 +82,11 @@ do
             local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
             -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
-            if not frame or frame and not frame.unit then
+            if not frame or (frame and not frame.unit and not frame:IsVisible()) then
                 frame = _G["CompactPartyFrameMember"..i] -- check this instead if first frame has no unit attached
             end
 
-            if not frame or frame and not frame.unit then
+            if not frame or (frame and not frame.unit and not frame:IsVisible()) then
                 frame = _G["CompactRaidGroup1Member"..i]
             end
 
