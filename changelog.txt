@@ -1,5 +1,8 @@
 v2.4.22:
+- [All] Add anchor support for Gladius (#25, thanks SweepyBoop)
 - [All] Fix bug in raid/party frame anchoring sometimes causing party DR icons to be invisible until /reload.
+  The Blizzard option "Use Compact Party Frames" and Diminish option "Anchor to UIParent" can further
+  be tweaked to support third party raid frame addons if needed.
 
 
 v2.4.21:
