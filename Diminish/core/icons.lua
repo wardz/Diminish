@@ -82,11 +82,11 @@ do
             local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
             -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
-            if not frame or (frame and not frame.unit and not frame:IsVisible()) then
+            if not frame or (frame and not frame:IsVisible()) then
                 frame = _G["CompactPartyFrameMember"..i] -- check this instead if first frame has no unit attached
             end
 
-            if not frame or (frame and not frame.unit and not frame:IsVisible()) then
+            if not frame or (frame and not frame:IsVisible()) then
                 frame = _G["CompactRaidGroup1Member"..i]
             end
 
@@ -131,14 +131,15 @@ do
                 parent = UIParent
             end
 
-            if parent then
-                if unit == "player" then
-                    -- we need to difference "player" for PlayerFrame and
-                    -- "player" for CompactRaidFrame
-                    unit = "player-party"
-                end
-                anchorCache[unit] = parent
+            if unit == "player" then
+                -- we need to difference "player" for PlayerFrame and
+                -- "player" for CompactRaidFrame
+                unit = "player-party"
+            end
 
+            anchorCache[unit] = parent or nil
+
+            if parent then
                 if frames[unit] then
                     -- Anchor existing DR icons to new parent
                     -- if parent:IsForbidden() then return end
