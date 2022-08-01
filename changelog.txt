@@ -1,3 +1,10 @@
+v2.5.0:
+- [Wrath] Add Wotlk beta support.
+- [BCC] Remove deprecated invalid categories shown in options panel.
+- [All] Fixes for party frame anchoring when party is converted to raid and frames are sorted by group.
+- [All] Update DRList-1.0 lib.
+
+
 v2.4.22:
 - [All] Add anchor support for Gladius (#25, thanks SweepyBoop)
 - [All] Fix bug in raid/party frame anchoring sometimes causing party DR icons to be invisible until /reload.
