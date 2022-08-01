@@ -4,6 +4,8 @@ Diminish attaches icons to unit frames or nameplates, displaying time left until
   
 Diminish can track DRs on both mobs and players if you enable PvE mode in the options.
 
+**Note:** Diminish is now in maintenance mode so new features won't be added other than bug fixes.
+
 ## Configuration
 
 Type `/diminish` to open the options panel. You may also skin the icons using [Masque](https://www.curseforge.com/wow/addons/masque).
