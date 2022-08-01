@@ -24,11 +24,29 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
         return GetNamePlateForUnit("player")
     end
 
+    local unit, count = gsub(unitID, "%d", "") -- party1 -> party
+
+    -- HACK: anchorCache[] wont work 100% for party/raid frames due to race conditions,
+    -- cba rewriting everything at this point so this'll have to do for now
+    if (unit == "party" or unit == "player-party") and not defaultAnchor then
+        if unit == "player-party" then
+            unitID = "player"
+        end
+
+        if not NS.db.unitFrames.party.anchorUIParent then
+            if NS.useCompactPartyFrames or IsInRaid(LE_PARTY_CATEGORY_HOME) then
+                return Icons:FindCompactRaidFrameByUnit(unitID) or Icons:FindPartyFrameByUnit(unitID)
+            else
+                return Icons:FindPartyFrameByUnit(unitID)
+            end
+        else
+            return UIParent
+        end
+    end
+
     if anchorCache[unitID] and not defaultAnchor then
         return anchorCache[unitID]
     end
-
-    local unit, count = gsub(unitID, "%d", "") -- party1 -> party
 
     if unit == "nameplate" then
         if unitID == "nameplate" then -- is testmode
@@ -63,7 +81,7 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
         end
 
         if frame then
-            if unit ~= "party" and unit ~= "player-party" and not defaultAnchor then -- AnchorPartyFrames() will handle party frames cache instead
+            if unit ~= "party" and unit ~= "player-party" and not defaultAnchor then
                 anchorCache[unitID] = frame
             end
 
@@ -72,81 +90,79 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
     end
 end
 
-do
-    local function FindCompactRaidFrameByUnit(unitID)
-        local guid = UnitGUID(unitID)
-        if not guid then return end
+function Icons:FindCompactRaidFrameByUnit(unitID)
+    local guid = UnitGUID(unitID)
+    if not guid then return end
 
-        for i = 1, 40 do
-            -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
-            local frame = _G["CompactRaidFrame"..i] -- check this frame first
+    for i = 1, 40 do
+        -- TODO: local frame = Icons:GetAnchor("raid"..i, true)
+        local frame = _G["CompactRaidFrame"..i] -- check this frame first
 
-            -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
-            if not frame or (frame and not frame:IsVisible()) then
-                frame = _G["CompactPartyFrameMember"..i] -- check this instead if first frame has no unit attached
-            end
+        -- CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
+        if not frame or (frame and not frame:IsVisible()) then
+            frame = _G["CompactPartyFrameMember"..i] -- check this instead if first frame has no unit attached
+        end
 
-            if not frame or (frame and not frame:IsVisible()) then
-                frame = _G["CompactRaidGroup1Member"..i]
-            end
+        if not frame or (frame and not frame:IsVisible()) then
+            frame = _G["CompactRaidGroup1Member"..i]
+        end
 
-            if frame and frame.unit and UnitGUID(frame.unit) == guid then
-                return frame
-            end
+        if frame and frame.unit and UnitGUID(frame.unit) == guid then
+            return frame
         end
     end
+end
 
-    -- For blizzard frames, party1 is always equal to PartyFrame1 and so on
-    -- but for unitframe addons party1 might be frame3 or some other random frame index
-    -- so always just scan through them all, just like with the raid frames
-    local function FindPartyFrameByUnit(unitID)
-        local guid = UnitGUID(unitID)
-        if not guid then return end
+-- For blizzard frames, party1 is always equal to PartyFrame1 and so on
+-- but for unitframe addons party1 might be frame3 or some other random frame index
+-- so always just scan through them all, just like with the raid frames
+function Icons:FindPartyFrameByUnit(unitID)
+    local guid = UnitGUID(unitID)
+    if not guid then return end
 
-        for i = 1, 5 do
-            local frame = Icons:GetAnchor("party"..i, true)
-            --if not frame then return end
+    for i = 1, 5 do
+        local frame = Icons:GetAnchor("party"..i, true)
+        --if not frame then return end
 
-            if frame and frame.unit and UnitGUID(frame.unit) == guid then
-                return frame
-            end
+        if frame and frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == guid then
+            return frame
         end
     end
+end
 
-    function Icons:AnchorPartyFrames(members)
-        local cfg = NS.db.unitFrames.party
-        if not cfg.enabled then return end
+function Icons:AnchorPartyFrames(members)
+    local cfg = NS.db.unitFrames.party
+    if not cfg.enabled then return end
 
-        for i = 0, (members or 4) do
-            local unit = i == 0 and "player" or "party"..i
-            local parent
+    for i = 0, (members or 4) do
+        local unit = i == 0 and "player" or "party"..i
+        local parent
 
-            if not cfg.anchorUIParent then
-                if NS.useCompactPartyFrames or IsInRaid(LE_PARTY_CATEGORY_HOME) then
-                    parent = FindCompactRaidFrameByUnit(unit) or FindPartyFrameByUnit(unit)
-                else
-                    parent = FindPartyFrameByUnit(unit)
-                end
+        if not cfg.anchorUIParent then
+            if NS.useCompactPartyFrames or IsInRaid(LE_PARTY_CATEGORY_HOME) then
+                parent = Icons:FindCompactRaidFrameByUnit(unit) or Icons:FindPartyFrameByUnit(unit)
             else
-                parent = UIParent
+                parent = Icons:FindPartyFrameByUnit(unit)
             end
+        else
+            parent = UIParent
+        end
 
-            if unit == "player" then
-                -- we need to difference "player" for PlayerFrame and
-                -- "player" for CompactRaidFrame
-                unit = "player-party"
-            end
+        if unit == "player" then
+            -- we need to difference "player" for PlayerFrame and
+            -- "player" for CompactRaidFrame
+            unit = "player-party"
+        end
 
-            anchorCache[unit] = parent or nil
+        --anchorCache[unit] = parent or nil
 
-            if parent then
-                if frames[unit] then
-                    -- Anchor existing DR icons to new parent
-                    -- if parent:IsForbidden() then return end
-                    for category, frame in pairs(frames[unit]) do
-                        frame:ClearAllPoints()
-                        frame:SetParent(parent)
-                    end
+        if parent then
+            if frames[unit] then
+                -- Anchor existing DR icons to new parent
+                -- if parent:IsForbidden() then return end
+                for category, frame in pairs(frames[unit]) do
+                    frame:ClearAllPoints()
+                    frame:SetParent(parent)
                 end
             end
         end
