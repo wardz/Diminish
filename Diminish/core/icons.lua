@@ -26,7 +26,7 @@ function Icons:GetAnchor(unitID, defaultAnchor, noUIParent)
 
     local unit, count = gsub(unitID, "%d", "") -- party1 -> party
 
-    -- HACK: anchorCache[] wont work 100% for party/raid frames due to race conditions,
+    -- HACK: anchorCache[] wont work 100% for party/raid frames due to event race conditions,
     -- cba rewriting everything at this point so this'll have to do for now
     if (unit == "party" or unit == "player-party") and not defaultAnchor then
         if unit == "player-party" then
