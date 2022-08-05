@@ -48,8 +48,6 @@ do
         alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
     elseif isTBC and tocExp ~= 5 then
         alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
-    elseif isWotlk and tocExp ~= 6 then
-        alert(format("Error: You're currently using the %s version of Diminish on a Wotlk client. You need to download the Wotlk version instead.", expansions[tocExp]))
     end
 end
 
