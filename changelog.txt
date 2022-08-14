@@ -1,3 +1,11 @@
+v2.5.2:
+- [Wrath] Add Wotlk PTR/beta support.
+
+
+v2.5.1:
+- [All] Hotfix for packager deploy error.
+
+
 v2.5.0:
 - [BCC] Remove deprecated invalid categories shown in options panel.
 - [All] Fixes for party frame anchoring. Anchor caching is now removed for party which should hopefully fix annoying race conditions.
