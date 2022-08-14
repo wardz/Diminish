@@ -309,7 +309,7 @@ do
                         timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
 
                         if not timer.isNotPetOrPlayer then
-                            if timer.applied >= 2 and duration >= (NS.IS_CLASSIC_OR_TBC and 6 or 5) then
+                            if timer.applied >= 2 and duration >= (NS.IS_NOT_RETAIL and 6 or 5) then
                                 -- is no DR but timer shows immune/75%
                                 -- may happen if server reset DR before our timer did & new CC got applied
                                 timer.applied = 1

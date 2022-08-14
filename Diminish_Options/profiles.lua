@@ -78,7 +78,7 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             [value] = DIMINISH_NS.DEFAULT_SETTINGS
         }, DiminishDB.profiles)
 
-        if DIMINISH_NS.IS_CLASSIC_OR_TBC and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
+        if DIMINISH_NS.IS_NOT_RETAIL and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
         end
 
@@ -108,7 +108,7 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             [profile] = DIMINISH_NS.DEFAULT_SETTINGS
         }, DiminishDB.profiles)
 
-        if DIMINISH_NS.IS_CLASSIC_OR_TBC and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
+        if DIMINISH_NS.IS_NOT_RETAIL and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
         end
 

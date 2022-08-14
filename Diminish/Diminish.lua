@@ -203,7 +203,7 @@ function Diminish:InitDB()
     NS.db.version = NS.DEFAULT_SETTINGS.version
     NS.activeProfile = profile
 
-    if NS.IS_CLASSIC_OR_TBC and NS.db.unitFrames.player.usePersonalNameplate then
+    if NS.IS_NOT_RETAIL and NS.db.unitFrames.player.usePersonalNameplate then
         NS.db.unitFrames.player.usePersonalNameplate = false
     end
 
@@ -325,13 +325,14 @@ do
     local CombatLogGetCurrentEventInfo = _G.CombatLogGetCurrentEventInfo
     local bit_band = _G.bit.band
 
-    local IS_CLASSIC_OR_TBC = NS.IS_CLASSIC_OR_TBC
+    local IS_NOT_RETAIL = NS.IS_NOT_RETAIL
     local CATEGORY_STUN = NS.CATEGORIES.stun
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local CATEGORY_ROOT = NS.CATEGORIES.root
     local CATEGORY_INCAP = NS.CATEGORIES.incapacitate
     local CATEGORY_DISORIENT = NS.CATEGORIES.disorient
     local CATEGORY_KIDNEY = NS.CATEGORIES.kidney_shot
+    local CATEGORY_OPENER_STUN = NS.CATEGORIES.opener_stun
     local CATEGORY_RNGSTUN = NS.CATEGORIES.random_stun
     local DRList = LibStub("DRList-1.0")
 
@@ -364,8 +365,8 @@ do
                 if not self.isWatchingNPCs and not isMindControlled then return end
 
                 if bit_band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) <= 0 then -- is not player pet or is not MCed
-                    if IS_CLASSIC_OR_TBC then
-                        if category ~= CATEGORY_STUN and category ~= CATEGORY_KIDNEY and category ~= CATEGORY_RNGSTUN then return end
+                    if IS_NOT_RETAIL then
+                        if category ~= CATEGORY_STUN and category ~= CATEGORY_KIDNEY and category ~= CATEGORY_RNGSTUN and category ~= CATEGORY_OPENER_STUN then return end
                     else
                         if category ~= CATEGORY_STUN and category ~= CATEGORY_TAUNT and category ~= CATEGORY_ROOT and category ~= CATEGORY_INCAP and category ~= CATEGORY_DISORIENT then
                             -- only show taunt and stun for normal mobs (roots/incaps/disorient for special mobs), player pets will show all
@@ -377,7 +378,7 @@ do
             else
                 -- Ignore taunts for players
                 if category == CATEGORY_TAUNT then return end
-                if IS_CLASSIC_OR_TBC then
+                if IS_NOT_RETAIL then
                     local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0
                     if not isSrcPlayer then return end
                 end

@@ -33,6 +33,7 @@ body:
     multiple: true
     options:
       - Retail
+      - Wrath of the Lich King
       - The Burning Crusade Classic
       - Classic Era
   validations:

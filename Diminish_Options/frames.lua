@@ -147,7 +147,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         end
 
 
-        if unit == "player" and not DIMINISH_NS.IS_CLASSIC_OR_TBC then
+        if unit == "player" and not DIMINISH_NS.IS_NOT_RETAIL then
             frames.usePersonalNameplate = Widgets:CreateCheckbox(panel, L.ATTACH_PERSONAL_NAMEPLATE, L.ATTACH_PERSONAL_NAMEPLATE_TOOLTIP, function()
                 db.usePersonalNameplate = not db.usePersonalNameplate
 

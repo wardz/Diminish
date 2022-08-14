@@ -25,20 +25,22 @@ do
         [WOW_PROJECT_MAINLINE] = "retail",
         [WOW_PROJECT_CLASSIC] = "classic",
         [WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5] = "tbc",
+        [6] = "wrath", -- FIXME: temp until new constant is added
     }
 
     local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
     local isTBC = WOW_PROJECT_ID == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5)
     local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-    --[[local isWotlk = false
+    local isWotlk = false
 
     local tocVersion = select(4, GetBuildInfo())
     if tocVersion >= 30400 and tocVersion < 40000 then
-        isWotlk = true -- temporary check for wotlk build until new constant is added
-    end]]
+        isTBC = false
+        isWotlk = true -- FIXME: temporary check for wotlk build until new constant is added
+    end
 
-    NS.IS_CLASSIC = isClassic
-    NS.IS_CLASSIC_OR_TBC = isClassic or isTBC
+    NS.IS_CLASSIC = isClassic -- Is vanilla
+    NS.IS_NOT_RETAIL = isClassic or isTBC or isWotlk
 
     local alert = _G.message or _G.print
     local tocExp = tonumber(GetAddOnMetadata("Diminish", "X-Expansion"))
@@ -48,6 +50,8 @@ do
         alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
     elseif isTBC and tocExp ~= 5 then
         alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
+    elseif isWotlk and tocExp ~= 6 then
+        alert(format("Error: You're currently using the %s version of Diminish on a Wotlk client. You need to download the Wotlk version instead.", expansions[tocExp]))
     end
 end
 
