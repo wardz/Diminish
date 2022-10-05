@@ -44,7 +44,7 @@ function Widgets:CreateSubHeader(parent, text)
     title:SetText(text)
     title:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -3)
 
-    local underline = anchor:CreateTexture(nil, "ARTWORK", "videoSubUnderline")
+    local underline = anchor:CreateTexture(nil, "ARTWORK", "_UI-Frame-BtnBotTile")
     underline:ClearAllPoints()
     underline:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -3)
 
