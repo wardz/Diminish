@@ -1,3 +1,7 @@
+v2.5.3:
+- [Retail] Updates for Dragonflight Beta, thanks to @jquick.
+
+
 v2.5.2:
 - [Wrath] Add Wotlk PTR/beta support.
 
