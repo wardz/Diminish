@@ -13,7 +13,7 @@
 ## X-Expansion: 5
 #@end-version-bcc@
 #@version-wrath@
-## X-Expansion: 6
+## X-Expansion: 11
 #@end-version-wrath@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
