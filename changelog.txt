@@ -1,3 +1,7 @@
+v2.5.4:
+- [Retail] Update DRList-1.0 lib.
+
+
 v2.5.3:
 - [Retail] Updates for Dragonflight Beta, thanks to @jquick.
 
