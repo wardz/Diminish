@@ -173,7 +173,7 @@ do
     local CreateFrame = _G.CreateFrame
 
     local function MasqueAddFrame(frame)
-        frame:SetNormalTexture(NS.db.borderTexture)
+        frame:SetNormalTexture(NS.db.border.edgeFile)
 
         NS.MasqueGroup:AddButton(frame, {
             Icon = frame.icon,
@@ -394,7 +394,7 @@ do
         end
 
         if NS.MasqueGroup and not isNew then
-            frame:SetNormalTexture(NS.db.borderTexture)
+            frame:SetNormalTexture(NS.db.border.edgeFile)
             NS.MasqueGroup:ReSkin(frame)
         end
 
@@ -441,7 +441,7 @@ do
             frame.border:SetPoint("TOPLEFT", -db.border.edgeSize, db.border.edgeSize)
             frame.border:SetPoint("BOTTOMRIGHT", db.border.edgeSize, -db.border.edgeSize)
         else
-            frame:SetNormalTexture(NS.db.borderTexture)
+            frame:SetNormalTexture(NS.db.border.edgeFile)
             NS.MasqueGroup:ReSkin(frame)
         end
 
