@@ -1,3 +1,10 @@
+v2.5.5:
+- [Retail] Update DRList-1.0 lib.
+- [Retail] Fix lua errors when Masque is enabled.
+- [Retail] Fix options not displaying fully first time Blizzard options panel is shown.
+- PS: I'm still not actively maintaining this addon, i just add updates once in a blue moon when i have time.
+
+
 v2.5.4:
 - [Retail] Update DRList-1.0 lib.
 
