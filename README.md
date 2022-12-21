@@ -4,7 +4,7 @@ Diminish attaches icons to unit frames or nameplates, displaying time left until
   
 Diminish can track DRs on both mobs and players if you enable PvE mode in the options.
 
-**Note:** Diminish is now in maintenance mode so new features won't be added other than important bug fixes. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time. Wotlk will still be supported, but Dragonflight most likely not.
+**Note:** Diminish is now in maintenance mode so new features won't be added other than important bug fixes. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time & some Blizzard functions are deprecated.
 
 ## Configuration
 
