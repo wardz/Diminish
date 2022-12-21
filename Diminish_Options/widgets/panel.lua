@@ -23,13 +23,6 @@ local function InitializePanel(self)
             self.callbacks[i] = nil
         end
         self.callbacks = nil
-
-        if InCombatLockdown() then
-            -- If we don't do this then child buttons (InterfaceOptionsFrameAddOnsButtonXToggle)
-            -- won't be shown when you initialize the panel in combat
-            InterfaceOptionsFrame_OpenToCategory(self.lastCreatedChild)
-            InterfaceOptionsFrame_OpenToCategory(self)
-        end
     end
 
     -- allow garbage collection of widget methods
@@ -47,24 +40,6 @@ end
 local function OnShow(self)
     InitializePanel(self)
     RefreshOnShow(self)
-
-    if InCombatLockdown() then return end
-
-    -- Display child panel buttons when clicking main panel
-    local i = 1
-    while true do
-        local button = _G["InterfaceOptionsFrameAddOnsButton"..i]
-        if not button then break end
-
-        local element = button.element
-        if element and element.name == self.name then
-            if element.hasChildren and element.collapsed then
-                _G[button:GetName().."Toggle"]:Click()
-            end
-            return
-        end
-        i = i + 1
-    end
 end
 
 -- Create child panel for main panel
@@ -100,7 +75,7 @@ function Widgets:CreateMainPanel(name)
     panel:Hide()
 
     InterfaceOptions_AddCategory(panel)
-    panel:SetScript("OnShow", OnShow)
+    panel:RegisterEvent("PLAYER_LOGIN") -- panel:SetScript("OnShow", OnShow)
+    panel:SetScript("OnEvent", OnShow)
     return panel
 end
-
