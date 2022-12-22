@@ -34,6 +34,10 @@ globals = {
 }
 
 read_globals = {
+    "EditModeManagerFrame",
+    "ArenaEnemyFramesContainer",
+    "C_VoiceChat",
+    "Enum",
     "hooksecurefunc",
     "IsInRaid",
     "LE_PARTY_CATEGORY_HOME",
