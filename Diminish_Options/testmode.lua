@@ -129,6 +129,12 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     if not DIMINISH_NS.IS_CLASSIC then
+        if EditModeManagerFrame and EditModeManagerFrame.AccountSettings then -- Dragonflight...
+            showFlag = not ArenaEnemyFramesContainer.Selection:IsShown()
+            EditModeManagerFrame.AccountSettings:SetArenaFramesShown(showFlag)
+            EditModeManagerFrame.AccountSettings:RefreshArenaFrames()
+        end
+
         local isInArena = select(2, IsInInstance()) == "arena"
         if forceHide or settings.arena.enabled and not isInArena then
             if ArenaEnemyFrames then

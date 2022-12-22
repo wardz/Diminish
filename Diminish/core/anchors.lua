@@ -97,5 +97,6 @@ if not NS.IS_CLASSIC then
         "GladiusButtonFramearena%d",
         "oUF_LumenArena%d",
         "ArenaEnemyFrame%d",
+        "ArenaEnemyMatchFrame%d",
     }
 end
