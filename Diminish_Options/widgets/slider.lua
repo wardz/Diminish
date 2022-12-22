@@ -35,6 +35,7 @@ function Widgets:CreateSlider(parent, text, tooltipText, minValue, maxValue, val
     slider.valueText = value
 
     slider.tooltipText = tooltipText
+    slider:SetScript("OnEnter", Widgets.OnEnter)
     slider.callbackFunc = func
     slider:SetScript("OnValueChanged", OnValueChanged)
     _G[name .. "Low"]:SetText("")
