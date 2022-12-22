@@ -186,8 +186,20 @@ function Diminish:InitDB()
 
     -- Reset config if the config version is too old
     if DiminishDB.profiles[profile] then
-        if DiminishDB.profiles[profile].version == "1.0" or not DiminishDB.profiles[profile].version then
-            wipe(DiminishDB.profiles[profile])
+        if not DiminishDB.profiles[profile].version then
+            DiminishDB = {
+                profileKeys = { [playerName] = "Default" },
+                profiles = {},
+            }
+        else
+            local version = gsub(DiminishDB.profiles[profile].version, "%.", "")
+            version = tonumber(version)
+            if version <= 19 then
+                DiminishDB = {
+                    profileKeys = { [playerName] = "Default" },
+                    profiles = {},
+                }
+            end
         end
     end
 
