@@ -1,5 +1,6 @@
 v2.5.5:
 - [Retail] Update DRList-1.0 lib.
+- [Retail] Fix arena frame anchoring.
 - [Retail] Fix options not displaying fully first time Blizzard options panel is shown.
 - [Retail] Fix tooltips for checkboxes/sliders not displaying.
 - [All] Fix Lua errors when Masque is enabled.
