@@ -1,7 +1,9 @@
 v2.5.5:
 - [Retail] Update DRList-1.0 lib.
-- [Retail] Fix lua errors when Masque is enabled.
 - [Retail] Fix options not displaying fully first time Blizzard options panel is shown.
+- [Retail] Fix tooltips for checkboxes/sliders not displaying.
+- [All] Fix Lua errors when Masque is enabled.
+- [All] People upgrading from very old versions of Diminish now have their settings reset on first update. Some default configs have now changed too.
 - PS: I'm still not actively maintaining this addon, i just add updates once in a blue moon when i have time.
 
 
