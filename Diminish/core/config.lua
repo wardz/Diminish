@@ -83,6 +83,7 @@ do
 
     NS.DEFAULT_SETTINGS = {
         version = "1.11",
+        announceDRs = false,
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,

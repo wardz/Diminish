@@ -130,6 +130,11 @@ function Panel:Setup()
     local subMisc = Widgets:CreateSubHeader(self, L.HEADER_MISC)
     subMisc:SetPoint("TOPRIGHT", -64, -50)
 
+    frames.announceDRs = Widgets:CreateCheckbox(self, "Announce DR Expirations (Experimental TTS)", "Use built in Text-To-Speech engine to announce DR expirations for unit names (targeted unitframe ones only). Very experimental test feature.", function()
+        db.announceDRs = not db.announceDRs
+    end)
+    frames.announceDRs:SetPoint("RIGHT", -225, 160)
+
 
     frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
         db.trackNPCs = not db.trackNPCs
@@ -146,7 +151,7 @@ function Panel:Setup()
 
         DIMINISH_NS.Diminish:ToggleForZone()
     end)
-    frames.trackNPCs:SetPoint("RIGHT", -225, 160)
+    frames.trackNPCs:SetPoint("LEFT", frames.announceDRs, 0, -40)
 
 
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
