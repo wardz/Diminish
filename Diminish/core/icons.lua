@@ -259,7 +259,7 @@ do
 
         if timer and self:GetCooldownDuration() <= 0.2 then
             if frame.unitFormatted and C_VoiceChat and C_VoiceChat.SpeakText then
-                if DIMINISH_NS.db.announceDRs then -- FYI: experimental/test at the moment
+                if DIMINISH_NS.db.announceDRs and not timer.isNotPetOrPlayer then -- FYI: experimental/test at the moment
                     local text = format("%s %s expired.", UnitName(frame.unitFormatted) or "", timer.category)
                     C_VoiceChat.SpeakText(0, text, Enum.VoiceTtsDestination.QueuedLocalPlayback, 3, 100)
                 end
