@@ -82,17 +82,17 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.10",
+        version = "1.11",
         timerTextOutline = "NONE",
         timerText = true,
         timerSwipe = true,
-        timerEdge = false,
+        timerEdge = true,
         timerColors = false,
         timerStartAuraEnd = false,
-        showCategoryText = false,
+        showCategoryText = true,
         categoryTextMaxLines = 2,
         colorBlind = false,
-        trackNPCs = false,
+        trackNPCs = true,
         categoryTextures = {},
         border = {
             edgeSize = 2.5,
