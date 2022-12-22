@@ -191,6 +191,7 @@ function Diminish:InitDB()
                 profileKeys = { [playerName] = "Default" },
                 profiles = {},
             }
+            profile = "Default"
         else
             local version = gsub(DiminishDB.profiles[profile].version, "%.", "")
             version = tonumber(version)
@@ -199,6 +200,7 @@ function Diminish:InitDB()
                     profileKeys = { [playerName] = "Default" },
                     profiles = {},
                 }
+                profile = "Default"
             end
         end
     end
