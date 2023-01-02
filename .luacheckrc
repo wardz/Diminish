@@ -34,6 +34,7 @@ globals = {
 }
 
 read_globals = {
+    "PartyFrame",
     "EditModeManagerFrame",
     "ArenaEnemyFramesContainer",
     "C_VoiceChat",

@@ -154,6 +154,9 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     end
 
     local useCompact = GetCVarBool("useCompactPartyFrames")
+    if EditModeManagerFrame then
+        useCompact = EditModeManagerFrame:UseRaidStylePartyFrames()
+    end
     if useCompact and settings.party.enabled and showFlag then
         if not IsInGroup() then
             print("Diminish: " .. L.COMPACTFRAMES_ERROR) -- luacheck: ignore

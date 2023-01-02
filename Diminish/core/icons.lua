@@ -116,16 +116,25 @@ end
 -- For blizzard frames, party1 is always equal to PartyFrame1 and so on
 -- but for unitframe addons party1 might be frame3 or some other random frame index
 -- so always just scan through them all, just like with the raid frames
+-- Edit: For Dragonflight this is no longer true.
 function Icons:FindPartyFrameByUnit(unitID)
     local guid = UnitGUID(unitID)
     if not guid then return end
 
     for i = 1, 5 do
-        local frame = Icons:GetAnchor("party"..i, true)
-        --if not frame then return end
+        if PartyFrame and PartyFrame.PartyMemberFramePool then
+            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+                if frame.layoutIndex and frame.layoutIndex == i and frame:IsVisible() and UnitGUID("party" .. frame.layoutIndex) == guid then
+                    return frame
+                end
+            end
+        else
+            local frame = Icons:GetAnchor("party"..i, true)
+            --if not frame then return end
 
-        if frame and frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == guid then
-            return frame
+            if frame and frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == guid then
+                return frame
+            end
         end
     end
 end
