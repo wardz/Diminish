@@ -122,18 +122,18 @@ function Icons:FindPartyFrameByUnit(unitID)
     if not guid then return end
 
     for i = 1, 5 do
-        if PartyFrame and PartyFrame.PartyMemberFramePool then
-            for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
-                if frame.layoutIndex and frame.layoutIndex == i and frame:IsVisible() and UnitGUID("party" .. frame.layoutIndex) == guid then
-                    return frame
-                end
-            end
-        else
-            local frame = Icons:GetAnchor("party"..i, true)
-            --if not frame then return end
+        local frame = Icons:GetAnchor("party"..i, true)
+        --if not frame then return end
 
-            if frame and frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == guid then
-                return frame
+        if frame and frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == guid then
+            return frame
+        end
+    end
+
+    if PartyFrame and PartyFrame.PartyMemberFramePool then
+        for f in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+            if f.layoutIndex and f:IsVisible() and UnitGUID("party" .. f.layoutIndex) == guid then
+                return f
             end
         end
     end
