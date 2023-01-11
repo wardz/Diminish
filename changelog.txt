@@ -1,3 +1,10 @@
+v2.5.6:
+- [Retail] Update DRList-1.0 lib. Unleashed Shield removed as it doesn't seem to DR (#32).
+- [Retail] Fix party/raid frame anchoring for Dragonflight. Testmode for these now only work while already in a group due to taint issues (don't got time to research full fix for it sry)
+- [Retail] Fix player frame DRs duplicating to party1 when using anchor to UIParent option. (#31)
+- [Retail] Fix some tooltips not hiding in options panel.
+
+
 v2.5.5:
 - [Retail] Update DRList-1.0 lib.
 - [Retail] Fix arena frame anchoring.
