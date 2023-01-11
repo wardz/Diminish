@@ -4,7 +4,7 @@ Diminish attaches icons to unit frames or nameplates, displaying time left until
   
 Diminish can track DRs on both mobs and players if you enable PvE mode in the options.
 
-**Note:** Diminish is now in maintenance mode so new features won't be added other than important bug fixes. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time & some Blizzard functions are deprecated.
+**Note:** Diminish is no longer actively maintained. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time & some Blizzard functions are now even deprecated. You will also need the BigWigsMods packager to run after making any code changes. You're thus advised starting over. (The DR spell database itself has moved over to [DRList-1.0](https://github.com/wardz/drlist-1.0) which is still updated every now and then).
 
 ## Configuration
 
@@ -17,7 +17,6 @@ You can manually set icons used for a DR category by right clicking one of the c
 ## Notes
 - Diminish not working with an unitframe addon? Go to options and enable "Anchor to UIParent", then position the icons wherever you want. For Party frames, try disabling "Use Raid-Style Party Frames" under WoW's interface options.
 - Supports tracking max 5 party/raid frames.
-- The addon is now in maintenance mode. New DRs & bugs will still be fixed, but new features won't be added.
 
 ## Links
 
