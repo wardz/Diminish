@@ -631,6 +631,10 @@ do
         local frame = self:GetFrame(unitID, timer.category)
         if not frame then return end
 
+        if unitID == "player-party" then
+            if not DIMINISH_NS.useCompactPartyFrames then return end
+        end
+
         if unitID == "player" then
             if NS.db.unitFrames.player.usePersonalNameplate then
                 local personalResourceDisplay = GetNamePlateForUnit("player")
