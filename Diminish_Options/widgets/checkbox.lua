@@ -24,6 +24,7 @@ function Widgets:CreateCheckbox(parent, text, tooltipText, func)
     check:SetHitRectInsets(0, -1 * max(100, check.labelText:GetStringWidth() + 4), 0, 0)
     check.tooltipText = tooltipText
     check:SetScript("OnEnter", Widgets.OnEnter)
+    check:SetScript("OnLeave", GameTooltip_Hide)
 
     return check
 end
