@@ -387,5 +387,5 @@ function TestMode:Test(hide)
     DNS.Timers:ResetAll()
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.stun, 853, false, false, true, true)
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.root, 122, false, false, true, true)
-    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.incapacitate, 118, false, true, true, true)
+    DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.incapacitate, 118, false, false, true, true)
 end
