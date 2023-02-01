@@ -271,7 +271,9 @@ end
 --@retail@
 hooksecurefunc(EditModeManagerFrame, "OnSystemSettingChange", function()
     NS.useCompactPartyFrames = EditModeManagerFrame:UseRaidStylePartyFrames()
-    Icons:AnchorPartyFrames()
+    if next(NS.db or {}) then -- is initialized
+        Icons:AnchorPartyFrames()
+    end
 end)
 --@end-retail@
 
