@@ -1,3 +1,9 @@
+v2.5.9:
+- [Retail] Fix lua error on login. (#33)
+- [Retail] Bump toc version for latest patch.
+- [All] Fix test mode only showing 2 icons instead of 3 like intended.
+
+
 v2.5.8:
 - [All] Update DRList-1.0 lib.
 - [Wrath] Bump toc version for latest patch.
