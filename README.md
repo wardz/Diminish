@@ -4,7 +4,8 @@ Diminish attaches icons to unit frames or nameplates, displaying time left until
   
 Diminish can track DRs on both mobs and players if you enable PvE mode in the options.
 
-**Note:** Diminish is no longer actively maintained. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time & some Blizzard functions are now even deprecated. You will also need the BigWigsMods packager to run after making any code changes. You're thus advised starting over. (The DR spell database itself has moved over to [DRList-1.0](https://github.com/wardz/drlist-1.0) which is still updated every now and then).
+**Note:** Diminish is no longer actively maintained. Feel free to fork this addon, but be wary it contains a ~9 year old codebase with lots of hacky methods added over time.
+(The DR spell database itself has moved over to [DRList-1.0](https://github.com/wardz/drlist-1.0) which is still updated every now and then).
 
 ## Configuration
 

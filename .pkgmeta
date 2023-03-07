@@ -1,6 +1,7 @@
 enable-nolib-creation: no
 manual-changelog: changelog.txt
 package-as: Diminish
+enable-toc-creation: yes
 
 externals:
   Diminish_Options/libs/WardzConfigDropdown-1.0: https://github.com/wardz/WardzConfigDropdown-1.0

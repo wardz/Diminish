@@ -3,18 +3,6 @@
 ## Interface-Classic: 11403
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30401
-#@version-retail@
-## X-Expansion: 1
-#@end-version-retail@
-#@version-classic@
-## X-Expansion: 2
-#@end-version-classic@
-#@version-bcc@
-## X-Expansion: 5
-#@end-version-bcc@
-#@version-wrath@
-## X-Expansion: 11
-#@end-version-wrath@
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
 ## SavedVariables: DiminishDB

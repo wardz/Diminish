@@ -287,17 +287,17 @@ do
         if settings.disabledCategories[timer.category] then return end
 
         -- Show root/taunt/incap/disorients DR only for special mobs
-        --@retail@
-        if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT or timer.category == CATEGORY_INCAP or timer.category == CATEGORY_DISORIENT) then
-            local classification = UnitClassification(unitID)
-            if classification == "normal" or classification == "trivial" or classification == "minus" then
-                if not UnitIsQuestBoss(unitID) then
-                    -- No need to keep tracking it, just delete timer and return
-                    return Timers:Remove(timer.unitGUID, timer.category, true)
+        if NS.IS_RETAIL then
+            if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT or timer.category == CATEGORY_INCAP or timer.category == CATEGORY_DISORIENT) then
+                local classification = UnitClassification(unitID)
+                if classification == "normal" or classification == "trivial" or classification == "minus" then
+                    if not UnitIsQuestBoss(unitID) then
+                        -- No need to keep tracking it, just delete timer and return
+                        return Timers:Remove(timer.unitGUID, timer.category, true)
+                    end
                 end
             end
         end
-        --@end-retail@
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if not NS.IS_CLASSIC then

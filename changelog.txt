@@ -1,3 +1,8 @@
+v2.6.0:
+- Update DRList-1.0 library.
+- Addon now uses the same build/zip file for all expansions.
+
+
 v2.5.9:
 - [Retail] Fix lua error on login. (#33)
 - [Retail] Bump toc version for latest patch.

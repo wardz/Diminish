@@ -1,6 +1,12 @@
 local _, NS = ...
 local DRList = LibStub("DRList-1.0")
 
+NS.IS_RETAIL = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+NS.IS_CLASSIC = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+NS.IS_TBC = WOW_PROJECT_ID == (WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5)
+NS.IS_WRATH = WOW_PROJECT_ID == (WOW_PROJECT_WRATH_CLASSIC or 11)
+NS.IS_NOT_RETAIL = not NS.IS_RETAIL
+
 -- How long a diminishing return lasts.
 NS.DR_TIME = DRList:GetResetTime()
 
@@ -20,35 +26,6 @@ if NS.CATEGORIES.knockback then
     NS.CATEGORIES.knockback = nil -- unreliable to track, remove it for now
 end
 
-do
-    local expansions = {
-        [WOW_PROJECT_MAINLINE] = "retail",
-        [WOW_PROJECT_CLASSIC] = "classic",
-        [WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5] = "tbc",
-        [WOW_PROJECT_WRATH_CLASSIC or 11] = "wrath",
-    }
-
-    local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-    local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-    local isTBC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
-    local isWotlk = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
-
-    NS.IS_CLASSIC = isClassic -- Is vanilla, lvl 60
-    NS.IS_NOT_RETAIL = not isRetail
-
-    local alert = _G.message or _G.print
-    local tocExp = tonumber(GetAddOnMetadata("Diminish", "X-Expansion"))
-    if isClassic and tocExp ~= 2 then
-        alert(format("Error: You're currently using the %s version of Diminish on a Classic client. You need to download the Classic version instead.", expansions[tocExp]))
-    elseif isRetail and tocExp ~= 1 then
-        alert(format("Error: You're currently using the %s version of Diminish on a Retail client. You need to download the Retail version instead.", expansions[tocExp]))
-    elseif isTBC and tocExp ~= 5 then
-        alert(format("Error: You're currently using the %s version of Diminish on a TBC client. You need to download the TBC version instead.", expansions[tocExp]))
-    elseif isWotlk and tocExp ~= 11 then
-        alert(format("Error: You're currently using the %s version of Diminish on a Wotlk client. You need to download the Wotlk version instead.", expansions[tocExp]))
-    end
-end
-
 -------------------------------------------------------
 -- Default SavedVariables
 -------------------------------------------------------
@@ -56,13 +33,13 @@ end
 do
     local defaultsDisabledCategories = {}
 
-    if NS.IS_CLASSIC then
+    if NS.IS_CLASSIC and NS.CATEGORIES.frost_shock then
         defaultsDisabledCategories[NS.CATEGORIES.frost_shock] = true
     end
 
-    --@retail@
-    defaultsDisabledCategories[NS.CATEGORIES.taunt] = true
-    --@end-retail@
+    if NS.IS_RETAIL and NS.CATEGORIES.taunt then
+        defaultsDisabledCategories[NS.CATEGORIES.taunt] = true
+    end
 
     local defaultsTarget = {
         enabled = true,

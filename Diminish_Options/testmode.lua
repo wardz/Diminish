@@ -208,7 +208,9 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
             end]]
            -- TODO: idk how to get party frame testing to work in Dragonflight without tainting the whole UI, and dont got time to research it
                 -- so gotta use existing player party members for now.
-            print("Diminish: You'll need to test party frames while in a group.") -- luacheck: ignore
+            if i == 1 then
+                print("Diminish: You'll need to test party frames while in a group.") -- luacheck: ignore
+            end
         end
     end
 end
