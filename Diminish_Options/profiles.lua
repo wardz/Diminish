@@ -81,6 +81,11 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
         if DIMINISH_NS.IS_NOT_RETAIL and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
         end
+        if DIMINISH_NS.IS_CLASSIC then
+            DIMINISH_NS.db.timerStartAuraEnd = true
+            DIMINISH_NS.db.unitFrames.focus.enabled = false
+            DIMINISH_NS.db.unitFrames.arena.enabled = false
+        end
 
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()
@@ -110,6 +115,11 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
 
         if DIMINISH_NS.IS_NOT_RETAIL and DIMINISH_NS.db.unitFrames.player.usePersonalNameplate then
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
+        end
+        if DIMINISH_NS.IS_CLASSIC then
+            DIMINISH_NS.db.timerStartAuraEnd = true
+            DIMINISH_NS.db.unitFrames.focus.enabled = false
+            DIMINISH_NS.db.unitFrames.arena.enabled = false
         end
 
         selectProfile:SetValue(nil)

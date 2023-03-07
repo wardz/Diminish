@@ -220,6 +220,11 @@ function Diminish:InitDB()
     if NS.IS_NOT_RETAIL and NS.db.unitFrames.player.usePersonalNameplate then
         NS.db.unitFrames.player.usePersonalNameplate = false
     end
+    if NS.IS_CLASSIC then
+        NS.db.timerStartAuraEnd = true
+        NS.db.unitFrames.focus.enabled = false
+        NS.db.unitFrames.arena.enabled = false
+    end
 
     -- Remove table values no longer found in default settings
     NS.CleanupDB(DiminishDB.profiles[profile], NS.DEFAULT_SETTINGS)
