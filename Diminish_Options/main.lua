@@ -141,7 +141,7 @@ function Panel:Setup()
 
         for _, unit in pairs({ "target", "focus", "nameplate" }) do
             local cfg = db.unitFrames[unit]
-            if NS.IS_RETAIL then
+            if DIMINISH_NS.IS_RETAIL then
                 cfg.disabledCategories[DIMINISH_NS.CATEGORIES.taunt] = not db.trackNPCs
             end
             cfg.zones.party = db.trackNPCs
