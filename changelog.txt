@@ -1,6 +1,8 @@
 v2.6.0:
+- Addon now uses the same build/zip file for all WoW expansions.
+- Hopefully fix DR border coloring sometimes being incorrect, especially with newest retail crowd control changes.
+- Bump retail toc version.
 - Update DRList-1.0 library.
-- Addon now uses the same build/zip file for all expansions.
 
 
 v2.5.9:
