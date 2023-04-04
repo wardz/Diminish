@@ -23,7 +23,7 @@ local function TimerIsFinished(timer, timestamp)
     return (timestamp or GetTime()) >= (timer.expiration or 0)
 end
 
-function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, isApplied, testMode, ranFromUpdate)
+function Timers:Insert(unitGUID, srcGUID, category, spellID, isFriendly, isNotPetOrPlayer, isApplied, testMode)
     if isApplied then -- SPELL_AURA_APPLIED
         if NS.db.timerStartAuraEnd and not testMode then
             -- on timerStartAuraEnd=true mode we start timer on SPELL_AURA_REMOVED instead of SPELL_AURA_APPLIED.
@@ -287,7 +287,7 @@ do
         if not NS.IS_CLASSIC then
             if isApplied and not NS.db.timerStartAuraEnd then
                 if not timer.testMode --[[and not isRefresh]] then
-                    local duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                    local _, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
 
                     if expirationTime and expirationTime > 0 then
                         timer.expiration = (expirationTime or GetTime()) + (timer.isNotPetOrPlayer and 23 or DR_TIME)
