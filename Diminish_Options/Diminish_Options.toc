@@ -3,7 +3,7 @@
 ## Interface-Retail: 100100
 ## Interface-Classic: 11403
 ## Interface-BCC: 20504
-## Interface-Wrath: 30401
+## Interface-Wrath: 30402
 ## IconTexture: Interface\Icons\Spell_nature_doublepolymorph1
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
