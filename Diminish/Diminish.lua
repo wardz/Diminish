@@ -252,7 +252,7 @@ function Diminish:PLAYER_LOGIN()
 
     local Masque = LibStub and LibStub("Masque", true)
     NS.MasqueGroup = Masque and Masque:Group("Diminish")
-    if EditModeManagerFrame then
+    if EditModeManagerFrame and EditModeManagerFrame.UseRaidStylePartyFrames then
         NS.useCompactPartyFrames = EditModeManagerFrame:UseRaidStylePartyFrames()
     else
         NS.useCompactPartyFrames = GetCVarBool("useCompactPartyFrames")
