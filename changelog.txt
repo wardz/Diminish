@@ -1,3 +1,7 @@
+v2.6.3:
+- Fix addon not working in newest wrath patch (#39)
+
+
 v2.6.2:
 - Update DRList-1.0 library. Fixes issue #38 Fear (Horrify Talent) missing.
 
