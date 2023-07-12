@@ -34,9 +34,11 @@ globals = {
 }
 
 read_globals = {
+    "HideUIPanel",
+    "ShowUIPanel",
     "PartyFrame",
     "EditModeManagerFrame",
-    "ArenaEnemyFramesContainer",
+    "CompactArenaFrame",
     "C_VoiceChat",
     "Enum",
     "hooksecurefunc",

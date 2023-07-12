@@ -1,3 +1,7 @@
+v2.6.4:
+- Fixes for patch 100105, test mode is kinda iffy but should atleast work.
+
+
 v2.6.3:
 - Fix addon not working in newest wrath patch (#39)
 
