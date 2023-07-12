@@ -680,7 +680,7 @@ do
                 local startTime, startDuration = frame.cooldown:GetCooldownTimes()
                 startTime, startDuration = startTime/1000, startDuration/1000
 
-                local drTime = timer.isNotPetOrPlayer and 23 or DR_TIME
+                local drTime = --[[timer.isNotPetOrPlayer and 20 or]] DR_TIME
                 local newDuration = drTime / (1 - ((now - startTime) / startDuration))
                 local newStartTime = drTime + now - newDuration
                 frame.cooldown:SetCooldown(newStartTime, newDuration)
