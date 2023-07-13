@@ -1,3 +1,7 @@
+v2.6.5:
+- Increase icon movers framelevel in editmode.
+
+
 v2.6.4:
 - Fixes for patch 100105, test mode is kinda iffy but should atleast work.
 - Update DRList-1.0 library. Add Earthgrab for wrath.
