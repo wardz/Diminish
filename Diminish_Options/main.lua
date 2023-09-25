@@ -130,10 +130,11 @@ function Panel:Setup()
     local subMisc = Widgets:CreateSubHeader(self, L.HEADER_MISC)
     subMisc:SetPoint("TOPRIGHT", -64, -50)
 
-    frames.announceDRs = Widgets:CreateCheckbox(self, "Announce DR Expirations (Experimental TTS)", "Use built in Text-To-Speech engine to announce player DR expirations by unit names (targeted unitframe ones only). Very experimental test feature.", function()
+    frames.announceDRs = Widgets:CreateCheckbox(self, "Announce DR Expirations (TEST ONLY)", "Use built in Text-To-Speech engine to announce player DR expirations by unit names (targeted unitframe ones only).", function()
         db.announceDRs = not db.announceDRs
     end)
     frames.announceDRs:SetPoint("RIGHT", -225, 160)
+    frames.announceDRs:SetAlpha(0.5)
 
 
     frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
