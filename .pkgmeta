@@ -4,9 +4,7 @@ enable-toc-creation: yes
 externals:
   Diminish_Options/libs/WardzConfigDropdown-1.0: https://github.com/wardz/WardzConfigDropdown-1.0
   Diminish/libs/LibStub: https://github.com/wardz/LibStub
-  Diminish/libs/DRList-1.0:
-    url: https://github.com/wardz/DRList-1.0
-    tag: latest
+  Diminish/libs/DRList-1.0: https://github.com/wardz/DRList-1.0
 
 move-folders:
   Diminish/Diminish_Options: Diminish_Options
