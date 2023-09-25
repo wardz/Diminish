@@ -3,7 +3,6 @@ release.sh
 /.release
 /.vscode
 /.idea
-Diminish/libs
 
 # luarocks build files
 *.src.rock
