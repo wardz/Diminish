@@ -14,10 +14,7 @@ move-folders:
 
 ignore:
   - README.md
-  - wow_symlinks.bat
-  - Diminish_Options/libs/LibStub/LibStub.toc
-  - Diminish_Options/libs/LibStub/tests
-  - Diminish_Options/libs/DRList-1.0/DRList-1.0/libs
-  - Diminish_Options/libs/DRList-1.0/DRList-1.0/tests
-  - Diminish_Options/libs/DRList-1.0/DRList-1.0.toc
-  - Diminish_Options/libs/DRList-1.0/README.md
+  - CHANGELOG.md
+  - Diminish/libs/LibStub/LibStub.toc
+  - Diminish/libs/DRList-1.0/libs
+  - "Diminish/libs/DRList-1.0/*.toc"
