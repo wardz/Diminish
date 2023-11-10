@@ -14,7 +14,4 @@ ignore:
   - README.md
   - CHANGELOG.md
   - Diminish/libs/LibStub/LibStub.toc
-  - Diminish/libs/DRList-1.0/Spells.lua
-  - Diminish/libs/DRList-1.0/DRList-1.0.lua
-  - Diminish/libs/DRList-1.0/DRList-1.0/libs
   - "Diminish/libs/DRList-1.0/DRList-1.0/*.toc"
