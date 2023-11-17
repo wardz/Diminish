@@ -221,7 +221,6 @@ function Diminish:InitDB()
         NS.db.unitFrames.player.usePersonalNameplate = false
     end
     if NS.IS_CLASSIC then
-        NS.db.timerStartAuraEnd = true
         NS.db.unitFrames.focus.enabled = false
         NS.db.unitFrames.arena.enabled = false
     end
@@ -372,16 +371,10 @@ do
 
         if auraType == "DEBUFF" then
             if eventType ~= "SPELL_AURA_REMOVED" and eventType ~= "SPELL_AURA_APPLIED" and eventType ~= "SPELL_AURA_REFRESH" then return end
-            if spellID == 0 then -- for classic
-                spellID = spellName
-            end
 
-            local category, drSpellID = DRList:GetCategoryBySpellID(spellID)
+            local category = DRList:GetCategoryBySpellID(spellID)
             if not category or category == "knockback" then return end
             category = DRList:GetCategoryLocalization(category)
-            if drSpellID then
-                spellID = drSpellID
-            end
 
             local isMindControlled = false
             local isNotPetOrPlayer = false

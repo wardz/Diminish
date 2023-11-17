@@ -93,7 +93,7 @@ L["TIMERTEXTSIZE_TOOLTIP"] = "Set the font size of the timer countdown text."
 L["TRACKNPCS"] = "Enable Tracking for PvE"
 L["TRACKNPCS_TOOLTIP"] = [=[Enable diminishing returns tracking for mobs and player pets. (Target/Focus/Nameplates)
 
-Enabling this may drastically increase memory usage in large battlefields. In classic WoW this will only enable pet tracking.]=]
+Enabling this may drastically increase memory usage in large battlefields.]=]
 L["UNLOCK"] = "Toggle Moving Frames"
 L["UNLOCK_TOOLTIP"] = "Toggle enabled frames for moving. Drag the red boxes to move icon spawn points."
 L["USEPROFILE"] = "Use"

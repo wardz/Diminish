@@ -284,14 +284,12 @@ do
         end
 
         -- Add aura duration to DR timer(18s) if using display mode on aura start
-        if not NS.IS_CLASSIC then
-            if isApplied and not NS.db.timerStartAuraEnd then
-                if not timer.testMode --[[and not isRefresh]] then
-                    local _, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+        if isApplied and not NS.db.timerStartAuraEnd then
+            if not timer.testMode --[[and not isRefresh]] then
+                local _, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
 
-                    if expirationTime and expirationTime > 0 then
-                        timer.expiration = (expirationTime or GetTime()) + (--[[timer.isNotPetOrPlayer and 20 or]] DR_TIME)
-                    end
+                if expirationTime and expirationTime > 0 then
+                    timer.expiration = (expirationTime or GetTime()) + (--[[timer.isNotPetOrPlayer and 20 or]] DR_TIME)
                 end
             end
         end

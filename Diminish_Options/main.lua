@@ -63,22 +63,18 @@ function Panel:Setup()
     subCooldown:SetPoint("TOPLEFT", 16, -50)
 
 
-    if not DIMINISH_NS.IS_CLASSIC then
-        frames.timerStartAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
-            db.timerStartAuraEnd = not db.timerStartAuraEnd
-        end)
-        frames.timerStartAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
-    end
+    frames.timerStartAuraEnd = Widgets:CreateCheckbox(self, L.DISPLAYMODE, L.DISPLAYMODE_TOOLTIP, function(cb)
+        db.timerStartAuraEnd = not db.timerStartAuraEnd
+    end)
+    frames.timerStartAuraEnd:SetPoint("LEFT", subCooldown, 10, -70)
 
 
     frames.timerSwipe = Widgets:CreateCheckbox(self, L.TIMERSWIPE, L.TIMERSWIPE_TOOLTIP, function()
         db.timerSwipe = not db.timerSwipe
         Icons:OnFrameConfigChanged()
     end)
-    frames.timerSwipe:SetPoint("LEFT", subCooldown, 10, -70)
-    if not DIMINISH_NS.IS_CLASSIC then
-        frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
-    end
+    frames.timerSwipe:SetPoint("LEFT", frames.timerStartAuraEnd, 0, -40)
+
 
 
     frames.timerEdge = Widgets:CreateCheckbox(self, L.TIMEREDGE, L.TIMEREDGE_TOOLTIP, function()

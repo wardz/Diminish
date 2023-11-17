@@ -82,7 +82,6 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
         end
         if DIMINISH_NS.IS_CLASSIC then
-            DIMINISH_NS.db.timerStartAuraEnd = true
             DIMINISH_NS.db.unitFrames.focus.enabled = false
             DIMINISH_NS.db.unitFrames.arena.enabled = false
         end
@@ -117,7 +116,6 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             DIMINISH_NS.db.unitFrames.player.usePersonalNameplate = false
         end
         if DIMINISH_NS.IS_CLASSIC then
-            DIMINISH_NS.db.timerStartAuraEnd = true
             DIMINISH_NS.db.unitFrames.focus.enabled = false
             DIMINISH_NS.db.unitFrames.arena.enabled = false
         end
