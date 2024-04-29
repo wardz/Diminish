@@ -395,8 +395,7 @@ do
             ctext:SetFont(db.categoryFont.font or ctext:GetFont(), db.categoryFont.size, db.categoryFont.flags)
             --ctext:SetPoint("BOTTOMLEFT", db.categoryFont.x, size + 2)
             ctext:SetShown(db.showCategoryText)
-            ctext:SetJustifyH("LEFT")
-            ctext:SetJustifyH("TOP")
+            ctext:SetJustifyH("CENTER")
             ctext:SetNonSpaceWrap(true)
             ctext:SetWidth(unitDB.iconSize + 11)
             frame.categoryText = ctext
