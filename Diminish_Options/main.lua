@@ -57,7 +57,7 @@ function Panel:Setup()
     local db = NS.GetDBProxy()
 
     --local notes = GetAddOnMetadata(self.name, "Notes-" .. GetLocale()) or GetAddOnMetadata(self.name, "Notes")
-    Widgets:CreateHeader(self, gsub(self.name, "_", " "), GetAddOnMetadata("Diminish", "Version"),
+    Widgets:CreateHeader(self, gsub(self.name, "_", " "), C_AddOns.GetAddOnMetadata("Diminish", "Version"),
         "\nClick the small red button next to Diminish_Options under the AddOns tab for frame specific options."
         .. "\n|cFFFF0000Note:|r Diminish is no longer actively maintained, use at your own risk.")
 
@@ -128,11 +128,11 @@ function Panel:Setup()
     local subMisc = Widgets:CreateSubHeader(self, L.HEADER_MISC)
     subMisc:SetPoint("TOPRIGHT", -64, -50)
 
-    frames.announceDRs = Widgets:CreateCheckbox(self, "Announce DR Expirations (TEST ONLY)", "Use built in Text-To-Speech engine to announce player DR expirations by unit names (targeted unitframe ones only).", function()
+    --[[frames.announceDRs = Widgets:CreateCheckbox(self, "Announce DR Expirations (TEST ONLY)", "Use built in Text-To-Speech engine to announce player DR expirations by unit names (targeted unitframe ones only).", function()
         db.announceDRs = not db.announceDRs
     end)
     frames.announceDRs:SetPoint("RIGHT", -225, 160)
-    frames.announceDRs:SetAlpha(0.5)
+    frames.announceDRs:SetAlpha(0.5)]]
 
 
     frames.trackNPCs = Widgets:CreateCheckbox(self, L.TRACKNPCS, L.TRACKNPCS_TOOLTIP, function()
@@ -150,7 +150,8 @@ function Panel:Setup()
 
         DIMINISH_NS.Diminish:ToggleForZone()
     end)
-    frames.trackNPCs:SetPoint("LEFT", frames.announceDRs, 0, -40)
+    frames.trackNPCs:SetPoint("RIGHT", -225, 160)
+    --frames.trackNPCs:SetPoint("LEFT", frames.announceDRs, 0, -40)
 
 
     frames.showCategoryText = Widgets:CreateCheckbox(self, L.SHOWCATEGORYTEXT, L.SHOWCATEGORYTEXT_TOOLTIP, function(cb)
@@ -288,6 +289,5 @@ end
 
 SLASH_DIMINISH1 = "/diminish"
 SlashCmdList.DIMINISH = function()
-    InterfaceOptionsFrame_OpenToCategory(Panel)
-    InterfaceOptionsFrame_OpenToCategory(Panel) -- double to fix blizz bug
+    Settings.OpenToCategory("Diminish")
 end

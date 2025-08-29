@@ -35,6 +35,8 @@ globals = {
 }
 
 read_globals = {
+    "C_AddOns",
+    "C_Spell",
     "HideUIPanel",
     "ShowUIPanel",
     "PartyFrame",
@@ -54,7 +56,7 @@ read_globals = {
     "CompactRaidFrameContainer",
     "CopyTable",
     "CreateFrame",
-    "CreateFramePool",
+    "CreateUnsecuredFramePool",
     "C_NamePlate",
     "C_Timer",
     "EMPTY",

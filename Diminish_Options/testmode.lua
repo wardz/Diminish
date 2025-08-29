@@ -12,7 +12,7 @@ local backdrop = {
 local SetCVar = _G.SetCVar or _G.C_CVar.SetCVar
 
 local TestMode = CreateFrame("Frame")
-TestMode.pool = CreateFramePool("Frame", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- just for testing purposes
+TestMode.pool = CreateUnsecuredFramePool("Frame", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- just for testing purposes
 NS.TestMode = TestMode
 
 -- Thanks sArena
@@ -112,8 +112,8 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
     local settings = DIMINISH_NS.db.unitFrames
 
     if not DIMINISH_NS.IS_CLASSIC then
-        if not IsAddOnLoaded("Blizzard_ArenaUI") then
-            LoadAddOn("Blizzard_ArenaUI")
+        if not C_AddOns.IsAddOnLoaded("Blizzard_ArenaUI") then
+            C_AddOns.LoadAddOn("Blizzard_ArenaUI")
         end
     end
 
@@ -133,16 +133,6 @@ function TestMode:ToggleArenaAndPartyFrames(state, forceHide)
         if forceHide or settings.arena.enabled and not isInArena then
             if ArenaEnemyFrames then
                 ArenaEnemyFrames:SetShown(showFlag)
-            end
-
-            if LibStub and LibStub("AceAddon-3.0", true) then
-                local _, sArena = pcall(function() return LibStub("AceAddon-3.0"):GetAddon("sArena") end)
-                if sArena and sArena.ArenaEnemyFrames then
-                    -- (As of sArena 3.0.0 this is no longer needed, but we'll keep this for now
-                    -- incase anyone is using the old version)
-                    -- sArena anchors frames to sArena.ArenaEnemyFrames instead of _G.ArenaEnemyFrames
-                    sArena.ArenaEnemyFrames:SetShown(showFlag)
-                end
             end
         end
     end

@@ -4,7 +4,7 @@ local frames = {}
 NS.Icons = Icons
 NS.iconFrames = frames
 
-local pool = CreateFramePool("CheckButton", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- CheckButton to support Masque
+local pool = CreateUnsecuredFramePool("CheckButton", nil, _G.BackdropTemplateMixin and "BackdropTemplate") -- CheckButton to support Masque
 
 local _G = _G
 local pairs = _G.pairs
@@ -475,7 +475,7 @@ do
         local db = NS.db
 
         -- Enumerate inactive frames
-        for _, frame in pool:EnumerateInactive() do
+        for _, frame in pairs(pool.inactiveObjects) do
             RefreshIcon(frame, db)
         end
 
@@ -582,7 +582,7 @@ function Icons:ReleaseFrame(frame, unitID, timer, category)
 end
 
 do
-    local GetSpellTexture = _G.GetSpellTexture
+    local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or _G.GetSpellTexture
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local indicatorColors = NS.DR_STATES_COLORS
     local DR_TIME = NS.DR_TIME

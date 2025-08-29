@@ -223,6 +223,8 @@ for unitFrame, unit in pairs(NS.unitFrames) do
         -------------------------------------------------------------------
 
         do
+            local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or _G.GetSpellTexture
+
             local subCategories = Widgets:CreateSubHeader(panel, L.HEADER_CATEGORIES)
             subCategories:SetPoint("RIGHT", -64, 10)
 

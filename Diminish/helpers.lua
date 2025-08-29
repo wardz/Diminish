@@ -49,12 +49,12 @@ NS.CleanupDB = function(src, dst)
 end
 
 -- Find debuff duration by aura indices
-local UnitAura = _G.UnitAura
+local GetAuraDataByIndex = _G.C_UnitAuras.GetAuraDataByIndex
 NS.GetAuraDuration = function(unitID, spellID)
     if not unitID or not spellID then return end
 
     for i = 1, 40 do
-        local _, _, _, _, duration, expirationTime, _, _, _, id = UnitAura(unitID, i, "HARMFUL")
+        local _, _, _, _, duration, expirationTime, _, _, _, id = GetAuraDataByIndex(unitID, i, "HARMFUL")
         if not id then return end -- no more debuffs
 
         if spellID == id then
