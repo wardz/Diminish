@@ -376,10 +376,6 @@ function TestMode:Test(hide)
         end)
     end
 
-    if EditModeManagerFrame and EditModeManagerFrame.AccountSettings then -- Dragonflight...
-        ShowUIPanel(EditModeManagerFrame)
-    end
-
     local DNS = DIMINISH_NS
     DNS.Timers:ResetAll()
     DNS.Timers:Insert(UnitGUID("player"), nil, DNS.CATEGORIES.stun, 853, false, false, true, true)
