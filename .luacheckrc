@@ -35,6 +35,7 @@ globals = {
 }
 
 read_globals = {
+    "Settings",
     "C_AddOns",
     "C_Spell",
     "HideUIPanel",
