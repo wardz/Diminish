@@ -53,17 +53,17 @@ local GetAuraDataByIndex = _G.C_UnitAuras.GetAuraDataByIndex
 NS.GetAuraDuration = function(unitID, spellID)
     if not unitID or not spellID then return end
 
-    for i = 1, 40 do
-        local _, _, _, _, duration, expirationTime, _, _, _, id = GetAuraDataByIndex(unitID, i, "HARMFUL")
-        if not id then return end -- no more debuffs
+    for i = 1, 100 do
+        local aura = GetAuraDataByIndex(unitID, i, "HARMFUL")
+        if not aura then return end -- no more debuffs
 
-        if spellID == id then
-            return duration, expirationTime
+        if spellID == aura.spellId then
+            return aura.duration, aura.expirationTime
         end
     end
 end
 
--- Pool for reusing tables. (Garbage collector isn't ran in combat unless max garbage is reached, which causes fps drops)
+-- Pool for reusing tables. (Garbage collector isn't ran in combat unless max garbage is reached, which may cause fps drops)
 do
     local pool = {}
     local wipe = _G.table.wipe
