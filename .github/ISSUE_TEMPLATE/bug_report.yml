@@ -33,6 +33,8 @@ body:
     multiple: true
     options:
       - Retail
+      - Mists of Pandaria
+      - Cataclysm
       - Wrath of the Lich King
       - The Burning Crusade Classic
       - Classic Era
@@ -66,8 +68,6 @@ body:
     options:
       - Yes, issue still occurs.
       - No, issue disappears.
-      - Not sure.
-      - Not applicable.
 - type: textarea
   id: comments
   attributes:
