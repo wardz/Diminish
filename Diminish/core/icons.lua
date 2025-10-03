@@ -311,6 +311,8 @@ do
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
         frame.uid = nil
 
+        frame:SetFrameLevel(anchor:GetFrameLevel() + 1)
+
         local unitDB = frame.unitSettingsRef
 
         -- Need to always update these for pooled frames
@@ -342,7 +344,6 @@ do
 
             iconCount = iconCount + 1
             frame:SetFrameStrata("HIGH")
-            frame:SetFrameLevel(11)
             frame:EnableMouse(false)
             frame:Hide()
 
