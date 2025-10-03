@@ -240,7 +240,7 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                 button1 = _G.ACCEPT,
                 button2 = _G.CANCEL,
                 OnAccept = function(self)
-                    local text = self.editBox:GetText()
+                    local text = self.EditBox:GetText()
                     if text == nil or text == "" then
                         DIMINISH_NS.db.categoryTextures[self.category] = nil
                         Widgets:ShowError(L.RESET)
@@ -284,16 +284,16 @@ for unitFrame, unit in pairs(NS.unitFrames) do
                     local texture = GetSpellTexture(editbox:GetText())
                     if texture then
                         frames.iconPreview.icon:SetTexture(texture)
-                        editbox:GetParent().button1:Enable()
+                        _G[editbox:GetParent():GetName().."Button1"]:Enable()
                     else
                         frames.iconPreview.icon:SetTexture("Interface\\ICONS\\inv_misc_questionmark")
 
                         -- when text is blank we enable the button to allow reset of icon
                         -- else only enable it when valid texture is found
                         if editbox:GetText() == "" then
-                            editbox:GetParent().button1:Enable()
+                            _G[editbox:GetParent():GetName().."Button1"]:Enable()
                         else
-                            editbox:GetParent().button1:Disable()
+                            _G[editbox:GetParent():GetName().."Button1"]:Disable()
                         end
                     end
                 end,
