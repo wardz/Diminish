@@ -286,10 +286,15 @@ do
         -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
-                local _, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                local max_duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                if max_duration and expirationTime and expirationTime > 0 then
+                    if timer.category ~= "taunt" and timer.category ~= "knockback" then
+                        if max_duration > 4.1 and timer.applied >= 2 then
+                            timer.applied = 1 -- Dynamic DR was most likely reset early
+                        end
+                    end
 
-                if expirationTime and expirationTime > 0 then
-                    timer.expiration = (expirationTime or GetTime()) + (--[[timer.isNotPetOrPlayer and 20 or]] DR_TIME)
+                    timer.expiration = expirationTime + DR_TIME
                 end
             end
         end
