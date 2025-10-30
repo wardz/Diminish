@@ -237,6 +237,7 @@ function Timers:ResetAll(clearGUIDs)
 end
 
 do
+    local DRList = LibStub("DRList-1.0")
     local GetAuraDuration = NS.GetAuraDuration
     local CATEGORY_TAUNT = NS.CATEGORIES.taunt
     local CATEGORY_ROOT = NS.CATEGORIES.root
@@ -254,6 +255,21 @@ do
         tinsert(testModeUnits, "arena1")
         tinsert(testModeUnits, "arena2")
         tinsert(testModeUnits, "arena3")
+    end
+
+    local maxDurationCache = {}
+    local function GetBaseMaxDuration(spellID, applied, currentDuration)
+        local cached = maxDurationCache[spellID]
+
+        -- update cache when we have a valid duration
+        if applied == 1 and currentDuration and currentDuration > 0 then
+            if not cached or currentDuration > cached then
+                maxDurationCache[spellID] = currentDuration
+                return currentDuration
+            end
+        end
+
+        return cached
     end
 
     local function Start(timer, isApplied, unitID, isUpdate, isRefresh, onAuraEnd)
@@ -283,17 +299,31 @@ do
             end
         end
 
-        -- Add aura duration to DR timer(18s) if using display mode on aura start
         if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
-                local max_duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
-                if max_duration and expirationTime and expirationTime > 0 then
+                local current_duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
+                if current_duration and expirationTime and expirationTime > 0 then
                     if timer.category ~= "taunt" and timer.category ~= "knockback" then
-                        if max_duration > 4.1 and timer.applied >= 2 then
-                            timer.applied = 1 -- Dynamic DR was most likely reset early
+                        local maxDuration = GetBaseMaxDuration(timer.spellID, timer.applied, current_duration)
+                        if not maxDuration then
+                            if current_duration > 4 and ((timer.applied or 0) >= 2) then
+                                timer.applied = 1 -- Dynamic DR was most likely reset early
+                            end
+                        else
+                            -- Determine the DR stage based on the ratio of current remaining duration to max base duration
+                            local remaining = expirationTime - GetTime()
+                            local ratio = remaining / maxDuration
+                            if math.abs(ratio - DRList:GetNextDR(2, timer.category)) <= 0.25 then
+                                timer.applied = 3
+                            elseif math.abs(ratio - DRList:GetNextDR(1, timer.category)) <= 0.5 then
+                                timer.applied = 2
+                            elseif math.abs(ratio - DRList:GetNextDR(3, timer.category)) <= 1.0 then
+                                timer.applied = 1
+                            end
                         end
                     end
 
+                    -- Add aura duration to DR timer(18s) when using display mode on aura start
                     timer.expiration = expirationTime + DR_TIME
                 end
             end

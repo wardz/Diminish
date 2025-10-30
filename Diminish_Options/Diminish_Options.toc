@@ -1,11 +1,11 @@
 
-## Interface: 110200
-## Interface-Retail: 110200
-## Interface-Classic: 11507
+## Interface: 110205
+## Interface-Retail: 110205
+## Interface-Classic: 11508
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40402
-## Interface-Mists: 50500
+## Interface-Mists: 50502
 ## IconTexture: Interface\Icons\Spell_nature_doublepolymorph1
 ## Title: Diminish Options
 ## Notes: Configuration for Diminish.
