@@ -311,6 +311,7 @@ do
                             end
                         else
                             -- Determine the DR stage based on the ratio of current remaining duration to max base duration
+                            -- TODO: need to also check target for buffs/debuffs that modifies incoming CC durations
                             local remaining = expirationTime - GetTime()
                             local ratio = remaining / maxDuration
                             if math.abs(ratio - DRList:GetNextDR(2, timer.category)) <= 0.25 then
