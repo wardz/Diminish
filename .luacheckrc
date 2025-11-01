@@ -39,6 +39,7 @@ read_globals = {
     "C_AddOns",
     "C_Spell",
     "HideUIPanel",
+    "UnitRace",
     "ShowUIPanel",
     "PartyFrame",
     "EditModeManagerFrame",

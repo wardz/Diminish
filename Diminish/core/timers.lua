@@ -303,23 +303,25 @@ do
             if not timer.testMode --[[and not isRefresh]] then
                 local current_duration, expirationTime = GetAuraDuration(origUnitID or unitID, timer.spellID)
                 if current_duration and expirationTime and expirationTime > 0 then
-                    if timer.category ~= "taunt" and timer.category ~= "knockback" then
-                        local maxDuration = GetBaseMaxDuration(timer.spellID, timer.applied, current_duration)
-                        if not maxDuration then
-                            if current_duration > 4 and ((timer.applied or 0) >= 2) then
-                                timer.applied = 1 -- Dynamic DR was most likely reset early
-                            end
-                        else
-                            -- Determine the DR stage based on the ratio of current remaining duration to max base duration
-                            -- TODO: need to also check target for buffs/debuffs that modifies incoming CC durations
-                            local remaining = expirationTime - GetTime()
-                            local ratio = remaining / maxDuration
-                            if math.abs(ratio - DRList:GetNextDR(2, timer.category)) <= 0.25 then
-                                timer.applied = 3
-                            elseif math.abs(ratio - DRList:GetNextDR(1, timer.category)) <= 0.5 then
-                                timer.applied = 2
-                            elseif math.abs(ratio - DRList:GetNextDR(3, timer.category)) <= 1.0 then
-                                timer.applied = 1
+                    if NS.IS_NOT_RETAIL and timer.category ~= "taunt" and timer.category ~= "knockback" then
+                        if not GetAuraDuration(origUnitID or unitID, 137562) then -- Skip checks when target has Nimble Brew
+                            local maxDuration = GetBaseMaxDuration(timer.spellID, timer.applied, current_duration) -- TODO: orc racial?
+
+                            if not maxDuration then
+                                if current_duration > 4 and ((timer.applied or 0) >= 2) then
+                                    timer.applied = 1 -- Dynamic DR was most likely reset early
+                                end
+                            else
+                                -- Determine the DR stage based on the ratio of current remaining duration to max base duration
+                                local remaining = expirationTime - GetTime()
+                                local ratio = remaining / maxDuration
+                                if math.abs(ratio - DRList:GetNextDR(2, timer.category)) <= 0.25 then
+                                    timer.applied = 3
+                                elseif math.abs(ratio - DRList:GetNextDR(1, timer.category)) <= 0.5 then
+                                    timer.applied = 2
+                                elseif math.abs(ratio - DRList:GetNextDR(3, timer.category)) <= 1.0 then
+                                    timer.applied = 1
+                                end
                             end
                         end
                     end
