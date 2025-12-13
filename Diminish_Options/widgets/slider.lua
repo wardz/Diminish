@@ -14,10 +14,10 @@ local function OnValueChanged(self, value)
 end
 
 local SliderBackdrop  = {
-	bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
-	edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
-	tile = true, tileSize = 8, edgeSize = 8,
-	insets = { left = 3, right = 3, top = 6, bottom = 6 }
+    bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
+    edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
+    tile = true, tileSize = 8, edgeSize = 8,
+    insets = { left = 3, right = 3, top = 6, bottom = 6 }
 }
 
 function Widgets:CreateSlider(parent, text, tooltipText, minValue, maxValue, valueStep, func)

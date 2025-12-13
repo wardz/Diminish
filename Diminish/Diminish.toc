@@ -1,10 +1,10 @@
-## Interface: 110205
-## Interface-Retail: 110205
+## Interface: 110207
+## Interface-Retail: 110207
 ## Interface-Classic: 11508
-## Interface-BCC: 20504
+## Interface-BCC: 20505
 ## Interface-Wrath: 30403
 ## Interface-Cata: 40402
-## Interface-Mists: 50502
+## Interface-Mists: 50503
 ## IconTexture: Interface\Icons\Spell_nature_heavypolymorph1
 ## Title: Diminish
 ## Notes: Lightweight diminishing returns tracker for hostile and friendly units.
