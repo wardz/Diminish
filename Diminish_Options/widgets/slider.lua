@@ -13,13 +13,23 @@ local function OnValueChanged(self, value)
     self.hasRefreshed = true -- only run callback after panel.refresh() has been triggered once after startup
 end
 
+local SliderBackdrop  = {
+	bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
+	edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
+	tile = true, tileSize = 8, edgeSize = 8,
+	insets = { left = 3, right = 3, top = 6, bottom = 6 }
+}
+
 function Widgets:CreateSlider(parent, text, tooltipText, minValue, maxValue, valueStep, func)
     local name = format("%sSlider%d", self.ADDON_NAME, count)
 
-    local slider = CreateFrame("Slider", name, parent, "OptionsSliderTemplate")
+    local slider = CreateFrame("Slider", name, parent, "OptionsSliderTemplate, BackdropTemplate")
     slider:SetSize(180, 15)
     slider:SetMinMaxValues(minValue or 1, maxValue or 100)
     slider:SetValueStep(valueStep or 1)
+    slider:SetOrientation("HORIZONTAL")
+    slider:SetBackdrop(SliderBackdrop)
+    slider:SetThumbTexture("Interface\\Buttons\\UI-SliderBar-Button-Horizontal")
 
     local label = _G[name .. "Text"]
     label:SetFontObject("GameFontNormalLeft")
