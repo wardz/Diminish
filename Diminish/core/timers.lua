@@ -239,12 +239,6 @@ end
 do
     local DRList = LibStub("DRList-1.0")
     local GetAuraDuration = NS.GetAuraDuration
-    local CATEGORY_TAUNT = NS.CATEGORIES.taunt
-    local CATEGORY_ROOT = NS.CATEGORIES.root
-    local CATEGORY_INCAP = NS.CATEGORIES.incapacitate
-    local CATEGORY_DISORIENT = NS.CATEGORIES.disorient
-    local UnitIsQuestBoss = _G.UnitIsQuestBoss
-    local UnitClassification = _G.UnitClassification
 
     local testModeUnits = {
         "player", "target", "nameplate",
@@ -287,7 +281,7 @@ do
         if settings.disabledCategories[timer.category] then return end
 
         -- Show root/taunt/incap/disorients DR only for special mobs
-        if NS.IS_RETAIL then
+        --[[if NS.IS_RETAIL then
             if timer.isNotPetOrPlayer and (timer.category == CATEGORY_ROOT or timer.category == CATEGORY_TAUNT or timer.category == CATEGORY_INCAP or timer.category == CATEGORY_DISORIENT) then
                 local classification = UnitClassification(unitID)
                 if classification == "normal" or classification == "trivial" or classification == "minus" then
@@ -297,7 +291,7 @@ do
                     end
                 end
             end
-        end
+        end]]
 
         if isApplied and not NS.db.timerStartAuraEnd then
             if not timer.testMode --[[and not isRefresh]] then
