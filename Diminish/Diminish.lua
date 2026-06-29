@@ -217,6 +217,12 @@ function Diminish:InitDB()
     NS.db.version = NS.DEFAULT_SETTINGS.version
     NS.activeProfile = profile
 
+    if NS.db.timerTextOutline == "NONE" then
+        NS.db.timerTextOutline = ""
+    elseif NS.db.timerTextOutline == "MONOCHROMEOUTLINE" then
+        NS.DB.timerTextOutline = "MONOCHROME,OUTLINE"
+    end
+
     if NS.IS_NOT_RETAIL and NS.db.unitFrames.player.usePersonalNameplate then
         NS.db.unitFrames.player.usePersonalNameplate = false
     end

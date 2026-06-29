@@ -105,10 +105,10 @@ function Panel:Setup()
 
     do
         local fontOutlines = {
-            { value = "NONE", text = L.TEXTURE_NONE },
+            { value = "", text = L.TEXTURE_NONE },
             { value = "OUTLINE", text = "Outline"},
             { value = "MONOCHROME", text = "Monochrome" },
-            { value = "MONOCHROMEOUTLINE", text = "Monochrome Outline" },
+            { value = "MONOCHROME,OUTLINE", text = "Monochrome Outline" },
             { value = "THICKOUTLINE", text = "Thick Outline" },
         }
 
@@ -116,8 +116,8 @@ function Panel:Setup()
         frames.timerTextOutline:SetSize(90, 45)
         frames.timerTextOutline:SetPoint("LEFT", frames.timerColors, 0, -45)
         frames.timerTextOutline.OnValueChanged = function(_, value)
-            if not value or value == EMPTY then return end
-            db.timerTextOutline = value
+            if value == EMPTY then return end
+            db.timerTextOutline = value or ""
 
             DIMINISH_NS.Icons:OnFrameConfigChanged()
         end
@@ -285,9 +285,4 @@ function Panel:refresh()
 
     -- Disable rest of timer options if timer countdown is not checked
     Widgets:ToggleState(self.frames.timerColors, self.frames.timerText:GetChecked())
-end
-
-SLASH_DIMINISH1 = "/diminish"
-SlashCmdList.DIMINISH = function()
-    Settings.OpenToCategory("Diminish")
 end

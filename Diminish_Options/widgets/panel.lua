@@ -55,9 +55,9 @@ local function CreateChildPanel(self, name, callback)
         panel.parent = self.name
         panel.frames = {}
 
-        local category = Settings.GetCategory(panel.parent)
+        local category = Settings.GetCategory(self.ID)
         local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, panel, panel.name)
-        subcategory.ID = panel.name
+        subcategory.ID = subcategory.ID or panel.name
 
         self.lastCreatedChild = panel
 
@@ -79,10 +79,18 @@ function Widgets:CreateMainPanel(name)
     panel:Hide()
 
     local category = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
-    category.ID = panel.name
+    category.ID = category.ID or panel.name
+    category.subcategories = {}
+    panel.ID = category.ID
     Settings.RegisterAddOnCategory(category)
 
     panel:RegisterEvent("PLAYER_LOGIN") -- panel:SetScript("OnShow", OnShow)
     panel:SetScript("OnEvent", OnShow)
+
+    SLASH_DIMINISH1 = "/diminish"
+    SlashCmdList.DIMINISH = function()
+        Settings.OpenToCategory(category.ID)
+    end
+
     return panel
 end

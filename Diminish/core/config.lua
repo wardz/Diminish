@@ -59,9 +59,9 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.11",
+        version = "1.12",
         announceDRs = false,
-        timerTextOutline = "NONE",
+        timerTextOutline = "",
         timerText = true,
         timerSwipe = true,
         timerEdge = true,
