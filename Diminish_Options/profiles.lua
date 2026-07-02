@@ -86,6 +86,12 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
             DIMINISH_NS.db.unitFrames.arena.enabled = false
         end
 
+        if DIMINISH_NS.db.timerTextOutline == "NONE" then
+            DIMINISH_NS.db.timerTextOutline = ""
+        elseif DIMINISH_NS.db.timerTextOutline == "MONOCHROMEOUTLINE" then
+            DIMINISH_NS.db.timerTextOutline = "MONOCHROME,OUTLINE"
+        end
+
         selectProfile:SetValue(nil)
         RefreshPanelAndIcons()
     end)
@@ -118,6 +124,12 @@ Panel:CreateChildPanel(L.PROFILES, function(panel)
         if DIMINISH_NS.IS_CLASSIC then
             DIMINISH_NS.db.unitFrames.focus.enabled = false
             DIMINISH_NS.db.unitFrames.arena.enabled = false
+        end
+
+        if DIMINISH_NS.db.timerTextOutline == "NONE" then
+            DIMINISH_NS.db.timerTextOutline = ""
+        elseif DIMINISH_NS.db.timerTextOutline == "MONOCHROMEOUTLINE" then
+            DIMINISH_NS.db.timerTextOutline = "MONOCHROME,OUTLINE"
         end
 
         selectProfile:SetValue(nil)
