@@ -311,8 +311,6 @@ do
         frame.unitSettingsRef = db.unitFrames[frame.unitFormatted]
         frame.uid = nil
 
-        frame:SetFrameLevel(anchor:GetFrameLevel() + 1)
-
         local unitDB = frame.unitSettingsRef
 
         -- Need to always update these for pooled frames
@@ -326,6 +324,9 @@ do
             end
             frame:SetParent(anchor)
         end
+
+        frame:SetFrameLevel(anchor:GetFrameLevel() + 10)
+        frame:SetFrameStrata("HIGH")
 
         local size = unitDB.iconSize
         frame:SetSize(size, size)
@@ -343,7 +344,6 @@ do
             --@end-debug@
 
             iconCount = iconCount + 1
-            frame:SetFrameStrata("HIGH")
             frame:EnableMouse(false)
             frame:Hide()
 
