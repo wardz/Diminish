@@ -26,3 +26,4 @@ testmode.lua
 main.lua
 frames.lua
 profiles.lua
+advanced.lua

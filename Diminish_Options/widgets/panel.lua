@@ -84,8 +84,9 @@ function Widgets:CreateMainPanel(name)
     panel.ID = category.ID
     Settings.RegisterAddOnCategory(category)
 
-    panel:RegisterEvent("PLAYER_LOGIN") -- panel:SetScript("OnShow", OnShow)
+    panel:RegisterEvent("PLAYER_LOGIN")
     panel:SetScript("OnEvent", OnShow)
+    panel:SetScript("OnShow", OnShow)
 
     SLASH_DIMINISH1 = "/diminish"
     SlashCmdList.DIMINISH = function()

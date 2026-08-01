@@ -414,7 +414,7 @@ do
 
         if frame.categoryText then
             frame.categoryText:SetMaxLines(db.categoryTextMaxLines or 2)
-            frame.categoryText:SetText(category)
+            frame.categoryText:SetText(db.abbreviations and db.abbreviations[category] or category)
             frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
         end
 
@@ -493,6 +493,9 @@ do
                     frame.categoryText:SetPoint("BOTTOM", db.categoryFont.x, size + 2)
                     frame.categoryText:SetWidth(size + 11)
                     frame.categoryText:SetMaxLines(db.categoryTextMaxLines)
+                    if frame.timerRef and frame.timerRef.category then
+                        frame.categoryText:SetText(db.abbreviations and db.abbreviations[frame.timerRef.category] or frame.timerRef.category)
+                    end
                     --frame.categoryText:SetHeight(db.categoryFont.size * 2)
                 end
 
@@ -660,6 +663,10 @@ do
 
         SetSpellTexture(frame, timer)
         SetIndicators(frame, timer.applied, timer.category)
+
+        if frame.categoryText and NS.db.showCategoryText then
+            frame.categoryText:SetText(NS.db.abbreviations and NS.db.abbreviations[timer.category] or timer.category)
+        end
 
         if frame.shown then
             if timer.testMode then return end

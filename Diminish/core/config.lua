@@ -59,7 +59,7 @@ do
     }
 
     NS.DEFAULT_SETTINGS = {
-        version = "1.12",
+        version = "1.13",
         announceDRs = false,
         timerTextOutline = "",
         timerText = true,
@@ -72,6 +72,7 @@ do
         colorBlind = false,
         trackNPCs = true,
         categoryTextures = {},
+        abbreviations = {},
         border = {
             edgeSize = 2.5,
             edgeFile = "Interface\\BUTTONS\\UI-Quickslot-Depress",
