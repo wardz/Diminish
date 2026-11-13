@@ -58,8 +58,8 @@ function Panel:Setup()
 
     --local notes = GetAddOnMetadata(self.name, "Notes-" .. GetLocale()) or GetAddOnMetadata(self.name, "Notes")
     Widgets:CreateHeader(self, gsub(self.name, "_", " "), C_AddOns.GetAddOnMetadata("Diminish", "Version"),
-        "\nClick the small red button next to Diminish_Options under the AddOns tab for frame specific options."
-        .. "\n|cFFFF0000Note:|r Diminish is no longer actively maintained, use at your own risk.")
+        "\nClick the small red [-] button next to Diminish under the AddOns tab for frame specific options."
+        .. "\n|cFFFF0000Note:|r Diminish is no longer actively maintained.")
 
     local subCooldown = Widgets:CreateSubHeader(self, L.HEADER_COOLDOWN)
     subCooldown:SetPoint("TOPLEFT", 16, -50)
