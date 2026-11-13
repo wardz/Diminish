@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "DRList-1.0", 81 -- Don't forget to change this in DRList-1.0.lua aswell!
+local MAJOR, MINOR = "DRList-1.0", 82 -- Don't forget to change this in DRList-1.0.lua aswell!
 local Lib = LibStub(MAJOR)
 if Lib.spellListVersion and Lib.spellListVersion >= MINOR then
     return
@@ -22,7 +22,6 @@ if Lib.gameExpansion == "retail" then
         [1513]    = "disorient", -- Scare Beast
         [31661]   = "disorient", -- Dragon's Breath
         [353084]  = "disorient", -- Ring of Fire
-        [198909]  = "disorient", -- Song of Chi-ji
         [202274]  = "disorient", -- Hot Trub
         [105421]  = "disorient", -- Blinding Light
         [10326]   = "disorient", -- Turn Evil
@@ -44,6 +43,7 @@ if Lib.gameExpansion == "retail" then
         -- *** Incapacitate Effects ***
         [217832]  = "incapacitate", -- Imprison
         [221527]  = "incapacitate", -- Imprison (Honor talent)
+        [198909]  = "incapacitate", -- Song of Chi-ji
         [2637]    = "incapacitate", -- Hibernate
         [99]      = "incapacitate", -- Incapacitating Roar
         [378441]  = "incapacitate", -- Time Stop
@@ -101,6 +101,7 @@ if Lib.gameExpansion == "retail" then
         [91797]   = "stun", -- Monstrous Blow (Mutated Ghoul)
         [287254]  = "stun", -- Dead of Winter
         [179057]  = "stun", -- Chaos Nova
+        [1234195] = "stun", -- Void Nova
         [205630]  = "stun", -- Illidan's Grasp (Primary effect)
         [208618]  = "stun", -- Illidan's Grasp (Secondary effect)
         [211881]  = "stun", -- Fel Eruption
@@ -170,7 +171,6 @@ if Lib.gameExpansion == "retail" then
         [324382]  = "root", -- Clash
         [64695]   = "root", -- Earthgrab (Totem effect)
         --[356738]  = "root", -- Earth Unleashed
-        [285515]  = "root", -- Surge of Power
         [199042]  = "root", -- Thunderstruck (Protection PvP Talent)
         --[356356]  = "root", -- Warbringer
         [39965]   = "root", -- Frost Grenade (Item)

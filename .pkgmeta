@@ -2,8 +2,6 @@ package-as: Diminish
 enable-toc-creation: yes
 
 externals:
-  Diminish_Options/libs/WardzConfigDropdown-1.0: https://github.com/wardz/WardzConfigDropdown-1.0
-  Diminish/libs/LibStub: https://github.com/wardz/LibStub
   Diminish/libs/DRList-1.0: https://github.com/wardz/DRList-1.0
 
 move-folders:
@@ -13,5 +11,4 @@ move-folders:
 ignore:
   - README.md
   - CHANGELOG.md
-  - Diminish/libs/LibStub/LibStub.toc
   - "Diminish/libs/DRList-1.0/DRList-1.0/*.toc"
