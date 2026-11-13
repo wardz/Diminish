@@ -6,6 +6,8 @@ Diminish can track DRs on both mobs and players if you enable PvE mode in the op
 
 **Note:** Diminish is no longer actively maintained. Feel free to fork this addon, but be wary it contains a ~10 year old codebase with lots of hacky methods added over time. Some code might rely on deprecated Blizzard functions that's marked for removal in a future patch.
 (The DR spell database itself has moved over to [DRList-1.0](https://github.com/wardz/drlist-1.0) which is still updated every now and then).
+  
+**UPDATE 2026:** Retail & Forever WoW is no longer supported due to the new API limitations/restrictions introduced in patch 12.0.0.
 
 ## Configuration
 
@@ -22,13 +24,13 @@ You can manually set icons used for a DR category by right clicking one of the c
 
 ## Links
 
-Installing from source is not always guaranteed to work. You should download a packaged version here instead:
+Installing from source branch is not always guaranteed to work. You should download a packaged version here instead:
 
 - [Curseforge Download](https://www.curseforge.com/wow/addons/diminish)
 - [WoWInterface Download](https://www.wowinterface.com/downloads/info23628-DiminishDRTracker.html)
-- [Github Download](https://github.com/wardz/diminish/releases/latest) (Choose binary)
+- [Github Download](https://github.com/wardz/diminish/releases/latest))
 - [Submit Bugs](https://github.com/wardz/diminish/issues)
 
 ## License
 
-Copyright (C) 2023 Wardz | [MIT License](https://opensource.org/licenses/mit-license.php).
+Copyright (C) 2015-2026 Wardz | [MIT License](https://opensource.org/licenses/mit-license.php).
